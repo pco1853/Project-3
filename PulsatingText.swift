@@ -9,7 +9,7 @@
 import UIKit
 import SpriteKit
 
-class PulsatingText : SKLabelNode {
+class PulsatingText: SKLabelNode {
     
     func setTextFontSizeAndPulsate(theText: String, theFontSize: CGFloat){
         self.text = theText;
@@ -18,4 +18,5 @@ class PulsatingText : SKLabelNode {
         let scaleForever = SKAction.repeatActionForever(scaleSequence)
         self.runAction(scaleForever)
     }
+    
 }

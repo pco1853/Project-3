@@ -13,12 +13,14 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let scene = StartGameScene(size: view.bounds.size)
+        
+        let scene = StartGameScene(size: CGSizeMake(768, 1024)) //ipad points
+        scene.scaleMode = .AspectFill
+        
         let skView = view as SKView
-        skView.showsFPS = true
-        skView.showsNodeCount = true
         skView.ignoresSiblingOrder = true
-        scene.scaleMode = .ResizeFill
+        //skView.showsFPS = true
+        //skView.showsNodeCount = true
         skView.presentScene(scene)
     }
     

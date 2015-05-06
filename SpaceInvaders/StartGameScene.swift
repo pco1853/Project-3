@@ -17,10 +17,9 @@ class StartGameScene: SKScene {
         startGameButton.name = "startgame"
         addChild(startGameButton)
         
-        
         backgroundColor = SKColor.blackColor()
         let invaderText = PulsatingText(fontNamed: "ChalkDuster")
-        invaderText.setTextFontSizeAndPulsate("INVADERZ", theFontSize: 50)
+        invaderText.setTextFontSizeAndPulsate("HARVESTER", theFontSize: 50)
         invaderText.position = CGPointMake(size.width/2,size.height/2 + 200)
         addChild(invaderText)
     }
@@ -29,11 +28,12 @@ class StartGameScene: SKScene {
         for touch: AnyObject in touches {
             let touchLocation = touch.locationInNode(self)
             let touchedNode = self.nodeAtPoint(touchLocation)
+            
             if(touchedNode.name == "startgame"){
-                let gameOverScene = GameScene(size: size)
-                gameOverScene.scaleMode = scaleMode
+                let gameScene = GameScene(size: size)
+                gameScene.scaleMode = scaleMode
                 let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
-                view?.presentScene(gameOverScene,transition: transitionType)
+                view?.presentScene(gameScene,transition: transitionType)
             }
         }
     }
