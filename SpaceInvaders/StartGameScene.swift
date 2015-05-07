@@ -18,7 +18,7 @@ class StartGameScene: SKScene {
         addChild(startGameButton)
         
         backgroundColor = SKColor.blackColor()
-        let invaderText = PulsatingText(fontNamed: "ChalkDuster")
+        let invaderText = PulsatingText(fontNamed: "Inversionz")
         invaderText.setTextFontSizeAndPulsate("HARVESTER", theFontSize: 50)
         invaderText.position = CGPointMake(size.width/2,size.height/2 + 200)
         addChild(invaderText)

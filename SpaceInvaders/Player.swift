@@ -13,36 +13,59 @@ import CoreMotion
 class Player: Ship {
 
     //MARK: - Variables -
-    var invincible: Bool = false
+    //draw order
+    let zShip: CGFloat = 0
+    let zHarvester: CGFloat = -1
+    let zBullets: CGFloat = -2
+    let zGuns: CGFloat = -3
+    let zEngine: CGFloat = -4
+    let zEngineParticle: CGFloat = -5
+    let zShadow: CGFloat = -6
+    
+    var canHarvest = true
+    var invincible = false
     //var powerup: Powerup! //TODO: implement powerups
     
-    let motionManager: CMMotionManager = CMMotionManager()
-    var accelerationX: CGFloat = 0.0
-    
     //MARK: - Initialization -
-    init() {
-        //TODO: load player data from GameData
+    init() { //TODO: load player data from GameData
         let texture = SKTexture(imageNamed: "Phoenix")
-        super.init(health: 100.0, movementSpeed: 50.0, canFire: true, fireRate: 0.5, bulletSpeed: 200.0, bulletDamage: 25.0, texture: texture)
-        
-        //TODO: add Harvester claw child
+        super.init(health: 100.0, movementSpeed: 200.0, canFire: true, fireRate: 0.5, bulletSpeed: 600.0, bulletDamage: 25.0, texture: texture)
         
         //physics
-        self.physicsBody =
-            SKPhysicsBody(texture: self.texture, size:self.size)
+        self.physicsBody = SKPhysicsBody(texture: self.texture, size: self.size)
         self.physicsBody?.dynamic = true
+        self.physicsBody?.allowsRotation = false
         self.physicsBody?.usesPreciseCollisionDetection = false
         self.physicsBody?.categoryBitMask = CollisionCategories.Player
-        self.physicsBody?.contactTestBitMask = CollisionCategories.EnemyBullet | CollisionCategories.Enemy
-        self.physicsBody?.allowsRotation = false
+        self.physicsBody?.contactTestBitMask = CollisionCategories.Enemy | CollisionCategories.EnemyBullet
+        self.physicsBody?.collisionBitMask = 0x0
         
-        //input
-        motionManager.accelerometerUpdateInterval = 0.2
-        motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue(), withHandler: {
-            (accelerometerData: CMAccelerometerData!, error: NSError!) in
-            let acceleration = accelerometerData.acceleration
-            self.accelerationX = CGFloat(acceleration.x)
-        })
+        //shadow
+        let shadowOffsetX: CGFloat = 10.0
+        let shadowOffsetY: CGFloat = 10.0
+        let shadow = SKSpriteNode(imageNamed: "Phoenix")
+        shadow.size = CGSizeMake(shadow.size.width + shadowOffsetX, shadow.size.height + shadowOffsetY)
+        shadow.color = SKColor.blackColor()
+        shadow.colorBlendFactor = 1.0;
+        shadow.alpha = 0.5;
+        let shadowEffect = SKEffectNode()
+        let shadowEffectBlur = CIFilter(name: "CIGaussianBlur", withInputParameters: ["inputRadius": 5.0])
+        shadowEffect.filter = shadowEffectBlur
+        shadowEffect.zPosition = self.zShadow
+        shadowEffect.addChild(shadow)
+        addChild(shadowEffect)
+        
+        //engine
+        //TODO: customizable engine textures from shop
+        //let engine: SKSpriteNode = SKSpriteNode()
+        let engineParticle = SKEmitterNode(fileNamed: "Fire")
+        engineParticle.position = CGPointMake(self.position.x, self.position.y - self.size.height / 2)
+        engineParticle.zPosition = self.zEngineParticle
+        addChild(engineParticle)
+        
+        //TODO: customizable gun texture
+        
+        //TODO: add Harvester claw child
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -50,42 +73,19 @@ class Player: Ship {
     }
     
     //MARK: - METHODS -
-    func update(dt: CGFloat, scene: SKScene) {
-        //update player position
-        if (self.position.x < 0) { //right edge
-            self.position.x = 0;
-        }
-        else if (self.position.x > scene.size.width) { //left edge
-            self.position.x = scene.size.width
-        }
-        else { //move
-            self.physicsBody?.velocity = CGVector(dx: (self.accelerationX * 10) * self.movementSpeed, dy: 0)
-        }
-        
-        //update bullet position
-        for (var i = 0; i < self.bullets.count; i++){
-            self.bullets[i].position.y += self.bulletSpeed * dt
-            
-            if (self.bullets[i].position.y > scene.size.height + 50){
-                self.bullets.removeAtIndex(i)
-            }
-        }
-    }
-    
     func fireBullet(scene: SKScene) {
-        if(!canFire) {
-            return
-        }
-        else {
+        if (self.canFire!) { //has to be unwrapped b/c it's a superclass var
             self.canFire = false
             
             let b1 = PlayerBullet(imageName: "laser")
-            b1.position.x = self.position.x - 10
-            b1.position.y = self.position.y + self.size.height / 2 + 5
+            b1.position.x = self.position.x - 12.0
+            b1.position.y = self.position.y + 2.0 //+ self.size.height / 2
+            b1.zPosition = self.zBullets
             
             let b2 = PlayerBullet(imageName: "laser")
-            b2.position.x = self.position.x + 10
-            b2.position.y = self.position.y + self.size.height / 2 + 5
+            b2.position.x = self.position.x + 12.0
+            b2.position.y = self.position.y + 2.0 //+ self.size.height / 2
+            b2.zPosition = self.zBullets
             
             self.bullets.append(b1)
             self.bullets.append(b2)
@@ -98,35 +98,25 @@ class Player: Ship {
     }
     
     func fireHarvester() {
-        //TODO: implement harvester
+        if (canHarvest) {
+            //TODO: implement harvester firing
+        }
     }
     
     func takeDamage(damage: CGFloat) {
-        if(invincible == false) {
+        if(!invincible) {
             self.health! -= damage
             turnInvincible()
         }
     }
     
-    func die() {
-        let gameOverScene = GameOverScene(size: self.scene!.size)
-        gameOverScene.scaleMode = self.scene!.scaleMode
-        let transitionType = SKTransition.flipHorizontalWithDuration(0.5)
-        self.scene!.view!.presentScene(gameOverScene, transition: transitionType)
-    }
-    
-    func turnInvincible(){
+    func turnInvincible(){ //makes player flash and become invincible for 1 sec after being hit
         invincible = true
         
-        let fadeOutAction = SKAction.fadeOutWithDuration(0.25)
-        let fadeInAction = SKAction.fadeInWithDuration(0.25)
-        let fadeOutIn = SKAction.sequence([fadeOutAction, fadeInAction])
-        
-        let fadeOutInAction = SKAction.repeatAction(fadeOutIn, count: 4)
-        let setInvicibleFalse = SKAction.runBlock() {
-            self.invincible = false
-        }
-        
-        runAction(SKAction.sequence([fadeOutInAction, setInvicibleFalse]))
+        let fadeOut = SKAction.fadeOutWithDuration(0.1)
+        let fadeIn = SKAction.fadeInWithDuration(0.1)
+        let fadeOutIn = SKAction.sequence([fadeOut, fadeIn])
+        let fadeOutInRepeat = SKAction.repeatAction(fadeOutIn, count: 5)
+        runAction(fadeOutInRepeat, completion: { self.invincible = false })
     }
 }

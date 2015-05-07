@@ -16,9 +16,9 @@ struct CollisionCategories {
 }
 
 
-class GameScene: SKScene, SKPhysicsContactDelegate
-{
-    //MARK: - Variables - 
+class GameScene: SKScene, SKPhysicsContactDelegate {
+    
+    //MARK: - Variables -
     //game
     var player:Player!
     //var enemies[Enemy] = []
@@ -30,21 +30,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     var healthLabel: SKLabelNode = SKLabelNode()
     var scoreLabel: SKLabelNode = SKLabelNode()
     
+    //input
+    let motionManager = CMMotionManager()
+    var accelerationX: CGFloat = 0.0
+    
     //MARK: - Initialization -
     override func didMoveToView(view: SKView) {
         //init physics
         self.physicsWorld.gravity = CGVectorMake(0, 0)
         self.physicsWorld.contactDelegate = self
         
-        backgroundColor = SKColor.blackColor()
-        let starField = SKEmitterNode(fileNamed: "StarField")
+        backgroundColor = SKColor.blueColor()
+        /*let starField = SKEmitterNode(fileNamed: "StarField")
         starField.position = CGPointMake(size.width / 2, size.height)
         starField.zPosition = -1000
-        addChild(starField)
+        addChild(starField)*/
         
         setupPlayer()
         setupEnemies()
         setupHUD()
+        setupInput()
     }
     
     func setupPlayer() {
@@ -75,13 +80,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         addChild(scoreLabel)
     }
     
-    //MARK: - Game Loop -
+    func setupInput() {
+        motionManager.accelerometerUpdateInterval = 0.2
+        motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue(), withHandler: {
+            (accelerometerData: CMAccelerometerData!, error: NSError!) in
+            let acceleration = accelerometerData.acceleration
+            self.accelerationX = CGFloat(acceleration.x)
+        })
+    }
+    
+    //MARK: - Input -
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         for touch: AnyObject in touches {
             player.fireBullet(self)
         }
     }
-   
+    
+    //MARK: - Game Loop -
     override func update(currentTime: CFTimeInterval) {
         //calculate dt
         dt = CGFloat(currentTime - lastUpdateTimeInterval)
@@ -90,9 +105,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate
             dt = 1.0 / 60.0
         }
         
-        //update game objects
-        player.update(dt, scene: self)
-        //TODO: update enemies
+        updatePlayer()
+        updateEnemies()
+        updateHUD()
         
         //check for level complete
         /*if (enemiesAreDead()){
@@ -104,8 +119,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate
             player.health = 0;
             levelFail();
         }
+    }
+    
+    func updatePlayer() {
+        //move player
+        player.physicsBody?.velocity = CGVector(dx: (accelerationX * 100) * (player.movementSpeed * dt), dy: 0)
         
-        //update ui
+        //check player bounds
+        if (player.position.x - player.size.width / 2 < 20.0) { //left edge
+            player.position.x = player.size.width / 2 + 20.0
+        }
+        else if (player.position.x + player.size.width / 2 > self.size.width - 20.0) { //right edge
+            player.position.x = self.size.width - player.size.width / 2 - 20.0
+        }
+        
+        //move player bullets
+        for (var i = 0; i < player.bullets.count; i++) {
+            player.bullets[i].position.y += player.bulletSpeed * dt
+        }
+        
+        //check player bullet bounds
+        for (var i = 0; i < player.bullets.count; i++) {
+            if (player.bullets[i].position.y >= self.size.height + 50){
+                player.bullets[i].removeFromParent()
+                player.bullets.removeAtIndex(i)
+            }
+        }
+    }
+    
+    func updateEnemies() {
+        //TODO: implement method
+    }
+    
+    func updateHUD() {
         healthLabel.text = "Health: \(player.health)"
         scoreLabel.text = "Score: \(score)"
     }
