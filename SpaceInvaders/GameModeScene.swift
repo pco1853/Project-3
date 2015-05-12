@@ -9,62 +9,38 @@
 import UIKit
 import SpriteKit
 
-class GameModeScene: SKScene {
+class GameModeScene: MenuScene {
     
-    var campaignButton: MenuButton!
+    var soloButton: MenuButton!
     var coopButton: MenuButton!
     var storeButton: MenuButton!
     var backButton: MenuButton!
     var scoresButton: MenuButton!
     
     override func didMoveToView(view: SKView) {
-        //background
-        backgroundColor = SKColor.blackColor()
-        let starField = SKEmitterNode(fileNamed: "StarField")
-        starField.advanceSimulationTime(15.0)
-        starField.position = CGPointMake(size.width / 2, size.height + 100)
-        starField.zPosition = -1000
-        addChild(starField)
-        
-        //game title
-        let titleText = TitleText(text: "mode select", xPos: size.width / 2, yPos: size.height - 200)
-        addChild(titleText)
-        
         //buttons
-        self.campaignButton = MenuButton(icon: "Phoenix", label: "CAMPAIGN", name: "campaignButton", xPos: size.width / 2 - 100, yPos: size.height / 2, enabled: true)
-        addChild(self.campaignButton)
+        self.soloButton = MenuButton(icon: "Phoenix", label: "SOLO", name: "soloButton", xPos: size.width / 2 - 100, yPos: size.height / 2, enabled: true)
+        self.buttons.append(self.soloButton)
+        addChild(self.soloButton)
         
         self.coopButton = MenuButton(icon: "Phoenix", label: "CO OP", name: "coopButton", xPos: size.width / 2 + 100, yPos: size.height / 2, enabled: true)
+        self.buttons.append(self.coopButton)
         addChild(self.coopButton)
         
-        self.storeButton = MenuButton(icon: "Phoenix", label: "STORE", name: "storeButton", xPos: size.width / 2, yPos: size.height / 2 - self.campaignButton.size.height / 1.33, enabled: true)
+        self.storeButton = MenuButton(icon: "Phoenix", label: "STORE", name: "storeButton", xPos: size.width / 2, yPos: size.height / 2 - self.soloButton.size.height / 1.33, enabled: true)
+        self.buttons.append(self.storeButton)
         addChild(self.storeButton)
         
-        self.backButton = MenuButton(icon: "Phoenix", label: "BACK", name: "backButton", xPos: size.width / 2 - self.storeButton.size.width, yPos: size.height / 2 - self.campaignButton.size.height / 1.33, enabled: true)
+        self.backButton = MenuButton(icon: "Phoenix", label: "BACK", name: "backButton", xPos: size.width / 2 - self.storeButton.size.width, yPos: size.height / 2 - self.soloButton.size.height / 1.33, enabled: true)
+        self.buttons.append(self.backButton)
         addChild(self.backButton)
         
-        self.scoresButton = MenuButton(icon: "Phoenix", label: "SCORES", name: "scoresButton", xPos: size.width / 2 + self.storeButton.size.width, yPos: size.height / 2 - self.campaignButton.size.height / 1.33, enabled: true)
+        self.scoresButton = MenuButton(icon: "Phoenix", label: "SCORES", name: "scoresButton", xPos: size.width / 2 + self.storeButton.size.width, yPos: size.height / 2 - self.soloButton.size.height / 1.33, enabled: true)
+        self.buttons.append(self.scoresButton)
         addChild(self.scoresButton)
         
         //fade in
-        starField.alpha = 0
-        titleText.alpha = 0
-        self.campaignButton.alpha = 0
-        self.coopButton.alpha = 0
-        self.storeButton.alpha = 0
-        self.backButton.alpha = 0
-        self.scoresButton.alpha = 0
-        
-        let fadeIn = SKAction.fadeInWithDuration(1.0)
-        starField.runAction(fadeIn, completion: {
-            titleText.runAction(fadeIn, completion: {
-                self.campaignButton.runAction(fadeIn)
-                self.coopButton.runAction(fadeIn)
-                self.storeButton.runAction(fadeIn)
-                self.backButton.runAction(fadeIn)
-                self.scoresButton.runAction(fadeIn)
-            })
-        })
+        fadeIn()
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
@@ -73,24 +49,11 @@ class GameModeScene: SKScene {
             let touchLocation = touch.locationInNode(self)
             let touchedNode = self.nodeAtPoint(touchLocation)
             
-            if (touchedNode.name == "backButton" && backButton.enabled) {
-                self.backButton.enabled = false
-                self.backButton.zPosition = 1000
-                self.backButton.highlight()
-                
-                self.backButton.fill.runAction(SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.25))
-                self.backButton.runAction(SKAction.scaleBy(1.25, duration: 0.25), completion: {
-                    //go to start scene
-                    let startGameScene = StartGameScene(size: self.size)
-                    startGameScene.scaleMode = self.scaleMode
-                    
-                    let transition = SKTransition.fadeWithDuration(1.0)
-                    self.view?.presentScene(startGameScene, transition: transition)
-                })
-                self.campaignButton.runAction(SKAction.fadeOutWithDuration(0.25))
-                self.coopButton.runAction(SKAction.fadeOutWithDuration(0.25))
-                self.scoresButton.runAction(SKAction.fadeOutWithDuration(0.25))
-                self.storeButton.runAction(SKAction.fadeOutWithDuration(0.25))
+            if (touchedNode.name == "soloButton" && soloButton.enabled) {
+                buttonClicked(self.soloButton, scene: GameScene(size: self.size))
+            }
+            else if (touchedNode.name == "backButton" && backButton.enabled) {
+                buttonClicked(self.backButton, scene: StartGameScene(size: self.size, title: "harvester"))
             }
             
             //TODO: Implement other scene buttons...

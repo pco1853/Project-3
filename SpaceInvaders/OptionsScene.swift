@@ -9,7 +9,7 @@
 import UIKit
 import SpriteKit
 
-class OptionsScene: SKScene {
+class OptionsScene: MenuScene {
     
     
     

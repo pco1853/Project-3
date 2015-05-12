@@ -14,14 +14,15 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let scene = StartGameScene(size: CGSizeMake(768, 1024)) //ipad points
-        scene.scaleMode = .AspectFill
+        let startGameScene = StartGameScene(size: CGSizeMake(768, 1024), title: "harvester")
+        startGameScene.scaleMode = .AspectFill //base size on iPad, scale down to iPhone
         
         let skView = view as SKView
         skView.ignoresSiblingOrder = true
         skView.showsFPS = true
         skView.showsNodeCount = true
-        skView.presentScene(scene)
+        
+        skView.presentScene(startGameScene)
     }
     
     override func prefersStatusBarHidden() -> Bool {
