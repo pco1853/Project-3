@@ -109,6 +109,7 @@ class GameModeScene: SKScene {
                 self.optionsButton.runAction(SKAction.fadeOutWithDuration(0.25))
                 self.manualButton.runAction(SKAction.fadeOutWithDuration(0.25))
             }
+                /*
             else if (touchedNode.name == "optionsButton") {
                 self.optionsButton.zPosition = 1000
                 self.optionsButton.highlight()
