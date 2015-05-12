@@ -30,6 +30,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var healthLabel: SKLabelNode = SKLabelNode()
     var scoreLabel: SKLabelNode = SKLabelNode()
     
+    //virtual controller
+    var virtualController:VirtualController?
+    
     //input
     let motionManager = CMMotionManager()
     var accelerationX: CGFloat = 0.0
@@ -50,6 +53,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupEnemies()
         setupHUD()
         setupInput()
+        
+        virtualController = VirtualController(size: size)
+        addChild(virtualController!)
     }
     
     func setupPlayer() {

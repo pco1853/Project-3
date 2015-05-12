@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F60A9451B023FCF00402038 /* LeftArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F60A9431B023FCF00402038 /* LeftArrow.png */; };
+		3F60A9461B023FCF00402038 /* RightArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F60A9441B023FCF00402038 /* RightArrow.png */; };
+		3F60A9481B023FE000402038 /* VirtualController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F60A9471B023FE000402038 /* VirtualController.swift */; };
+		3F60A94A1B023FF800402038 /* OptionsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F60A9491B023FF800402038 /* OptionsScene.swift */; };
 		3F7B09111AE74DC0000EEAD4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7B09101AE74DC0000EEAD4 /* AppDelegate.swift */; };
 		3F7B09151AE74DC0000EEAD4 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7B09141AE74DC0000EEAD4 /* GameScene.swift */; };
 		3F7B09171AE74DC0000EEAD4 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7B09161AE74DC0000EEAD4 /* GameViewController.swift */; };
@@ -56,6 +60,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F60A9431B023FCF00402038 /* LeftArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LeftArrow.png; sourceTree = "<group>"; };
+		3F60A9441B023FCF00402038 /* RightArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RightArrow.png; sourceTree = "<group>"; };
+		3F60A9471B023FE000402038 /* VirtualController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualController.swift; sourceTree = "<group>"; };
+		3F60A9491B023FF800402038 /* OptionsScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionsScene.swift; sourceTree = "<group>"; };
 		3F7B090B1AE74DC0000EEAD4 /* SpaceInvaders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaceInvaders.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F7B090F1AE74DC0000EEAD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F7B09101AE74DC0000EEAD4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -185,6 +193,8 @@
 		3F7B09361AE75041000EEAD4 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				3F60A9431B023FCF00402038 /* LeftArrow.png */,
+				3F60A9441B023FCF00402038 /* RightArrow.png */,
 				3F7B09381AE75041000EEAD4 /* invader1.png */,
 				3F7B09391AE75041000EEAD4 /* invader2.png */,
 				3F7B093A1AE75041000EEAD4 /* invader3.png */,
@@ -231,6 +241,7 @@
 			isa = PBXGroup;
 			children = (
 				3FEA26451B01717C00680E31 /* MenuButton.swift */,
+				3F60A9471B023FE000402038 /* VirtualController.swift */,
 			);
 			name = Buttons;
 			sourceTree = "<group>";
@@ -243,6 +254,7 @@
 				3F7B09141AE74DC0000EEAD4 /* GameScene.swift */,
 				3F7B095D1AE75A75000EEAD4 /* LevelCompleteScene.swift */,
 				3FEF8AB91AF9971500445871 /* GameOverScene.swift */,
+				3F60A9491B023FF800402038 /* OptionsScene.swift */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -375,6 +387,7 @@
 			files = (
 				3FB5577F1AFBAC2800916F1B /* Inversionz.otf in Resources */,
 				3F7B09441AE75041000EEAD4 /* CONQUEST.ttf in Resources */,
+				3F60A9461B023FCF00402038 /* RightArrow.png in Resources */,
 				3F7B094F1AE75041000EEAD4 /* start_btn.png in Resources */,
 				3F7B09451AE75041000EEAD4 /* invader1.png in Resources */,
 				3F7B09481AE75041000EEAD4 /* laser.mp3 in Resources */,
@@ -390,6 +403,7 @@
 				3F7B094E1AE75041000EEAD4 /* star.png in Resources */,
 				3F7B094B1AE75041000EEAD4 /* nextlevelbtn.png in Resources */,
 				3F7B09491AE75041000EEAD4 /* laser.png in Resources */,
+				3F60A9451B023FCF00402038 /* LeftArrow.png in Resources */,
 				3FB5577D1AFBA4B200916F1B /* Fire.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -409,11 +423,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F7B095A1AE75465000EEAD4 /* PlayerBullet.swift in Sources */,
+				3F60A9481B023FE000402038 /* VirtualController.swift in Sources */,
 				3F7B09151AE74DC0000EEAD4 /* GameScene.swift in Sources */,
 				3FEF8ABA1AF9971500445871 /* GameOverScene.swift in Sources */,
 				3F7B09351AE74E76000EEAD4 /* StartGameScene.swift in Sources */,
 				3FEA26411B01570200680E31 /* TitleText.swift in Sources */,
 				3F7B095E1AE75A75000EEAD4 /* LevelCompleteScene.swift in Sources */,
+				3F60A94A1B023FF800402038 /* OptionsScene.swift in Sources */,
 				3FEF8AB81AF98CDA00445871 /* Ship.swift in Sources */,
 				3FEF8ABC1AF9A5E000445871 /* Enemy.swift in Sources */,
 				3F7B09561AE753B1000EEAD4 /* Bullet.swift in Sources */,
