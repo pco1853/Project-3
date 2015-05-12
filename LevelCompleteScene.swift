@@ -17,12 +17,7 @@ class LevelCompleteScene:SKScene{
         startGameButton.position = CGPointMake(size.width/2,size.height/2 - 100)
         startGameButton.name = "nextlevel"
         addChild(startGameButton)
-        
-        self.backgroundColor = SKColor.blackColor()
-        let invaderText = PulsatingText(fontNamed: "ChalkDuster")
-        invaderText.setTextFontSizeAndPulsate("LEVEL COMPLETE", theFontSize: 40)
-        invaderText.position = CGPointMake(size.width/2,size.height/2 + 200)
-        addChild(invaderText)
+
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {

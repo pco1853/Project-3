@@ -74,7 +74,7 @@ class Player: Ship {
     
     //MARK: - METHODS -
     func fireBullet(scene: SKScene) {
-        if (self.canFire!) { //has to be unwrapped b/c it's a superclass var
+        if (self.canFire) {
             self.canFire = false
             
             let b1 = PlayerBullet(imageName: "laser")
@@ -105,7 +105,7 @@ class Player: Ship {
     
     func takeDamage(damage: CGFloat) {
         if(!invincible) {
-            self.health! -= damage
+            self.health -= damage
             turnInvincible()
         }
     }

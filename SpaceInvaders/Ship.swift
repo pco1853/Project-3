@@ -10,12 +10,13 @@ import UIKit
 import SpriteKit
 
 class Ship: SKSpriteNode {
-    var health: CGFloat!
-    var movementSpeed: CGFloat!
-    var canFire: Bool!
-    var fireRate: NSTimeInterval!
-    var bulletSpeed: CGFloat!
-    var bulletDamage: CGFloat!
+    
+    var health: CGFloat = 100.0
+    var movementSpeed: CGFloat = 200.0
+    var canFire: Bool = true
+    var fireRate: NSTimeInterval = 0.5
+    var bulletSpeed: CGFloat = 500.0
+    var bulletDamage: CGFloat = 10.0
     var bullets: [Bullet] = []
     
     init(health: CGFloat, movementSpeed: CGFloat, canFire: Bool, fireRate: NSTimeInterval, bulletSpeed: CGFloat, bulletDamage: CGFloat, texture: SKTexture) {
