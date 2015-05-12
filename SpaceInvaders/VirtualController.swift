@@ -36,6 +36,23 @@ class VirtualController: SKSpriteNode
         rightArrow.position.y = size.height - (size.height * 0.85)
         self.addChild(rightArrow)
         
+        var shootTexture = SKTexture(imageNamed: "shootButton.png")
+        var shootButton = SKSpriteNode(texture: shootTexture)
+        shootButton.size = shootTexture.size()
+        shootButton.color = UIColor.clearColor()
+        shootButton.name = "Shoot"
+        shootButton.position.x = size.width - (size.width * 0.10)
+        shootButton.position.y = size.height - (size.height * 0.70)
+        self.addChild(shootButton)
+        
+        var harvestTexture = SKTexture(imageNamed: "shootButton.png")
+        var harvestButton = SKSpriteNode(texture: harvestTexture)
+        harvestButton.size = shootTexture.size()
+        harvestButton.color = UIColor.clearColor()
+        harvestButton.name = "Harvest"
+        harvestButton.position.x = size.width - (size.width * 0.90)
+        harvestButton.position.y = size.height - (size.height * 0.70)
+        self.addChild(harvestButton)
     }
     
     required init?(coder aDecoder: NSCoder) {
