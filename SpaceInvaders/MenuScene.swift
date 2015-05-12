@@ -11,12 +11,10 @@ import SpriteKit
 
 class MenuScene: SKScene {
     
-    //MARK: - Variables -
     var starField: SKEmitterNode!
     var titleText: TitleText!
     var buttons: [MenuButton] = []
     
-    //MARK: - Initialization -
     init(size: CGSize, title: String) {
         super.init(size: size)
         
@@ -36,7 +34,6 @@ class MenuScene: SKScene {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - Methods -
     func fadeIn() {
         starField.alpha = 0
         titleText.alpha = 0
@@ -60,20 +57,20 @@ class MenuScene: SKScene {
             button.zPosition = 1000
             button.highlight()
             
-            button.fill.runAction(SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.25))
-            button.runAction(SKAction.scaleBy(1.25, duration: 0.25), completion: {
-                //go to scene
-                scene.scaleMode = self.scaleMode
-                let transition = SKTransition.fadeWithDuration(1.0)
-                self.view?.presentScene(scene, transition: transition)
-            })
-            
             let fadeOut = SKAction.fadeOutWithDuration(0.25)
             for (var i = 0; i < buttons.count; i++) {
                 if (buttons[i].name != button.name){
                     buttons[i].runAction(fadeOut)
                 }
             }
+            
+            button.fill.runAction(SKAction.fadeAlphaTo(1.0, duration: 0.25))
+            button.runAction(SKAction.scaleBy(1.25, duration: 0.25), completion: {
+                //go to scene
+                scene.scaleMode = self.scaleMode
+                let transition = SKTransition.fadeWithDuration(1.0)
+                self.view?.presentScene(scene, transition: transition)
+            })
         }
     }
     

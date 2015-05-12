@@ -17,7 +17,7 @@ class ManualScene: MenuScene {
         
         //TODO: display instructions
         
-        //buttons
+        //add buttons
         self.backButton = MenuButton(icon: "Phoenix", label: "BACK", name: "backButton", xPos: size.width / 2, yPos: size.height / 2, enabled: true)
         self.buttons.append(self.backButton)
         addChild(self.backButton)

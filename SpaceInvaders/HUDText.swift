@@ -11,8 +11,8 @@ import SpriteKit
 
 class HUDText: SKLabelNode {
     
-    let hudFontName = "Inversionz"
-    let hudFontSize: CGFloat = 36.0
+    let hudFontName = "SquareFont"
+    let hudFontSize: CGFloat = 24.0
     let hudFontColor = SKColor.whiteColor()
     let hudGlowColor = SKColor.redColor()
     

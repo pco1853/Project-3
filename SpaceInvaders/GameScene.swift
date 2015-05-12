@@ -15,27 +15,31 @@ struct CollisionCategories {
     static let EnemyBullet: UInt32 = 0x1 << 3
 }
 
-
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //MARK: - Variables -
-    //game
-    var player:Player!
-    //var enemies[Enemy] = []
+    //player
+    var player: Player!
     var score = 0
+    
+    //game
+    //var enemies: [Enemy] = []
+    var wave = 1
+    var waveTimer: CFTimeInterval = 10.0
+    var difficulty = 1
+    
+    //animation
     var lastUpdateTimeInterval: CFTimeInterval = -1.0
     var dt: CGFloat = 0.0
     
     //ui
-    var healthLabel: SKLabelNode = SKLabelNode()
-    var scoreLabel: SKLabelNode = SKLabelNode()
-    
-    //virtual controller
-    var virtualController:VirtualController?
+    var healthLabel: HUDText!
+    var scoreLabel: HUDText!
     
     //input
     let motionManager = CMMotionManager()
     var accelerationX: CGFloat = 0.0
+    var virtualController:VirtualController?
     
     //MARK: - Initialization -
     override func didMoveToView(view: SKView) {
@@ -43,47 +47,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.gravity = CGVectorMake(0, 0)
         self.physicsWorld.contactDelegate = self
         
-        backgroundColor = SKColor.blueColor()
-        /*let starField = SKEmitterNode(fileNamed: "StarField")
-        starField.position = CGPointMake(size.width / 2, size.height)
+        //set background
+        backgroundColor = SKColor.blackColor()
+        let starField = SKEmitterNode(fileNamed: "StarField")
+        starField.position = CGPointMake(size.width / 2, size.height + 100)
         starField.zPosition = -1000
-        addChild(starField)*/
+        starField.advanceSimulationTime(15.0)
+        addChild(starField)
         
+        //setup game objects
         setupPlayer()
         setupEnemies()
         setupHUD()
         setupInput()
-        
-        virtualController = VirtualController(size: size)
-        addChild(virtualController!)
     }
     
     func setupPlayer() {
-        player = Player(); //TODO: generate player based on game data
-        player.position = CGPoint(x: CGRectGetMidX(self.frame), y: player.size.height + 20)
-        addChild(player)
+        self.player = Player(); //TODO: generate player based on game data
+        self.player.position = CGPoint(x: size.width / 2, y: player.size.height + 100)
+        self.addChild(self.player)
     }
     
     func setupEnemies() {
-        
+        //TODO:
     }
     
     func setupHUD() {
-        healthLabel = SKLabelNode(fontNamed: "Courier")
-        healthLabel.fontSize = 24
-        healthLabel.fontColor = SKColor.whiteColor()
-        healthLabel.horizontalAlignmentMode = .Left
-        healthLabel.verticalAlignmentMode = .Top
-        healthLabel.position = CGPoint(x: 20, y: size.height - 20)
-        addChild(healthLabel)
+        self.healthLabel = HUDText(text: "HEALTH \(self.player.health)", xPos: 20, yPos: size.height - 20)
+        self.addChild(self.healthLabel)
         
-        scoreLabel = SKLabelNode(fontNamed: "Courier")
-        scoreLabel.fontSize = 24
-        scoreLabel.fontColor = SKColor.whiteColor()
-        scoreLabel.horizontalAlignmentMode = .Left
-        scoreLabel.verticalAlignmentMode = .Top
-        scoreLabel.position = CGPoint(x: 20, y: size.height - 60)
-        addChild(scoreLabel)
+        self.scoreLabel = HUDText(text: "SCORE \(self.score)", xPos: 20, yPos: size.height - 60)
+        self.addChild(self.scoreLabel)
     }
     
     func setupInput() {
@@ -93,6 +87,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let acceleration = accelerometerData.acceleration
             self.accelerationX = CGFloat(acceleration.x)
         })
+        
+        virtualController = VirtualController(size: size)
+        addChild(virtualController!)
     }
     
     //MARK: - Input -
@@ -158,8 +155,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func updateHUD() {
-        healthLabel.text = "Health: \(player.health)"
-        scoreLabel.text = "Score: \(score)"
+        healthLabel.text = "HEALTH: \(player.health)"
+        scoreLabel.text = "SCORE: \(score)"
     }
     
     //MARK: - Collision -

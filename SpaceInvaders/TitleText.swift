@@ -12,7 +12,7 @@ import SpriteKit
 class TitleText: SKLabelNode {
     
     let titleFontName = "Inversionz"
-    let titleFontSize: CGFloat = 90.0
+    let titleFontSize: CGFloat = 100.0
     let titleFontColor = SKColor.whiteColor()
     let titleGlowColor = SKColor.redColor()
     

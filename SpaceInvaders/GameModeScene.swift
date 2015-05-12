@@ -18,12 +18,12 @@ class GameModeScene: MenuScene {
     var scoresButton: MenuButton!
     
     override func didMoveToView(view: SKView) {
-        //buttons
-        self.soloButton = MenuButton(icon: "Phoenix", label: "SOLO", name: "soloButton", xPos: size.width / 2 - 100, yPos: size.height / 2, enabled: true)
+        //add buttons
+        self.soloButton = MenuButton(icon: "Phoenix", label: "SOLO", name: "soloButton", xPos: size.width / 2 - 100.5, yPos: size.height / 2, enabled: true)
         self.buttons.append(self.soloButton)
         addChild(self.soloButton)
         
-        self.coopButton = MenuButton(icon: "Phoenix", label: "CO OP", name: "coopButton", xPos: size.width / 2 + 100, yPos: size.height / 2, enabled: true)
+        self.coopButton = MenuButton(icon: "Phoenix", label: "CO-OP", name: "coopButton", xPos: size.width / 2 + 100.5, yPos: size.height / 2, enabled: true)
         self.buttons.append(self.coopButton)
         addChild(self.coopButton)
         
@@ -31,11 +31,11 @@ class GameModeScene: MenuScene {
         self.buttons.append(self.storeButton)
         addChild(self.storeButton)
         
-        self.backButton = MenuButton(icon: "Phoenix", label: "BACK", name: "backButton", xPos: size.width / 2 - self.storeButton.size.width, yPos: size.height / 2 - self.soloButton.size.height / 1.33, enabled: true)
+        self.backButton = MenuButton(icon: "Phoenix", label: "BACK", name: "backButton", xPos: size.width / 2 - self.storeButton.size.width - 0.5, yPos: size.height / 2 - self.soloButton.size.height / 1.33, enabled: true)
         self.buttons.append(self.backButton)
         addChild(self.backButton)
         
-        self.scoresButton = MenuButton(icon: "Phoenix", label: "SCORES", name: "scoresButton", xPos: size.width / 2 + self.storeButton.size.width, yPos: size.height / 2 - self.soloButton.size.height / 1.33, enabled: true)
+        self.scoresButton = MenuButton(icon: "Phoenix", label: "SCORES", name: "scoresButton", xPos: size.width / 2 + self.storeButton.size.width + 0.5, yPos: size.height / 2 - self.soloButton.size.height / 1.33, enabled: true)
         self.buttons.append(self.scoresButton)
         addChild(self.scoresButton)
         

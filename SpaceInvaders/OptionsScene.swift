@@ -11,16 +11,31 @@ import SpriteKit
 
 class OptionsScene: MenuScene {
     
-    
+    var backButton: MenuButton!
     
     override func didMoveToView(view: SKView) {
         
+        //TODO: display options
+        
+        //add buttons
+        self.backButton = MenuButton(icon: "Phoenix", label: "BACK", name: "backButton", xPos: size.width / 2, yPos: size.height / 2, enabled: true)
+        self.buttons.append(self.backButton)
+        addChild(self.backButton)
+        
+        //fade in
+        fadeIn()
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent)
-    {
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         for touch: AnyObject in touches {
             
+            let touchLocation = touch.locationInNode(self)
+            let touchedNode = self.nodeAtPoint(touchLocation)
+            
+            if (touchedNode.name == "backButton" && self.backButton.enabled) {
+                buttonClicked(self.backButton, scene: StartGameScene(size: self.size, title: "harvester"))
+            }
         }
     }
+    
 }
