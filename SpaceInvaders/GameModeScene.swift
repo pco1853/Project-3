@@ -101,13 +101,32 @@ class GameModeScene: SKScene {
                     /*
                     let gameModeScene = gameModeScene(size: size)
                     gameModeScene.scaleMode = scaleMode
+            
+            if (touchedNode.name == "campaignButton") {
+               self.campaignButton.zPosition = 1000
+                self.campaignButton.highlight()
+                self.campaignButton.fill.runAction(SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.25))
+               self.campaignButton.runAction(SKAction.scaleBy(1.25, duration: 0.25), completion: {
+                
+                //go to game mode select scene
+                
+                let gameScene = GameScene(size: self.size)
+                gameScene.scaleMode = self.scaleMode
                     
                     let transition = SKTransition.fadeWithDuration(1.0)
                     view?.presentScene(gameModeScene, transition: transition)
                     */
+                let transition = SKTransition.fadeWithDuration(1.0)
+                self.view?.presentScene(gameScene, transition: transition)
+                
                 })
                 self.optionsButton.runAction(SKAction.fadeOutWithDuration(0.25))
                 self.manualButton.runAction(SKAction.fadeOutWithDuration(0.25))
+
+                self.backButton.runAction(SKAction.fadeOutWithDuration(0.25))
+                self.scoresButton.runAction(SKAction.fadeOutWithDuration(0.25))
+                self.storeButton.runAction(SKAction.fadeOutWithDuration(0.25))
+                self.coopButton.runAction(SKAction.fadeOutWithDuration(0.25))
             }
                 /*
             else if (touchedNode.name == "optionsButton") {
