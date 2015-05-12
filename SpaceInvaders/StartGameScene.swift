@@ -19,8 +19,8 @@ class StartGameScene: SKScene {
         //background
         backgroundColor = SKColor.blackColor()
         let starField = SKEmitterNode(fileNamed: "StarField")
-        starField.advanceSimulationTime(10.0)
-        starField.position = CGPointMake(size.width / 2, size.height)
+        starField.advanceSimulationTime(15.0)
+        starField.position = CGPointMake(size.width / 2, size.height + 100)
         starField.zPosition = -1000
         addChild(starField)
         
@@ -61,9 +61,11 @@ class StartGameScene: SKScene {
             let touchLocation = touch.locationInNode(self)
             let touchedNode = self.nodeAtPoint(touchLocation)
             
-            if (touchedNode.name == "playButton") {
+            if (touchedNode.name == "playButton" && self.playButton.enabled) {
+                self.playButton.enabled = false
                 self.playButton.zPosition = 1000
                 self.playButton.highlight()
+                
                 self.playButton.fill.runAction(SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.25))
                 self.playButton.runAction(SKAction.scaleBy(1.25, duration: 0.25), completion: {
                     //go to game mode select scene
@@ -76,9 +78,11 @@ class StartGameScene: SKScene {
                 self.optionsButton.runAction(SKAction.fadeOutWithDuration(0.25))
                 self.manualButton.runAction(SKAction.fadeOutWithDuration(0.25))
             }
-            else if (touchedNode.name == "optionsButton") {
+            else if (touchedNode.name == "optionsButton" && self.optionsButton.enabled) {
+                self.optionsButton.enabled = false
                 self.optionsButton.zPosition = 1000
                 self.optionsButton.highlight()
+                
                 self.optionsButton.fill.runAction(SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.25))
                 self.optionsButton.runAction(SKAction.scaleBy(1.25, duration: 0.25), completion: {
                     /*TODO:
@@ -92,18 +96,18 @@ class StartGameScene: SKScene {
                 self.playButton.runAction(SKAction.fadeOutWithDuration(0.25))
                 self.manualButton.runAction(SKAction.fadeOutWithDuration(0.25))
             }
-            else if (touchedNode.name == "manualButton") {
+            else if (touchedNode.name == "manualButton" && self.manualButton.enabled) {
+                self.manualButton.enabled = false
                 self.manualButton.zPosition = 1000
                 self.manualButton.highlight()
+                
                 self.manualButton.fill.runAction(SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.25))
                 self.manualButton.runAction(SKAction.scaleBy(1.25, duration: 0.25), completion: {
-                    /*TODO:
-                    let manualScene = ManualScene(size: size)
-                    manualScene = scaleMode
+                    let manualScene = ManualScene(size: self.size)
+                    manualScene.scaleMode = self.scaleMode
                     
                     let transition = SKTransition.fadeWithDuration(1.0)
-                    view?.presentScene(manualScene, transition: transition)
-                    */
+                    self.view?.presentScene(manualScene, transition: transition)
                 })
                 self.playButton.runAction(SKAction.fadeOutWithDuration(0.25))
                 self.optionsButton.runAction(SKAction.fadeOutWithDuration(0.25))

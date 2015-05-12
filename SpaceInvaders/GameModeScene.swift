@@ -21,8 +21,8 @@ class GameModeScene: SKScene {
         //background
         backgroundColor = SKColor.blackColor()
         let starField = SKEmitterNode(fileNamed: "StarField")
-        starField.advanceSimulationTime(10.0)
-        starField.position = CGPointMake(size.width / 2, size.height)
+        starField.advanceSimulationTime(15.0)
+        starField.position = CGPointMake(size.width / 2, size.height + 100)
         starField.zPosition = -1000
         addChild(starField)
         
@@ -73,9 +73,11 @@ class GameModeScene: SKScene {
             let touchLocation = touch.locationInNode(self)
             let touchedNode = self.nodeAtPoint(touchLocation)
             
-            if (touchedNode.name == "backButton") {
+            if (touchedNode.name == "backButton" && backButton.enabled) {
+                self.backButton.enabled = false
                 self.backButton.zPosition = 1000
                 self.backButton.highlight()
+                
                 self.backButton.fill.runAction(SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.25))
                 self.backButton.runAction(SKAction.scaleBy(1.25, duration: 0.25), completion: {
                     //go to start scene

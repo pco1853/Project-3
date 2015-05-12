@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F17C8821B024B860095A6E9 /* ManualScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17C8811B024B860095A6E9 /* ManualScene.swift */; };
 		3F60A9451B023FCF00402038 /* LeftArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F60A9431B023FCF00402038 /* LeftArrow.png */; };
 		3F60A9461B023FCF00402038 /* RightArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F60A9441B023FCF00402038 /* RightArrow.png */; };
 		3F60A9481B023FE000402038 /* VirtualController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F60A9471B023FE000402038 /* VirtualController.swift */; };
@@ -60,6 +61,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F17C8811B024B860095A6E9 /* ManualScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualScene.swift; sourceTree = "<group>"; };
 		3F60A9431B023FCF00402038 /* LeftArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LeftArrow.png; sourceTree = "<group>"; };
 		3F60A9441B023FCF00402038 /* RightArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RightArrow.png; sourceTree = "<group>"; };
 		3F60A9471B023FE000402038 /* VirtualController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualController.swift; sourceTree = "<group>"; };
@@ -251,10 +253,11 @@
 			children = (
 				3F7B09341AE74E76000EEAD4 /* StartGameScene.swift */,
 				3FEA26481B019FCE00680E31 /* GameModeScene.swift */,
+				3F60A9491B023FF800402038 /* OptionsScene.swift */,
+				3F17C8811B024B860095A6E9 /* ManualScene.swift */,
 				3F7B09141AE74DC0000EEAD4 /* GameScene.swift */,
 				3F7B095D1AE75A75000EEAD4 /* LevelCompleteScene.swift */,
 				3FEF8AB91AF9971500445871 /* GameOverScene.swift */,
-				3F60A9491B023FF800402038 /* OptionsScene.swift */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F17C8821B024B860095A6E9 /* ManualScene.swift in Sources */,
 				3F7B095A1AE75465000EEAD4 /* PlayerBullet.swift in Sources */,
 				3F60A9481B023FE000402038 /* VirtualController.swift in Sources */,
 				3F7B09151AE74DC0000EEAD4 /* GameScene.swift in Sources */,

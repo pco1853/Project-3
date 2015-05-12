@@ -14,7 +14,7 @@ class MenuButton: SKSpriteNode {
     var fill: SKSpriteNode!
     var label: SKLabelNode!
     var icon: SKSpriteNode!
-    var enabled : Bool!
+    var enabled : Bool = true
     
     init(icon: String, label: String, name: String, xPos: CGFloat, yPos: CGFloat, enabled: Bool) {
         let outline = SKTexture(imageNamed: "MenuButtonOutline")
