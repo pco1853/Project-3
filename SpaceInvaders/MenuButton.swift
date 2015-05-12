@@ -14,6 +14,7 @@ class MenuButton: SKSpriteNode {
     var fill: SKSpriteNode!
     var label: SKLabelNode!
     var icon: SKSpriteNode!
+    var enabled : Bool!
     
     init(icon: String, label: String, name: String, xPos: CGFloat, yPos: CGFloat, enabled: Bool) {
         let outline = SKTexture(imageNamed: "MenuButtonOutline")
@@ -22,9 +23,9 @@ class MenuButton: SKSpriteNode {
         self.name = name
         self.position.x = xPos
         self.position.y = yPos
-        //self.userInteractionEnabled = enabled
         self.color = SKColor.redColor()
         self.colorBlendFactor = 1.0
+        self.enabled = enabled
         
         //set up fill
         self.fill = SKSpriteNode(imageNamed: "MenuButtonFill")
@@ -55,10 +56,11 @@ class MenuButton: SKSpriteNode {
         super.init(coder: aDecoder)
     }
     
-    func animate() {
-        self.runAction(SKAction.scaleBy(1.25, duration: 0.25))
-        self.fill.runAction(SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.25))
+    func highlight() {
+        self.fill.alpha = 1.0
         self.label.fontColor = SKColor.whiteColor()
+        self.icon.color = SKColor.whiteColor()
+        self.icon.colorBlendFactor = 1.0
     }
     
 }
