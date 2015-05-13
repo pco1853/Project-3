@@ -53,7 +53,6 @@ class GameModeScene: MenuScene {
                 buttonClicked(self.soloButton, scene: GameScene(size: self.size))
             }
             else if (touchedNode.name == "backButton" && backButton.enabled) {
-                self.buttons.removeAll(keepCapacity: false)
                 buttonClicked(self.backButton, scene: StartGameScene(size: self.size, title: "harvester"))
             }
             

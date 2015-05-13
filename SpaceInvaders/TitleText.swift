@@ -24,7 +24,7 @@ class TitleText: SKLabelNode {
         self.position.x = xPos
         self.position.y = yPos
         
-        //set consts
+        //set text properties
         self.fontName = titleFontName
         self.fontSize = titleFontSize
         self.fontColor = titleFontColor

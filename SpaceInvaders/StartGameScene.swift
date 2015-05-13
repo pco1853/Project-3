@@ -40,15 +40,13 @@ class StartGameScene: MenuScene {
             let touchedNode = self.nodeAtPoint(touchLocation)
             
             if (touchedNode.name == "playButton" && self.playButton.enabled) {
-                self.buttons.removeAll(keepCapacity: false)
                 buttonClicked(self.playButton, scene: GameModeScene(size: self.size, title: "mode"))
             }
             else if (touchedNode.name == "optionsButton" && self.optionsButton.enabled) {
-                self.buttons.removeAll(keepCapacity: false)
                 buttonClicked(self.optionsButton, scene: OptionsScene(size: self.size, title: "options"))
             }
             else if (touchedNode.name == "manualButton" && self.manualButton.enabled) {
-                self.buttons.removeAll(keepCapacity: false)
+                //self.buttons.removeAll(keepCapacity: false)
                 buttonClicked(self.manualButton, scene: ManualScene(size: self.size, title: "manual"))
             }
         }

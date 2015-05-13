@@ -104,7 +104,7 @@
 		3FB5577E1AFBAC2800916F1B /* Inversionz.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inversionz.otf; sourceTree = "<group>"; };
 		3FEA26401B01570200680E31 /* TitleText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleText.swift; sourceTree = "<group>"; };
 		3FEA26431B016C7300680E31 /* HUDText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDText.swift; sourceTree = "<group>"; };
-		3FEA26451B01717C00680E31 /* MenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
+		3FEA26451B01717C00680E31 /* MenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		3FEA26481B019FCE00680E31 /* GameModeScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameModeScene.swift; sourceTree = "<group>"; };
 		3FEF8AB41AF98C3C00445871 /* GameData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
 		3FEF8AB71AF98CDA00445871 /* Ship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };

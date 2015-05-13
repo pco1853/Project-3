@@ -85,7 +85,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Sets up input based on what control scheme is selected
     func setupInput()
     {
-        if(controlScheme == "Accelerometer Controls")
+        if(gameData.controlScheme == "motion")
         {
             motionManager.accelerometerUpdateInterval = 0.2
             motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue(), withHandler: {
@@ -94,7 +94,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.accelerationX = CGFloat(acceleration.x)
             })
         }
-        else if(controlScheme == "Virtual Controls")
+        else
         {
             virtualController = VirtualController(size: size)
             addChild(virtualController!)
@@ -108,7 +108,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let touchLocation = touch.locationInNode(self)
             let touchedNode = self.nodeAtPoint(touchLocation)
             
-            if(controlScheme == "Accelerometer Controls")
+            if(gameData.controlScheme == "motion")
             {
                 player.fireBullet(self)
             }

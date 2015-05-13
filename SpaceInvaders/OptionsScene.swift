@@ -11,118 +11,198 @@ import SpriteKit
 
 class OptionsScene: MenuScene {
     
+    enum menuState { case DEFAULT, CONTROLS, SOUND }
+    var currentState = menuState.DEFAULT
+    
+    var subtitle: HUDText!
+    var text: [HUDText] = []
+    
+    //default buttons
+    var controlsButton: MenuButton!
+    var soundButton: MenuButton!
     var backButton: MenuButton!
-    var tiltButton: MenuButton!
-    var virtualButton: MenuButton!
-    var tiltDescription: SKLabelNode!
-    var tiltDescription2: SKLabelNode!
-    var tiltDescription3: SKLabelNode!
-    var virtualDescription: SKLabelNode!
-    var virtualDescription2: SKLabelNode!
-    var virtualDescription3: SKLabelNode!
-    let fadeIn = SKAction.fadeInWithDuration(0.1)
-    let fadeOut = SKAction.fadeOutWithDuration(0.0)
+    
+    //control options
+    var motionControlsButton: MenuButton!
+    var virtualControlsButton: MenuButton!
+    
+    //sounds options
+    var soundOnButton: MenuButton!
+    var soundOffButton: MenuButton!
     
     override func didMoveToView(view: SKView)
     {
-        
-        self.backButton = MenuButton(icon: "Phoenix", label: "BACK", name: "backButton", xPos: size.width / 2 , yPos: size.height / 2 - 400, enabled: true)
-        self.backButton.xScale = 0.5
-        self.backButton.yScale = 0.5
-        self.buttons.append(self.backButton)
-        addChild(self.backButton)
-        
-        self.tiltButton = MenuButton(icon: "Phoenix", label: "TILT", name: "tiltControls", xPos: size.width / 2 - 180, yPos: size.height / 2 + 100, enabled: true)
-        self.buttons.append(self.tiltButton)
-        addChild(self.tiltButton)
-        
-        self.virtualButton = MenuButton(icon: "Phoenix", label: "VIRTUAL", name: "virtualControls", xPos: size.width / 2 - 180, yPos: size.height / 2 - 200, enabled: true)
-        self.buttons.append(self.virtualButton)
-        addChild(self.virtualButton)
-        
-        //fades in buttons and title text
+        showOptions()
         fadeIn()
-        
-        setUpButtonDescriptions()
     }
     
-    //SKLabel node only supports 1 line of text... so each line of a description has to be its own labelNode
-    func setUpButtonDescriptions()
-    {
-        self.tiltDescription = SKLabelNode(text: "Use the accelermoter to move.")
-        self.tiltDescription.position = CGPointMake(size.width / 2 + 120, size.height / 2 + 137)
-        self.tiltDescription.fontName = "SquareFont"
-        self.tiltDescription.fontColor = UIColor.whiteColor()
-        self.tiltDescription.fontSize = 22.0
+    func showOptions() {
+        clearContent()
         
-        self.tiltDescription2 = SKLabelNode(text: "Tap the screen to shoot.")
-        self.tiltDescription2.position = CGPointMake(size.width / 2 + 85, size.height / 2 + 90)
-        self.tiltDescription2.fontName = "SquareFont"
-        self.tiltDescription2.fontColor = UIColor.whiteColor()
-        self.tiltDescription2.fontSize = 22.0
+        //add default buttons
+        self.controlsButton = MenuButton(icon: "Phoenix", label: "CONTROLS", name: "controlsButton", xPos: size.width / 2 - 100.5, yPos: size.height / 2, enabled: true)
+        self.buttons.append(self.controlsButton)
+        self.addChild(self.controlsButton)
         
-        self.tiltDescription3 = SKLabelNode(text: "Swipe up to harvest.")
-        self.tiltDescription3.position = CGPointMake(size.width / 2 + 62, size.height / 2 + 45)
-        self.tiltDescription3.fontName = "SquareFont"
-        self.tiltDescription3.fontColor = UIColor.whiteColor()
-        self.tiltDescription3.fontSize = 22.0
+        self.soundButton = MenuButton(icon: "Phoenix", label: "SOUND", name: "soundButton", xPos: size.width / 2 + 100.5, yPos: size.height / 2, enabled: true)
+        self.buttons.append(self.soundButton)
+        self.addChild(self.soundButton)
         
+        self.backButton = MenuButton(icon: "Phoenix", label: "BACK", name: "backButton", xPos: size.width / 2, yPos: size.height / 2 - self.controlsButton.size.height / 1.33, enabled: true)
+        self.buttons.append(self.backButton)
+        self.addChild(self.backButton)
         
-        self.virtualDescription = SKLabelNode(text: "Left and Right arrows to move")
-        self.virtualDescription.position = CGPointMake(size.width / 2 + 118, size.height / 2 - 165)
-        self.virtualDescription.fontName = "SquareFont"
-        self.virtualDescription.fontColor = UIColor.whiteColor()
-        self.virtualDescription.fontSize = 22.0
-        
-        
-        self.virtualDescription2 = SKLabelNode(text: "Right button to shoot.")
-        self.virtualDescription2.position = CGPointMake(size.width / 2 + 71, size.height / 2 - 210)
-        self.virtualDescription2.fontName = "SquareFont"
-        self.virtualDescription2.fontColor = UIColor.whiteColor()
-        self.virtualDescription2.fontSize = 22.0
-        
-        
-        self.virtualDescription3 = SKLabelNode(text: "Left button to harvest.")
-        self.virtualDescription3.position = CGPointMake(size.width / 2 + 79, size.height / 2 - 255)
-        self.virtualDescription3.fontName = "SquareFont"
-        self.virtualDescription3.fontColor = UIColor.whiteColor()
-        self.virtualDescription3.fontSize = 22.0
-
-        addChild(self.tiltDescription)
-        addChild(self.tiltDescription2)
-        addChild(self.tiltDescription3)
-        
-        addChild(self.virtualDescription)
-        addChild(self.virtualDescription2)
-        addChild(self.virtualDescription3)
-        
-        if(controlScheme == "Accelerometer Controls")
-        {
-            self.virtualButton.undoHighlight()
-            self.tiltButton.highlight()
-            
-            self.virtualDescription.runAction(fadeOut)
-            self.virtualDescription2.runAction(fadeOut)
-            self.virtualDescription3.runAction(fadeOut)
-            
-            self.tiltDescription.runAction(fadeIn)
-            self.tiltDescription2.runAction(fadeIn)
-            self.tiltDescription3.runAction(fadeIn)
+        //fade in
+        if (currentState != .DEFAULT) { //check to avoid double fade on initial startup
+            fadeInButtons()
         }
-        else if(controlScheme == "Virtual Controls")
-        {
-            self.tiltButton.undoHighlight()
-            self.virtualButton.highlight()
-            
-            self.virtualDescription.runAction(fadeIn)
-            self.virtualDescription2.runAction(fadeIn)
-            self.virtualDescription3.runAction(fadeIn)
-            
-            self.tiltDescription.runAction(fadeOut)
-            self.tiltDescription2.runAction(fadeOut)
-            self.tiltDescription3.runAction(fadeOut)
+        
+        //set state
+        self.currentState = .DEFAULT
+    }
+    
+    func showControlOptions() {
+        clearContent()
+        
+        //add buttons
+        self.motionControlsButton = MenuButton(icon: "", label: "MOTION", name: "motionControlsButton", xPos: size.width / 2 - 100.5, yPos: size.height / 2 - 110, enabled: true)
+        self.buttons.append(self.motionControlsButton)
+        addChild(self.motionControlsButton)
+        
+        self.virtualControlsButton = MenuButton(icon: "", label: "VIRTUAL", name: "virtualControlsButton", xPos: size.width / 2 + 100.5, yPos: size.height / 2 - 110, enabled: true)
+        self.buttons.append(self.virtualControlsButton)
+        addChild(self.virtualControlsButton)
+        
+        self.backButton = MenuButton(icon: "Phoenix", label: "BACK", name: "backButton", xPos: size.width / 2, yPos: size.height / 2 - self.motionControlsButton.size.height / 1.33 - 110, enabled: true)
+        self.buttons.append(self.backButton)
+        self.addChild(self.backButton)
+        
+        //add and fade in subtitle
+        fadeInSubtitle("Control Scheme")
+        
+        //fade in buttons, determine which to highlight and text to display
+        fadeInButtons()
+        highlightControlOptions()
+        
+        //set state
+        self.currentState = .CONTROLS
+    }
+    
+    func showSoundOptions() {
+        clearContent()
+        
+        //add buttons
+        self.soundOnButton = MenuButton(icon: "", label: "ON", name: "soundOnButton", xPos: size.width / 2 - 100.5, yPos: size.height / 2, enabled: true)
+        self.buttons.append(self.soundOnButton)
+        addChild(self.soundOnButton)
+        
+        self.soundOffButton = MenuButton(icon: "", label: "OFF", name: "soundOffButton", xPos: size.width / 2 + 100.5, yPos: size.height / 2, enabled: true)
+        self.buttons.append(self.soundOffButton)
+        addChild(self.soundOffButton)
+        
+        self.backButton = MenuButton(icon: "Phoenix", label: "BACK", name: "backButton", xPos: size.width / 2, yPos: size.height / 2 - self.soundOnButton.size.height / 1.33, enabled: true)
+        self.buttons.append(self.backButton)
+        self.addChild(self.backButton)
+        
+        //fade in buttons
+        fadeInButtons()
+        
+        //add and fade in subtitle
+        fadeInSubtitle("Sound")
+        highlightSoundOptions()
+        
+        //set state
+        self.currentState = .SOUND
+    }
+    
+    func highlightControlOptions() {
+        //clear text
+        for (var i = 0; i < self.text.count; i++) {
+            self.text[i].removeFromParent()
         }
-
+        self.text.removeAll()
+        
+        //remove highlights
+        self.virtualControlsButton.undoHighlight()
+        self.motionControlsButton.undoHighlight()
+        
+        //set highlights and text
+        if (gameData.controlScheme == "motion") {
+            self.motionControlsButton.highlight()
+            fadeInText("Use the accelerometer to move", xPos: size.width / 2, yPos: self.subtitle.position.y - 60)
+            fadeInText("Tap the screen to shoot", xPos: size.width / 2, yPos: self.subtitle.position.y - 100)
+            fadeInText("Swipe up to harvest", xPos: size.width / 2, yPos: self.subtitle.position.y - 140)
+        }
+        else {
+            self.virtualControlsButton.highlight()
+            fadeInText("Use the arrow buttons to move", xPos: size.width / 2, yPos: self.subtitle.position.y - 60)
+            fadeInText("Tap the right button to shoot", xPos: size.width / 2, yPos: self.subtitle.position.y - 100)
+            fadeInText("Tap the left button to harvest", xPos: size.width / 2, yPos: self.subtitle.position.y - 140)
+        }
+    }
+    
+    func highlightSoundOptions() {
+        //remove highlights
+        self.soundOnButton.undoHighlight()
+        self.soundOffButton.undoHighlight()
+        
+        //set highlights
+        if (gameData.soundEnabled) {
+            self.soundOnButton.highlight()
+        }
+        else {
+            self.soundOffButton.highlight()
+        }
+    }
+    
+    func fadeInButtons() {
+        //set invisible
+        for (var i = 0; i < self.buttons.count; i++) {
+            self.buttons[i].alpha = 0
+        }
+        
+        //fade in
+        let fadeIn = SKAction.fadeInWithDuration(1.0)
+        for (var i = 0; i < self.buttons.count; i++) {
+            self.buttons[i].enabled = false
+            self.buttons[i].runAction(fadeIn, completion: {
+                for (var i = 0; i < self.buttons.count; i++) {
+                    self.buttons[i].enabled = true
+                }
+            })
+        }
+    }
+    
+    func fadeInSubtitle(subtitle: String) {
+        self.subtitle = HUDText(text: subtitle, xPos: size.width / 2, yPos: self.titleText.position.y - 100)
+        self.addChild(self.subtitle)
+        self.subtitle.horizontalAlignmentMode = .Center
+        self.subtitle.alpha = 0
+        self.subtitle.runAction(SKAction.fadeInWithDuration(1.0))
+    }
+    
+    func fadeInText(text: String, xPos: CGFloat, yPos: CGFloat) {
+        let t = HUDText(text: text, xPos: xPos, yPos: yPos)
+        self.addChild(t)
+        t.horizontalAlignmentMode = .Center
+        t.alpha = 0
+        t.runAction(SKAction.fadeInWithDuration(1.0))
+        self.text.append(t)
+    }
+    
+    func clearContent() {
+        //clear buttons
+        for (var i = 0; i < self.buttons.count; i++) {
+            self.buttons[i].removeFromParent()
+        }
+        self.buttons.removeAll()
+        
+        //clear text
+        for (var i = 0; i < self.text.count; i++) {
+            self.text[i].removeFromParent()
+        }
+        self.text.removeAll()
+        self.subtitle?.removeFromParent()
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
@@ -131,40 +211,41 @@ class OptionsScene: MenuScene {
             let touchLocation = touch.locationInNode(self)
             let touchedNode = self.nodeAtPoint(touchLocation)
             
+            //default options
             if (touchedNode.name == "backButton" && self.backButton.enabled) {
-                self.buttons.removeAll(keepCapacity: false)
-                buttonClicked(self.backButton, scene: StartGameScene(size: self.size, title: "harvester"))
+                //determine where to go based on state
+                if (self.currentState == .DEFAULT) { //return to main menu
+                    buttonClicked(self.backButton, scene: StartGameScene(size: self.size, title: "harvester"))
+                }
+                else { //return to default screen
+                    buttonClicked(self.backButton, completion: { self.showOptions() })
+                }
             }
-            else if(touchedNode.name == "tiltControls")
-            {
-                self.virtualDescription.runAction(fadeOut)
-                self.virtualDescription2.runAction(fadeOut)
-                self.virtualDescription3.runAction(fadeOut)
-                
-                self.tiltDescription.runAction(fadeIn)
-                self.tiltDescription2.runAction(fadeIn)
-                self.tiltDescription3.runAction(fadeIn)
-                
-                self.virtualButton.undoHighlight()
-                self.tiltButton.highlight()
-                
-                controlScheme = "Accelerometer Controls"
+            else if (touchedNode.name == "controlsButton" && self.controlsButton.enabled) {
+                buttonClicked(self.controlsButton, completion: { self.showControlOptions() })
             }
-            else if(touchedNode.name == "virtualControls")
-            {
-                
-                self.tiltDescription.runAction(fadeOut)
-                self.tiltDescription2.runAction(fadeOut)
-                self.tiltDescription3.runAction(fadeOut)
-                
-                self.virtualDescription.runAction(fadeIn)
-                self.virtualDescription2.runAction(fadeIn)
-                self.virtualDescription3.runAction(fadeIn)
-                
-                self.tiltButton.undoHighlight()
-                self.virtualButton.highlight()
-                
-                controlScheme = "Virtual Controls"
+            else if (touchedNode.name == "soundButton" && self.soundButton.enabled) {
+                buttonClicked(self.soundButton, completion: { self.showSoundOptions() })
+            }
+            
+            //control options
+            else if (touchedNode.name == "motionControlsButton" && self.motionControlsButton.enabled) {
+                gameData.controlScheme = "motion"
+                highlightControlOptions()
+            }
+            else if (touchedNode.name == "virtualControlsButton" && self.virtualControlsButton.enabled) {
+                gameData.controlScheme = "virtual"
+                highlightControlOptions()
+            }
+            
+            //sound options
+            else if (touchedNode.name == "soundOnButton" && self.soundOnButton.enabled) {
+                gameData.soundEnabled = true
+                highlightSoundOptions()
+            }
+            else if (touchedNode.name == "soundOffButton" && self.soundOffButton.enabled) {
+                gameData.soundEnabled = false
+                highlightSoundOptions()
             }
         }
     }

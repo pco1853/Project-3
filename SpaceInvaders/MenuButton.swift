@@ -43,10 +43,16 @@ class MenuButton: SKSpriteNode {
         addChild(self.label)
         
         //set up icon
-        self.icon = SKSpriteNode(imageNamed: icon)
+        if (icon == "") { //if no icon, center label instead
+            self.icon = SKSpriteNode()
+            self.label.position.y = 0
+        }
+        else {
+            self.icon = SKSpriteNode(imageNamed: icon)
+            self.icon.color = SKColor.whiteColor()
+            self.icon.colorBlendFactor = 1.0;
+        }
         self.icon.zPosition = -1
-        self.icon.color = SKColor.whiteColor()
-        self.icon.colorBlendFactor = 1.0;
         addChild(self.icon)
     }
     
@@ -61,8 +67,7 @@ class MenuButton: SKSpriteNode {
         self.icon.colorBlendFactor = 1.0
     }
     
-    func undoHighlight()
-    {
+    func undoHighlight() {
         self.fill.alpha = 0.1
         self.label.fontColor = SKColor.whiteColor()
         self.icon.color = SKColor.whiteColor()

@@ -10,4 +10,13 @@ import Foundation
 
 class GameData {
     
+    var controlScheme: String = "motion"
+    var soundEnabled: Bool = true
+    
+    init() {
+        //TODO: set vars from loaded file
+    }
+    
 }
+
+var gameData = GameData()
