@@ -33,6 +33,7 @@ class ManualScene: MenuScene {
             let touchedNode = self.nodeAtPoint(touchLocation)
             
             if (touchedNode.name == "backButton" && self.backButton.enabled) {
+                self.buttons.removeAll(keepCapacity: false)
                 buttonClicked(self.backButton, scene: StartGameScene(size: self.size, title: "harvester"))
             }
         }

@@ -60,6 +60,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupEnemies()
         setupHUD()
         setupInput()
+        
+        self.view?.multipleTouchEnabled = true
     }
     
     func setupPlayer() {
@@ -80,24 +82,77 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(self.scoreLabel)
     }
     
-    func setupInput() {
-        motionManager.accelerometerUpdateInterval = 0.2
-        motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue(), withHandler: {
-            (accelerometerData: CMAccelerometerData!, error: NSError!) in
-            let acceleration = accelerometerData.acceleration
-            self.accelerationX = CGFloat(acceleration.x)
-        })
-        
-        virtualController = VirtualController(size: size)
-        addChild(virtualController!)
+    //Sets up input based on what control scheme is selected
+    func setupInput()
+    {
+        if(controlScheme == "Accelerometer Controls")
+        {
+            motionManager.accelerometerUpdateInterval = 0.2
+            motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue(), withHandler: {
+                (accelerometerData: CMAccelerometerData!, error: NSError!) in
+                let acceleration = accelerometerData.acceleration
+                self.accelerationX = CGFloat(acceleration.x)
+            })
+        }
+        else if(controlScheme == "Virtual Controls")
+        {
+            virtualController = VirtualController(size: size)
+            addChild(virtualController!)
+        }
     }
     
     //MARK: - Input -
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        for touch: AnyObject in touches {
-            player.fireBullet(self)
+        for touch: AnyObject in touches
+        {
+            let touchLocation = touch.locationInNode(self)
+            let touchedNode = self.nodeAtPoint(touchLocation)
+            
+            if(controlScheme == "Accelerometer Controls")
+            {
+                player.fireBullet(self)
+            }
+            else
+            {
+                if(touchedNode.name == "RightArrow")
+                {
+                    self.accelerationX = 0.5
+                }
+                else if(touchedNode.name == "LeftArrow")
+                {
+                    self.accelerationX = -0.5
+                }
+                else if(touchedNode.name == "Shoot")
+                {
+                    player.fireBullet(self)
+                }
+                else if(touchedNode.name == "Harvest")
+                {
+                    //harvest code
+                }
+            }
         }
     }
+    
+    override func touchesEnded(touches: NSSet, withEvent event: UIEvent)
+    {
+        for touch: AnyObject in touches
+        {
+            
+            let touchLocation = touch.locationInNode(self)
+            let touchedNode = self.nodeAtPoint(touchLocation)
+            
+            if(touchedNode.name == "RightArrow")
+            {
+                self.accelerationX = 0.0
+            }
+            else if(touchedNode.name == "LeftArrow")
+            {
+                self.accelerationX = 0.0
+            }
+        }
+    }
+    
     
     //MARK: - Game Loop -
     override func update(currentTime: CFTimeInterval) {
@@ -124,7 +179,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func updatePlayer() {
+    func updatePlayer()
+    {
         //move player
         player.physicsBody?.velocity = CGVector(dx: (accelerationX * 100) * (player.movementSpeed * dt), dy: 0)
         

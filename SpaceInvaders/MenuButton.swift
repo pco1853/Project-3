@@ -61,4 +61,11 @@ class MenuButton: SKSpriteNode {
         self.icon.colorBlendFactor = 1.0
     }
     
+    func undoHighlight()
+    {
+        self.fill.alpha = 0.1
+        self.label.fontColor = SKColor.whiteColor()
+        self.icon.color = SKColor.whiteColor()
+    }
+    
 }
