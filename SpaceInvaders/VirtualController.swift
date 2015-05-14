@@ -22,25 +22,6 @@ class VirtualController: SKSpriteNode {
         self.position.x = size.width / 2
         self.position.y = (size.height / 2) - (size.height * 0.25) - (self.size.height / 2)
         
-        //Left and right arrows are set
-        var leftTexture = SKTexture(imageNamed: "LeftArrow.png")
-        var leftArrow = SKSpriteNode(texture: leftTexture)
-        leftArrow.size = leftTexture.size()
-        leftArrow.color = UIColor.clearColor()
-        leftArrow.name = "LeftArrow"
-        leftArrow.position.x = -self.size.width / 2 + 120
-        leftArrow.position.y = 0
-        self.addChild(leftArrow)
-        
-        var rightTexture = SKTexture(imageNamed: "RightArrow.png")
-        var rightArrow = SKSpriteNode(texture: rightTexture)
-        rightArrow.size = leftTexture.size()
-        rightArrow.color = UIColor.clearColor()
-        rightArrow.name = "RightArrow"
-        rightArrow.position.x =  leftArrow.position.x + 120
-        rightArrow.position.y = 0
-        self.addChild(rightArrow)
-        
         self.fireButton = MenuButton(icon: "", label: "FIRE", name: "fireButton", xPos: self.size.width / 2 - 120, yPos: 0, enabled: true)
         self.fireButton.zPosition = 1000
         self.fireButton.xScale = 0.5

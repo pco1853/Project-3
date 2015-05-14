@@ -23,7 +23,8 @@ enum EnemyDirection{
     case None
 }
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class GameScene: SKScene, SKPhysicsContactDelegate
+{
     
     //MARK: - Variables -
     //player
@@ -90,7 +91,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func setupEnemies() {
         //TODO:
         self.fighter = Fighter()
-        self.fighter.position = CGPoint(x: size.width / 2, y: fighter.size.width)
+        self.fighter.position = CGPoint(x: size.width / 2, y: size.height - 100)
         self.addChild(self.fighter)
 
     }
@@ -166,19 +167,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             else
             {
-                if(touchedNode.name == "RightArrow")
+                
                 if(touchedNode.name == "fireButton")
                 {
-                    self.accelerationX = 0.5
                     player.fireBullet(self)
                 }
-                else if(touchedNode.name == "LeftArrow")
+                
                 else if(touchedNode.name == "harvestButton")
                 {
-                    self.accelerationX = -0.5
                     println("harvest")
                 }
-                else if(touchedNode.name == "Shoot")
+                
                 else if(touchedNode.name == "powerupButton")
                 {
                     player.fireBullet(self)
@@ -214,18 +213,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     {
         for touch: AnyObject in touches
         {
-            
-            let touchLocation = touch.locationInNode(self)
-            let touchedNode = self.nodeAtPoint(touchLocation)
-            
-            if(touchedNode.name == "RightArrow")
-            {
-                self.accelerationX = 0.0
-            }
-            else if(touchedNode.name == "LeftArrow")
-            {
-                self.accelerationX = 0.0
-            }
         }
     }
     
@@ -302,7 +289,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         //move player
-        player.physicsBody?.velocity = CGVector(dx: (accelerationX * 100) * (player.movementSpeed * dt), dy: 0)
         player.physicsBody?.velocity = CGVector(dx: (accelerationX * 100) * (player.movementSpeed * dt), dy: (accelerationY * 100) * (player.movementSpeed * dt))
         
         //check player bounds
@@ -346,7 +332,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     //MARK: - Collision -
-    func didBeginContact(contact: SKPhysicsContact) {
+    func didBeginContact(contact: SKPhysicsContact)
+    {
         
         var firstBody: SKPhysicsBody
         var secondBody: SKPhysicsBody

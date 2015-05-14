@@ -25,7 +25,6 @@ class StartGameScene: MenuScene {
         self.buttons.append(self.optionsButton)
         addChild(self.optionsButton)
         
-        self.manualButton = MenuButton(icon: "icon_manual", label: "MANUAL", name: "manualButton", xPos: size.width / 2 + 100.5, yPos: playButton.position.y - playButton.size.height / 1.33, enabled: true)
         self.manualButton = MenuButton(icon: "icon_manual", label: "CREDITS", name: "manualButton", xPos: size.width / 2 + 100.5, yPos: playButton.position.y - playButton.size.height / 1.33, enabled: true)
         self.buttons.append(self.manualButton)
         addChild(self.manualButton)
@@ -48,7 +47,6 @@ class StartGameScene: MenuScene {
             }
             else if (touchedNode.name == "manualButton" && self.manualButton.enabled) {
                 //self.buttons.removeAll(keepCapacity: false)
-                buttonClicked(self.manualButton, scene: ManualScene(size: self.size, title: "manual"))
                 buttonClicked(self.manualButton, scene: ManualScene(size: self.size, title: "credits"))
             }
         }

@@ -131,14 +131,10 @@ class OptionsScene: MenuScene {
             self.motionControlsButton.highlight()
             fadeInText("Use the accelerometer to move", xPos: size.width / 2, yPos: self.subtitle.position.y - 60)
             fadeInText("Tap the screen to shoot", xPos: size.width / 2, yPos: self.subtitle.position.y - 100)
-            fadeInText("Swipe up to harvest", xPos: size.width / 2, yPos: self.subtitle.position.y - 140)
             fadeInText("Swipe up to use ability", xPos: size.width / 2, yPos: self.subtitle.position.y - 140)
         }
         else {
             self.virtualControlsButton.highlight()
-            fadeInText("Use the arrow buttons to move", xPos: size.width / 2, yPos: self.subtitle.position.y - 60)
-            fadeInText("Tap the right button to shoot", xPos: size.width / 2, yPos: self.subtitle.position.y - 100)
-            fadeInText("Tap the left button to harvest", xPos: size.width / 2, yPos: self.subtitle.position.y - 140)
             fadeInText("Use the joystick to move", xPos: size.width / 2, yPos: self.subtitle.position.y - 60)
             fadeInText("Tap the fire button to shoot", xPos: size.width / 2, yPos: self.subtitle.position.y - 100)
             fadeInText("Tap the harvest button to use ability", xPos: size.width / 2, yPos: self.subtitle.position.y - 140)
