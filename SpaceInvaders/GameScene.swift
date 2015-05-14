@@ -35,11 +35,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //ui
     var healthLabel: HUDText!
     var scoreLabel: HUDText!
+    var pauseButton: MenuButton!
     
     //input
+    var virtualController: VirtualController?
     let motionManager = CMMotionManager()
     var accelerationX: CGFloat = 0.0
-    var virtualController:VirtualController?
     
     //MARK: - Initialization -
     override func didMoveToView(view: SKView) {
@@ -55,7 +56,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         starField.advanceSimulationTime(15.0)
         addChild(starField)
         
-        //setup game objects
+        //setup game
         setupPlayer()
         setupEnemies()
         setupHUD()
@@ -75,18 +76,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupHUD() {
+        //add labels
         self.healthLabel = HUDText(text: "HEALTH \(self.player.health)", xPos: 20, yPos: size.height - 20)
         self.addChild(self.healthLabel)
         
         self.scoreLabel = HUDText(text: "SCORE \(self.score)", xPos: 20, yPos: size.height - 60)
         self.addChild(self.scoreLabel)
+        
+        //add buttons
+        self.pauseButton = MenuButton(icon: "", label: "PAUSE", name: "pauseButton", xPos: size.width - 120, yPos: size.height - 100, enabled: true)
+        self.pauseButton.xScale = 0.5
+        self.pauseButton.yScale = 0.5
+        self.addChild(self.pauseButton)
     }
     
-    //Sets up input based on what control scheme is selected
-    func setupInput()
-    {
-        if(gameData.controlScheme == "motion")
-        {
+    func setupInput() {
+        //determine movement scheme
+        if(gameData.controlScheme == "motion") {
             motionManager.accelerometerUpdateInterval = 0.2
             motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue(), withHandler: {
                 (accelerometerData: CMAccelerometerData!, error: NSError!) in
@@ -94,8 +100,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.accelerationX = CGFloat(acceleration.x)
             })
         }
-        else
-        {
+        else {
             virtualController = VirtualController(size: size)
             addChild(virtualController!)
         }
@@ -130,6 +135,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 {
                     //harvest code
                 }
+            }
+            
+            if (touchedNode.name == "pauseButton" && self.pauseButton.enabled){
+                println("pause clicked")
             }
         }
     }

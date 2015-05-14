@@ -9,13 +9,17 @@
 import UIKit
 import SpriteKit
 
-class VirtualController: SKSpriteNode
-{
+class VirtualController: SKSpriteNode {
+    
+    var fireButton: MenuButton!
+    var harvestButton: MenuButton!
+    var powerupButton: MenuButton!
     
     //sets up the virtual controller UI overlay
-    init(size:CGSize)
-    {
-        super.init(texture: nil, color: UIColor.clearColor(), size: size)
+    init(size: CGSize) {
+        super.init(texture: nil, color: UIColor.clearColor(), size: CGSize(width: size.width, height: size.height * 0.25))
+        self.position.x = size.width / 2
+        self.position.y = (size.height / 2) - (size.height * 0.25) - (self.size.height / 2)
         
         //Left and right arrows are set
         var leftTexture = SKTexture(imageNamed: "LeftArrow.png")
@@ -23,8 +27,8 @@ class VirtualController: SKSpriteNode
         leftArrow.size = leftTexture.size()
         leftArrow.color = UIColor.clearColor()
         leftArrow.name = "LeftArrow"
-        leftArrow.position.x = size.width - (size.width * 0.90)
-        leftArrow.position.y = size.height - (size.height * 0.85)
+        leftArrow.position.x = -self.size.width / 2 + 120
+        leftArrow.position.y = 0
         self.addChild(leftArrow)
         
         var rightTexture = SKTexture(imageNamed: "RightArrow.png")
@@ -32,27 +36,26 @@ class VirtualController: SKSpriteNode
         rightArrow.size = leftTexture.size()
         rightArrow.color = UIColor.clearColor()
         rightArrow.name = "RightArrow"
-        rightArrow.position.x = size.width - (size.width * 0.10)
-        rightArrow.position.y = size.height - (size.height * 0.85)
+        rightArrow.position.x =  leftArrow.position.x + 120
+        rightArrow.position.y = 0
         self.addChild(rightArrow)
         
-        var shootTexture = SKTexture(imageNamed: "shootButton.png")
-        var shootButton = SKSpriteNode(texture: shootTexture)
-        shootButton.size = shootTexture.size()
-        shootButton.color = UIColor.clearColor()
-        shootButton.name = "Shoot"
-        shootButton.position.x = size.width - (size.width * 0.10)
-        shootButton.position.y = size.height - (size.height * 0.70)
-        self.addChild(shootButton)
+        self.fireButton = MenuButton(icon: "", label: "FIRE", name: "fireButton", xPos: self.size.width / 2 - 120, yPos: 0, enabled: true)
+        self.fireButton.zPosition = 1000
+        self.fireButton.xScale = 0.5
+        self.fireButton.yScale = 0.5
+        self.addChild(self.fireButton)
         
-        var harvestTexture = SKTexture(imageNamed: "shootButton.png")
-        var harvestButton = SKSpriteNode(texture: harvestTexture)
-        harvestButton.size = shootTexture.size()
-        harvestButton.color = UIColor.clearColor()
-        harvestButton.name = "Harvest"
-        harvestButton.position.x = size.width - (size.width * 0.90)
-        harvestButton.position.y = size.height - (size.height * 0.70)
-        self.addChild(harvestButton)
+        self.harvestButton = MenuButton(icon: "", label: "HARVEST", name: "harvestButton", xPos: self.fireButton.position.x - self.fireButton.size.width / 2 - 0.25, yPos: self.fireButton.position.y + self.fireButton.size.height / 1.33, enabled: true)
+        self.harvestButton.xScale = 0.5
+        self.harvestButton.yScale = 0.5
+        self.addChild(self.harvestButton)
+        
+        self.powerupButton = MenuButton(icon: "", label: "POWERUP", name: "powerupButton", xPos: self.fireButton.position.x + self.fireButton.size.width / 2 + 0.25, yPos: self.fireButton.position.y + self.fireButton.size.height / 1.33, enabled: false)
+        self.powerupButton.alpha = 0.5
+        self.powerupButton.xScale = 0.5
+        self.powerupButton.yScale = 0.5
+        self.addChild(self.powerupButton)
     }
     
     required init?(coder aDecoder: NSCoder) {

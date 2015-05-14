@@ -30,9 +30,9 @@ class OptionsScene: MenuScene {
     var soundOnButton: MenuButton!
     var soundOffButton: MenuButton!
     
-    override func didMoveToView(view: SKView)
-    {
+    override func didMoveToView(view: SKView) {
         showOptions()
+        
         fadeIn()
     }
     

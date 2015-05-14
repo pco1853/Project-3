@@ -14,7 +14,6 @@ class MenuScene: SKScene {
     var starField: SKEmitterNode!
     var titleText: TitleText!
     var buttons: [MenuButton] = []
-
     
     init(size: CGSize, title: String) {
         super.init(size: size)

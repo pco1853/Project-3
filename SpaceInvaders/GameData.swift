@@ -10,7 +10,7 @@ import Foundation
 
 class GameData {
     
-    var controlScheme: String = "motion"
+    var controlScheme: String = "virtual"
     var soundEnabled: Bool = true
     
     init() {
