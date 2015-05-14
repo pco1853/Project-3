@@ -41,6 +41,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var virtualController: VirtualController?
     let motionManager = CMMotionManager()
     var accelerationX: CGFloat = 0.0
+    var accelerationY: CGFloat = 0.0
     
     //MARK: - Initialization -
     override func didMoveToView(view: SKView) {
@@ -85,6 +86,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //add buttons
         self.pauseButton = MenuButton(icon: "", label: "PAUSE", name: "pauseButton", xPos: size.width - 120, yPos: size.height - 100, enabled: true)
+        self.pauseButton.zPosition = 1000
         self.pauseButton.xScale = 0.5
         self.pauseButton.yScale = 0.5
         self.addChild(self.pauseButton)
@@ -98,6 +100,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 (accelerometerData: CMAccelerometerData!, error: NSError!) in
                 let acceleration = accelerometerData.acceleration
                 self.accelerationX = CGFloat(acceleration.x)
+                self.accelerationY = CGFloat(acceleration.y * 1.2)
             })
         }
         else {
@@ -120,20 +123,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             else
             {
                 if(touchedNode.name == "RightArrow")
+                if(touchedNode.name == "fireButton")
                 {
                     self.accelerationX = 0.5
+                    player.fireBullet(self)
                 }
                 else if(touchedNode.name == "LeftArrow")
+                else if(touchedNode.name == "harvestButton")
                 {
                     self.accelerationX = -0.5
+                    println("harvest")
                 }
                 else if(touchedNode.name == "Shoot")
+                else if(touchedNode.name == "powerupButton")
                 {
                     player.fireBullet(self)
                 }
                 else if(touchedNode.name == "Harvest")
                 {
                     //harvest code
+                    println("powerup")
                 }
             }
             
@@ -190,8 +199,53 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func updatePlayer()
     {
+        if(gameData.controlScheme == "virtual")
+        {
+            if virtualController!.joystick.velocity.x != 0 || virtualController!.joystick.velocity.y != 0
+            {
+                accelerationX = (virtualController!.joystick.velocity.x / 60)
+                accelerationY = (virtualController!.joystick.velocity.y / 60)
+            }
+                //Logic for making the player slow to a stop instead of coming to a dead stop when the joystick is released
+            else if virtualController!.joystick.velocity.x == 0 || virtualController!.joystick.velocity.y == 0
+            {
+                //Slowing down the X coordinate
+                if player.physicsBody?.velocity.dx > 1.0
+                {
+                    accelerationX -= 0.02
+                
+                }
+                else if player.physicsBody?.velocity.dx < 1.0
+                {
+                    accelerationX += 0.02
+                }
+                else
+                {
+                    accelerationX = 0.0
+                    accelerationY = 0.0
+                }
+            
+                //slowing down the Y coordinate
+                if player.physicsBody?.velocity.dy > 1.0
+                {
+                    accelerationY -= 0.02
+                
+                }
+                else if player.physicsBody?.velocity.dy < 1.0
+                {
+                    accelerationY += 0.02
+                }
+                else
+                {
+                    accelerationY = 0.0
+                    accelerationX = 0.0
+                }
+            }
+        }
+        
         //move player
         player.physicsBody?.velocity = CGVector(dx: (accelerationX * 100) * (player.movementSpeed * dt), dy: 0)
+        player.physicsBody?.velocity = CGVector(dx: (accelerationX * 100) * (player.movementSpeed * dt), dy: (accelerationY * 100) * (player.movementSpeed * dt))
         
         //check player bounds
         if (player.position.x - player.size.width / 2 < 20.0) { //left edge
@@ -199,6 +253,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         else if (player.position.x + player.size.width / 2 > self.size.width - 20.0) { //right edge
             player.position.x = self.size.width - player.size.width / 2 - 20.0
+        }
+        
+        if(player.position.y - player.size.height / 2 < 20.0)
+        {
+            player.position.y = player.size.height / 2 + 20.0
+        }
+        else if (player.position.y + player.size.height / 2 > self.size.height - 20.0)
+        {
+            player.position.y = self.size.height - player.size.height / 2 - 20.0
         }
         
         //move player bullets

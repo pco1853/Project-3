@@ -15,6 +15,7 @@ class VirtualController: SKSpriteNode {
     var harvestButton: MenuButton!
     var powerupButton: MenuButton!
     
+    var joystick: Joystick!
     //sets up the virtual controller UI overlay
     init(size: CGSize) {
         super.init(texture: nil, color: UIColor.clearColor(), size: CGSize(width: size.width, height: size.height * 0.25))
@@ -47,15 +48,23 @@ class VirtualController: SKSpriteNode {
         self.addChild(self.fireButton)
         
         self.harvestButton = MenuButton(icon: "", label: "HARVEST", name: "harvestButton", xPos: self.fireButton.position.x - self.fireButton.size.width / 2 - 0.25, yPos: self.fireButton.position.y + self.fireButton.size.height / 1.33, enabled: true)
+        self.harvestButton.zPosition = 1000
         self.harvestButton.xScale = 0.5
         self.harvestButton.yScale = 0.5
         self.addChild(self.harvestButton)
         
         self.powerupButton = MenuButton(icon: "", label: "POWERUP", name: "powerupButton", xPos: self.fireButton.position.x + self.fireButton.size.width / 2 + 0.25, yPos: self.fireButton.position.y + self.fireButton.size.height / 1.33, enabled: false)
+        self.zPosition = 1000
         self.powerupButton.alpha = 0.5
         self.powerupButton.xScale = 0.5
         self.powerupButton.yScale = 0.5
         self.addChild(self.powerupButton)
+        
+        //joystick setup
+        joystick = Joystick()
+        joystick.position = CGPointMake(-self.size.width / 2 + 110, 20)
+        addChild(joystick)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

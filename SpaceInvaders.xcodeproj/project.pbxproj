@@ -40,6 +40,10 @@
 		3F7B095E1AE75A75000EEAD4 /* LevelCompleteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7B095D1AE75A75000EEAD4 /* LevelCompleteScene.swift */; };
 		3F7B09611AE75CE9000EEAD4 /* StarField.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3F7B095F1AE75CE9000EEAD4 /* StarField.sks */; };
 		3F7B09621AE75CE9000EEAD4 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F7B09601AE75CE9000EEAD4 /* spark.png */; };
+		3FA6C07D1B04395C00C317F6 /* dpad.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FA6C0791B04395C00C317F6 /* dpad.png */; };
+		3FA6C07E1B04395C00C317F6 /* joystick.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FA6C07A1B04395C00C317F6 /* joystick.png */; };
+		3FA6C07F1B04395C00C317F6 /* Joystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA6C07B1B04395C00C317F6 /* Joystick.swift */; };
+		3FA6C0801B04395C00C317F6 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 3FA6C07C1B04395C00C317F6 /* README.md */; };
 		3FB5577D1AFBA4B200916F1B /* Fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3FB5577C1AFBA4B200916F1B /* Fire.sks */; };
 		3FB5577F1AFBAC2800916F1B /* Inversionz.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3FB5577E1AFBAC2800916F1B /* Inversionz.otf */; };
 		3FEA26411B01570200680E31 /* TitleText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA26401B01570200680E31 /* TitleText.swift */; };
@@ -100,6 +104,10 @@
 		3F7B095D1AE75A75000EEAD4 /* LevelCompleteScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LevelCompleteScene.swift; path = ../LevelCompleteScene.swift; sourceTree = "<group>"; };
 		3F7B095F1AE75CE9000EEAD4 /* StarField.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StarField.sks; sourceTree = "<group>"; };
 		3F7B09601AE75CE9000EEAD4 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
+		3FA6C0791B04395C00C317F6 /* dpad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dpad.png; path = "../Swift-SpriteKit-Joystick-master/dpad.png"; sourceTree = "<group>"; };
+		3FA6C07A1B04395C00C317F6 /* joystick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joystick.png; path = "../Swift-SpriteKit-Joystick-master/joystick.png"; sourceTree = "<group>"; };
+		3FA6C07B1B04395C00C317F6 /* Joystick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Joystick.swift; sourceTree = "<group>"; };
+		3FA6C07C1B04395C00C317F6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3FB5577C1AFBA4B200916F1B /* Fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Fire.sks; sourceTree = "<group>"; };
 		3FB5577E1AFBAC2800916F1B /* Inversionz.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inversionz.otf; sourceTree = "<group>"; };
 		3FEA26401B01570200680E31 /* TitleText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleText.swift; sourceTree = "<group>"; };
@@ -211,6 +219,7 @@
 		3F7B09361AE75041000EEAD4 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				3FA6C0791B04395C00C317F6 /* dpad.png */,
 				3F60A94D1B02467B00402038 /* shootButton.png */,
 				3F60A9431B023FCF00402038 /* LeftArrow.png */,
 				3F60A9441B023FCF00402038 /* RightArrow.png */,
@@ -226,6 +235,16 @@
 			);
 			name = images;
 			path = ../images;
+			sourceTree = "<group>";
+		};
+		3FA6C0781B04395C00C317F6 /* Swift-SpriteKit-Joystick-master */ = {
+			isa = PBXGroup;
+			children = (
+				3FA6C07B1B04395C00C317F6 /* Joystick.swift */,
+				3FA6C07C1B04395C00C317F6 /* README.md */,
+			);
+			name = "Swift-SpriteKit-Joystick-master";
+			path = "../Swift-SpriteKit-Joystick-master";
 			sourceTree = "<group>";
 		};
 		3FB557801AFBDBA400916F1B /* Ships */ = {
@@ -259,6 +278,7 @@
 		3FEA26471B01718000680E31 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				3FA6C0781B04395C00C317F6 /* Swift-SpriteKit-Joystick-master */,
 				3FEA26451B01717C00680E31 /* MenuButton.swift */,
 				3F60A9471B023FE000402038 /* VirtualController.swift */,
 			);
@@ -298,6 +318,7 @@
 		3FEF8AB21AF9895200445871 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				3FA6C07A1B04395C00C317F6 /* joystick.png */,
 				3FB5577E1AFBAC2800916F1B /* Inversionz.otf */,
 				3F17C8861B0265CA0095A6E9 /* SquareFont.ttf */,
 			);
@@ -408,6 +429,7 @@
 				3F7B09451AE75041000EEAD4 /* invader1.png in Resources */,
 				3F7B09481AE75041000EEAD4 /* laser.mp3 in Resources */,
 				3F7B091F1AE74DC0000EEAD4 /* LaunchScreen.xib in Resources */,
+				3FA6C07E1B04395C00C317F6 /* joystick.png in Resources */,
 				3F7B094A1AE75041000EEAD4 /* newgamebtn.png in Resources */,
 				3F17C8871B0265CA0095A6E9 /* SquareFont.ttf in Resources */,
 				3F7B09621AE75CE9000EEAD4 /* spark.png in Resources */,
@@ -416,6 +438,7 @@
 				3F7B091C1AE74DC0000EEAD4 /* Images.xcassets in Resources */,
 				3F7B09501AE75041000EEAD4 /* ufo.png in Resources */,
 				3F7B091A1AE74DC0000EEAD4 /* Main.storyboard in Resources */,
+				3FA6C07D1B04395C00C317F6 /* dpad.png in Resources */,
 				3F7B09461AE75041000EEAD4 /* invader2.png in Resources */,
 				3F60A94E1B02467B00402038 /* shootButton.png in Resources */,
 				3F7B094E1AE75041000EEAD4 /* star.png in Resources */,
@@ -448,6 +471,7 @@
 				3FEF8ABA1AF9971500445871 /* GameOverScene.swift in Sources */,
 				3F7B09351AE74E76000EEAD4 /* StartGameScene.swift in Sources */,
 				3FEA26411B01570200680E31 /* TitleText.swift in Sources */,
+				3FA6C0801B04395C00C317F6 /* README.md in Sources */,
 				3F7B095E1AE75A75000EEAD4 /* LevelCompleteScene.swift in Sources */,
 				3F60A94A1B023FF800402038 /* OptionsScene.swift in Sources */,
 				3FEF8AB81AF98CDA00445871 /* Ship.swift in Sources */,
@@ -457,6 +481,7 @@
 				3F7B09541AE7532E000EEAD4 /* Player.swift in Sources */,
 				3FEA26441B016C7300680E31 /* HUDText.swift in Sources */,
 				3FEA26461B01717C00680E31 /* MenuButton.swift in Sources */,
+				3FA6C07F1B04395C00C317F6 /* Joystick.swift in Sources */,
 				3F7B09111AE74DC0000EEAD4 /* AppDelegate.swift in Sources */,
 				3F7B095C1AE756A3000EEAD4 /* Utilities.swift in Sources */,
 				3FEF8AB51AF98C3C00445871 /* GameData.swift in Sources */,
