@@ -15,14 +15,6 @@ struct CollisionCategories {
     static let EnemyBullet: UInt32 = 0x1 << 3
 }
 
-enum EnemyDirection{
-    case Right
-    case Left
-    case DownThenRight
-    case DownThenLeft
-    case None
-}
-
 class GameScene: SKScene, SKPhysicsContactDelegate
 {
     
@@ -32,17 +24,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     var score = 0
     
     //game
-    //var enemies: [Enemy] = []
+    var enemies: [Enemy] = []
     var wave = 1
     var waveTimer: CFTimeInterval = 10.0
     var difficulty = 1
     var fighter: Fighter!
-    
-    //enemy movement variables
-    var enemyDirection: EnemyDirection = .Right
-    var timeOfLastMove: CFTimeInterval = 0.0
-    let timePerMove: CFTimeInterval = 1.0
-    
+
     //animation
     var lastUpdateTimeInterval: CFTimeInterval = -1.0
     var dt: CGFloat = 0.0
@@ -88,33 +75,45 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         self.addChild(self.player)
     }
     
-    func setupEnemies() {
+    func setupEnemies()
+    {
         //TODO:
         self.fighter = Fighter()
+        var fighter2 = Fighter()
+        var fighter3 = Fighter()
+        var fighter4 = Fighter()
+        
         self.fighter.position = CGPoint(x: size.width / 2, y: size.height - 100)
-        self.addChild(self.fighter)
+        fighter2.position = CGPoint(x: size.width / 2 + 50, y: size.height - 150)
+        fighter3.position = CGPoint(x: size.width / 2 - 50, y: size.height - 260)
+        fighter4.position = CGPoint(x: size.width / 2 - 150, y: size.height - 310)
+        self.enemies.append(self.fighter)
+        self.enemies.append(fighter2)
+         self.enemies.append(fighter3)
+         self.enemies.append(fighter4)
+        for enemy in self.enemies
+        {
+            self.addChild(enemy)
+        }
 
     }
     
-    func moveEnemies(currentTime: CFTimeInterval){
-        if (currentTime - timeOfLastMove < timePerMove) {
-            return
+    func moveEnemies()
+    {
+        
+        //Move enemies left or right depending on their direction
+        for enemy in self.enemies
+        {
+            if enemy.moveDirection == "Right"
+            {
+                enemy.position.x += CGFloat(enemy.movementSpeed! * dt)
+            }
+            else if enemy.moveDirection == "Left"
+            {
+                enemy.position.x -= CGFloat(enemy.movementSpeed! * dt)
+            }
         }
         
-        enumerateChildNodesWithName("fighter", usingBlock: { (node: SKNode!, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
-            switch self.enemyDirection {
-            case .Right:
-                node.position = CGPoint(x: node.position.x + 10, y: node.position.y)
-            case .Left:
-                node.position = CGPoint(x: node.position.x - 10, y: node.position.y)
-            case .None:
-                break
-            default:
-                break
-            }
-            
-            self.timeOfLastMove = currentTime
-        })
     }
     
     func setupHUD() {
@@ -189,25 +188,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate
                 }
             }
             
-            if (touchedNode.name == "pauseButton" && self.pauseButton.enabled){
-                self.runAction(SKAction.runBlock(self.pauseGame))
-                pauseButton.removeFromParent()
-                addChild(unpauseButton)
+            if (touchedNode.name == "pauseButton" && self.pauseButton.enabled)
+            {
+                self.pauseButton.enabled = false
                 
-                //maybe add blur effect?
+                if(self.view!.paused == false)
+                {
+                    self.pauseButton.label.text = "pause"
+                    self.pauseButton.enabled = true
+                    self.view!.paused = false
+                }
+                else
+                {
                 
+                    self.pauseButton.label.text = "unpause"
+                    self.view!.paused = true
+                    self.pauseButton.enabled = true
+                }
             }
-            else if (touchedNode.name == "unpauseButton" && self.unpauseButton.enabled){
+            else if (touchedNode.name == "unpauseButton" && self.unpauseButton.enabled)
+            {
+                self.pauseButton.label.text = "pause"
+                self.pauseButton.enabled = true
                 self.view!.paused = false
-                unpauseButton.removeFromParent()
-                addChild(pauseButton)
+                //unpauseButton.removeFromParent()
+                //addChild(pauseButton)
             }
         }
     }
     
-    func pauseGame(){
-        self.view!.paused = true
-    }
     
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent)
     {
@@ -217,29 +226,40 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     }
     
     //MARK: - Game Loop -
-    override func update(currentTime: CFTimeInterval) {
-        //calculate dt
-        dt = CGFloat(currentTime - lastUpdateTimeInterval)
-        lastUpdateTimeInterval = currentTime
-        if (dt > 1) {
-            dt = 1.0 / 60.0
+    override func update(currentTime: CFTimeInterval)
+    {
+        if(self.view!.paused == true)
+        {
+            return
         }
+        else
+        {
+            //calculate dt
+            dt = CGFloat(currentTime - lastUpdateTimeInterval)
+            lastUpdateTimeInterval = currentTime
+            if (dt > 1) {
+                dt = 1.0 / 60.0
+            }
         
-        updatePlayer()
-        updateEnemies()
-        updateHUD()
-        moveEnemies(currentTime)
+            checkBounds()
+            updatePlayer()
+            updateEnemies()
+            updateHUD()
+            moveEnemies()
         
-        //check for level complete
-        /*if (enemiesAreDead()){
+            //check for level complete
+            /*if (enemiesAreDead()){
             levelComplete()
-        }*/
+            }*/
         
-        //check for player death
-        if (player.health <= 0) {
-            player.health = 0;
-            levelFail();
+            //check for player death
+            if (player.health <= 0)
+            {
+                player.health = 0;
+                levelFail();
+            }
         }
+        
     }
     
     func updatePlayer()
@@ -291,6 +311,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         //move player
         player.physicsBody?.velocity = CGVector(dx: (accelerationX * 100) * (player.movementSpeed * dt), dy: (accelerationY * 100) * (player.movementSpeed * dt))
         
+        //move player bullets
+        for (var i = 0; i < player.bullets.count; i++) {
+            player.bullets[i].position.y += player.bulletSpeed * dt
+        }
+
+    }
+    
+    //checks to see if the enemies or player are hitting the edges of the screen
+    func checkBounds()
+    {
         //check player bounds
         if (player.position.x - player.size.width / 2 < 20.0) { //left edge
             player.position.x = player.size.width / 2 + 20.0
@@ -308,16 +338,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate
             player.position.y = self.size.height - player.size.height / 2 - 20.0
         }
         
-        //move player bullets
-        for (var i = 0; i < player.bullets.count; i++) {
-            player.bullets[i].position.y += player.bulletSpeed * dt
-        }
-        
         //check player bullet bounds
         for (var i = 0; i < player.bullets.count; i++) {
             if (player.bullets[i].position.y >= self.size.height + 50){
                 player.bullets[i].removeFromParent()
                 player.bullets.removeAtIndex(i)
+            }
+        }
+        
+        //check enemy bounds
+        for enemy in self.enemies
+        {
+            if (enemy.position.x - enemy.size.width / 2 < 20.0) //left edge
+            {
+                enemy.position.x = enemy.size.width / 2 + 20.0
+                enemy.moveDirection = "Right"
+            }
+            else if(enemy.position.x + enemy.size.width / 2 > self.size.width - 20.0)//right edge
+            {
+                enemy.position.x = self.size.width - enemy.size.width / 2 - 20.0
+                enemy.moveDirection = "Left"
             }
         }
     }
@@ -357,6 +397,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         if ((firstBody.categoryBitMask & CollisionCategories.Player != 0) &&
             (secondBody.categoryBitMask & CollisionCategories.Enemy != 0)) {
                 player.takeDamage(50.0)
+                
+                //Remove the enemy who got shot from the enemies array
+                let enemyIndex = findIndex(self.enemies, valueToFind: secondBody.node? as Enemy)
+                if(enemyIndex != nil)
+                {
+                    self.enemies.removeAtIndex(enemyIndex!)
+                }
+                
                 secondBody.node?.removeFromParent()
         }
         
@@ -367,14 +415,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate
                 return
             }
                 
-            score += 100
+            score += 50
             
+                //Remove the enemy who got shot from the enemies array
+            let enemyIndex = findIndex(self.enemies, valueToFind: firstBody.node? as Enemy)
+            if(enemyIndex != nil)
+            {
+                self.enemies.removeAtIndex(enemyIndex!)
+            }
+                
             /*
             let enemy = firstBody.node? as Enemy
             enemy.explode()
-            enemy.removeFromParent()
             */
-            
+                
+            firstBody.node?.removeFromParent()
             secondBody.node?.removeFromParent()
         }
     }
@@ -392,6 +447,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         gameOverScene.scaleMode = scaleMode
         let transitionType = SKTransition.flipHorizontalWithDuration(0.5)
         view?.presentScene(gameOverScene,transition: transitionType)
+    }
+    
+    func findIndex<T: Equatable>(array: [T], valueToFind: T) -> Int?
+    {
+        for (index, value) in enumerate(array) {
+            if value == valueToFind {
+                return index
+            }
+        }
+        return nil
     }
     
 }
