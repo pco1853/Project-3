@@ -50,6 +50,7 @@
 		3FEF8AB81AF98CDA00445871 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEF8AB71AF98CDA00445871 /* Ship.swift */; };
 		3FEF8ABA1AF9971500445871 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEF8AB91AF9971500445871 /* GameOverScene.swift */; };
 		3FEF8ABC1AF9A5E000445871 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEF8ABB1AF9A5E000445871 /* Enemy.swift */; };
+		965CAC3A1B044E4A0060C698 /* Fighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965CAC391B044E4A0060C698 /* Fighter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +111,7 @@
 		3FEF8AB71AF98CDA00445871 /* Ship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		3FEF8AB91AF9971500445871 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		3FEF8ABB1AF9A5E000445871 /* Enemy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
+		965CAC391B044E4A0060C698 /* Fighter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fighter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +236,7 @@
 				3FEF8AB71AF98CDA00445871 /* Ship.swift */,
 				3F7B09531AE7532E000EEAD4 /* Player.swift */,
 				3FEF8ABB1AF9A5E000445871 /* Enemy.swift */,
+				965CAC391B044E4A0060C698 /* Fighter.swift */,
 			);
 			name = Ships;
 			sourceTree = "<group>";
@@ -441,6 +444,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F17C8821B024B860095A6E9 /* ManualScene.swift in Sources */,
+				965CAC3A1B044E4A0060C698 /* Fighter.swift in Sources */,
 				3F7B095A1AE75465000EEAD4 /* PlayerBullet.swift in Sources */,
 				3F60A9481B023FE000402038 /* VirtualController.swift in Sources */,
 				3F17C8841B0257990095A6E9 /* MenuScene.swift in Sources */,

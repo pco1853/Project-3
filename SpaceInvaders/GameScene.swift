@@ -15,6 +15,14 @@ struct CollisionCategories {
     static let EnemyBullet: UInt32 = 0x1 << 3
 }
 
+enum EnemyDirection{
+    case Right
+    case Left
+    case DownThenRight
+    case DownThenLeft
+    case None
+}
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //MARK: - Variables -
@@ -27,6 +35,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var wave = 1
     var waveTimer: CFTimeInterval = 10.0
     var difficulty = 1
+    var fighter: Fighter!
+    
+    //enemy movement variables
+    var enemyDirection: EnemyDirection = .Right
+    var timeOfLastMove: CFTimeInterval = 0.0
+    let timePerMove: CFTimeInterval = 1.0
     
     //animation
     var lastUpdateTimeInterval: CFTimeInterval = -1.0
@@ -36,6 +50,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var healthLabel: HUDText!
     var scoreLabel: HUDText!
     var pauseButton: MenuButton!
+    var unpauseButton: MenuButton!
     
     //input
     var virtualController: VirtualController?
@@ -73,6 +88,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func setupEnemies() {
         //TODO:
+        self.fighter = Fighter()
+        self.fighter.position = CGPoint(x: size.width / 2, y: fighter.size.width)
+        self.addChild(self.fighter)
+
+    }
+    
+    func moveEnemies(currentTime: CFTimeInterval){
+        if (currentTime - timeOfLastMove < timePerMove) {
+            return
+        }
+        
+        enumerateChildNodesWithName("fighter", usingBlock: { (node: SKNode!, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+            switch self.enemyDirection {
+            case .Right:
+                node.position = CGPoint(x: node.position.x + 10, y: node.position.y)
+            case .Left:
+                node.position = CGPoint(x: node.position.x - 10, y: node.position.y)
+            case .None:
+                break
+            default:
+                break
+            }
+            
+            self.timeOfLastMove = currentTime
+        })
     }
     
     func setupHUD() {
@@ -88,6 +128,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.pauseButton.xScale = 0.5
         self.pauseButton.yScale = 0.5
         self.addChild(self.pauseButton)
+        
+        self.unpauseButton = MenuButton(icon: "", label: "UNPAUSE", name: "unpauseButton", xPos: size.width - 120, yPos: size.height - 100, enabled: true)
+        self.unpauseButton.xScale = 0.5
+        self.unpauseButton.yScale = 0.5
     }
     
     func setupInput() {
@@ -138,9 +182,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             if (touchedNode.name == "pauseButton" && self.pauseButton.enabled){
-                println("pause clicked")
+                self.runAction(SKAction.runBlock(self.pauseGame))
+                pauseButton.removeFromParent()
+                addChild(unpauseButton)
+                
+                //maybe add blur effect?
+                
+            }
+            else if (touchedNode.name == "unpauseButton" && self.unpauseButton.enabled){
+                self.view!.paused = false
+                unpauseButton.removeFromParent()
+                addChild(pauseButton)
             }
         }
+    }
+    
+    func pauseGame(){
+        self.view!.paused = true
     }
     
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent)
@@ -162,7 +220,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
     //MARK: - Game Loop -
     override func update(currentTime: CFTimeInterval) {
         //calculate dt
@@ -175,6 +232,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         updatePlayer()
         updateEnemies()
         updateHUD()
+        moveEnemies(currentTime)
         
         //check for level complete
         /*if (enemiesAreDead()){

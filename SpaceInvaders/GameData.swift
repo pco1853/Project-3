@@ -8,14 +8,24 @@
 
 import Foundation
 
-class GameData {
+class GameData: NSCoder {
     
     var controlScheme: String = "virtual"
     var soundEnabled: Bool = true
     
-    init() {
+    override init() {
         //TODO: set vars from loaded file
     }
+    
+    func encodeWithCoder(aCoder: NSCoder){
+        aCoder.encodeObject(gameData, forKey: "gameData")
+        aCoder.encodeBool(soundEnabled, forKey: "sound")
+        aCoder.encodeObject(controlScheme, forKey: "controls")
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+    }
+
     
 }
 
