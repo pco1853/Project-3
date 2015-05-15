@@ -14,7 +14,6 @@ class Enemy: SKSpriteNode
     
     //MARK: - Variables -
     var hasPowerup: Bool = false
-    //var powerup: Powerup! //TODO: implement powerups
     var movementSpeed: CGFloat?
     var bulletSpeed: CGFloat?
     var bulletDamage: CGFloat = 10.0

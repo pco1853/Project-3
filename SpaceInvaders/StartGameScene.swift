@@ -13,23 +13,44 @@ class StartGameScene: MenuScene {
     
     var playButton: MenuButton!
     var optionsButton: MenuButton!
-    var manualButton: MenuButton!
+    var creditsButton: MenuButton!
    
     override func didMoveToView(view: SKView) {
         //add buttons
-        self.playButton = MenuButton(icon: "Phoenix", label: "PLAY", name: "playButton", xPos: size.width / 2, yPos: size.height / 2, enabled: true)
+        self.playButton = MenuButton(
+            icon: "Phoenix",
+            label: "PLAY",
+            name: "playButton",
+            xPos: size.width / 2,
+            yPos: size.height / 2,
+            enabled: true
+        )
         self.buttons.append(self.playButton)
-        addChild(self.playButton)
+        self.addChild(self.playButton)
         
-        self.optionsButton = MenuButton(icon: "Phoenix", label: "OPTIONS", name: "optionsButton", xPos: size.width / 2 - 100.5, yPos: playButton.position.y - playButton.size.height / 1.33, enabled: true)
+        self.optionsButton = MenuButton(
+            icon: "Phoenix",
+            label: "OPTIONS",
+            name: "optionsButton",
+            xPos: size.width / 2 - 100.5,
+            yPos: playButton.position.y - playButton.size.height / 1.33,
+            enabled: true
+        )
         self.buttons.append(self.optionsButton)
-        addChild(self.optionsButton)
+        self.addChild(self.optionsButton)
         
-        self.manualButton = MenuButton(icon: "icon_manual", label: "CREDITS", name: "manualButton", xPos: size.width / 2 + 100.5, yPos: playButton.position.y - playButton.size.height / 1.33, enabled: true)
-        self.buttons.append(self.manualButton)
-        addChild(self.manualButton)
+        self.creditsButton = MenuButton(
+            icon: "icon_credits",
+            label: "CREDITS",
+            name: "creditsButton",
+            xPos: size.width / 2 + 100.5,
+            yPos: playButton.position.y - playButton.size.height / 1.33,
+            enabled: true
+        )
+        self.buttons.append(self.creditsButton)
+        self.addChild(self.creditsButton)
         
-        //fade in
+        //display menu
         fadeIn()
     }
 
@@ -45,9 +66,8 @@ class StartGameScene: MenuScene {
             else if (touchedNode.name == "optionsButton" && self.optionsButton.enabled) {
                 buttonClicked(self.optionsButton, scene: OptionsScene(size: self.size, title: "options"))
             }
-            else if (touchedNode.name == "manualButton" && self.manualButton.enabled) {
-                //self.buttons.removeAll(keepCapacity: false)
-                buttonClicked(self.manualButton, scene: ManualScene(size: self.size, title: "credits"))
+            else if (touchedNode.name == "creditsButton" && self.creditsButton.enabled) {
+                buttonClicked(self.creditsButton, scene: CreditsScene(size: self.size, title: "credits"))
             }
         }
     }

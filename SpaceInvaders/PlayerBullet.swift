@@ -14,10 +14,7 @@ class PlayerBullet: Bullet {
     override init(imageName: String){
         super.init(imageName: imageName)
         
-        self.physicsBody = SKPhysicsBody(texture: self.texture, size: self.size)
-        self.physicsBody?.dynamic = true
-        self.physicsBody?.allowsRotation = false
-        self.physicsBody?.usesPreciseCollisionDetection = true
+        //set collision physics
         self.physicsBody?.categoryBitMask = CollisionCategories.PlayerBullet
         self.physicsBody?.contactTestBitMask = CollisionCategories.Enemy
         self.physicsBody?.collisionBitMask = 0x0

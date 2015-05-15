@@ -24,10 +24,10 @@ class MenuScene: SKScene {
         self.starField.position = CGPointMake(size.width / 2, size.height + 100)
         self.starField.zPosition = -1000
         self.starField.advanceSimulationTime(15.0)
-        addChild(self.starField)
+        self.addChild(self.starField)
         
         self.titleText = TitleText(text: title, xPos: size.width / 2, yPos: size.height - 200)
-        addChild(self.titleText)
+        self.addChild(self.titleText)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -35,8 +35,8 @@ class MenuScene: SKScene {
     }
     
     func fadeIn() {
-        starField.alpha = 0
-        titleText.alpha = 0
+        self.starField.alpha = 0
+        self.titleText.alpha = 0
         for (var i = 0; i < self.buttons.count; i++) {
             self.buttons[i].alpha = 0
             self.buttons[i].enabled = false

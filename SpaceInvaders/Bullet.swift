@@ -14,6 +14,12 @@ class Bullet: SKSpriteNode {
     init(imageName: String) {
         let texture = SKTexture(imageNamed: imageName)
         super.init(texture: texture, color: SKColor.clearColor(), size: texture.size())
+        
+        //set up physics
+        self.physicsBody = SKPhysicsBody(texture: self.texture, size: self.size)
+        self.physicsBody?.dynamic = true
+        self.physicsBody?.allowsRotation = false
+        self.physicsBody?.usesPreciseCollisionDetection = true
     }
     
     required init?(coder aDecoder: NSCoder) {

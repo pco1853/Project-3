@@ -15,10 +15,7 @@ class EnemyBullet: Bullet {
     {
         super.init(imageName: imageName)
         
-        self.physicsBody = SKPhysicsBody(texture: self.texture, size: self.size)
-        self.physicsBody?.dynamic = true
-        self.physicsBody?.allowsRotation = false
-        self.physicsBody?.usesPreciseCollisionDetection = true
+        //set collision physics
         self.physicsBody?.categoryBitMask = CollisionCategories.EnemyBullet
         self.physicsBody?.contactTestBitMask = CollisionCategories.Player
         self.physicsBody?.collisionBitMask = 0x0

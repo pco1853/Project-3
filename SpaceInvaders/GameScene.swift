@@ -15,15 +15,12 @@ struct CollisionCategories {
     static let EnemyBullet: UInt32 = 0x1 << 3
 }
 
-class GameScene: SKScene, SKPhysicsContactDelegate
-{
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //MARK: - Variables -
-    //player
-    var player: Player!
-    var score = 0
     
     //game
+    var player: Player!
     var enemies: [Enemy] = []
     var wave = 1
     var waveTimer: CFTimeInterval = 10.0
@@ -38,13 +35,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     var healthLabel: HUDText!
     var scoreLabel: HUDText!
     var pauseButton: MenuButton!
-    var unpauseButton: MenuButton!
     
     //input
-    var virtualController: VirtualController?
-    let motionManager = CMMotionManager()
     var accelerationX: CGFloat = 0.0
     var accelerationY: CGFloat = 0.0
+    
+    var virtualController: VirtualController?
+    var fireButtonPressed = false
+    var harvestButtonPressed = false
+    var powerupButtonPressed = false
+    
+    var motionManager: CMMotionManager?
     
     //MARK: - Initialization -
     override func didMoveToView(view: SKView) {
@@ -65,19 +66,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         setupEnemies()
         setupHUD()
         setupInput()
-        
-        self.view?.multipleTouchEnabled = true
     }
     
     func setupPlayer() {
-        self.player = Player(); //TODO: generate player based on game data
+        //TODO: generate player based on game data
+        self.player = Player()
         self.player.position = CGPoint(x: size.width / 2, y: player.size.height + 100)
         self.addChild(self.player)
     }
     
-    func setupEnemies()
-    {
-        //TODO:
+    func setupEnemies() {
+        //TODO: generate waves from data
         self.fighter = Fighter()
         var fighter2 = Fighter()
         var fighter3 = Fighter()
@@ -98,9 +97,217 @@ class GameScene: SKScene, SKPhysicsContactDelegate
 
     }
     
-    func moveEnemies()
-    {
+    func setupHUD() {
+        //add labels
+        self.healthLabel = HUDText(text: "HEALTH \(self.player.health)", xPos: 20, yPos: size.height - 20)
+        self.addChild(self.healthLabel)
         
+        self.scoreLabel = HUDText(text: "SCORE \(gameData.score)", xPos: 20, yPos: size.height - 60)
+        self.addChild(self.scoreLabel)
+        
+        //add buttons
+        self.pauseButton = MenuButton(icon: "", label: "PAUSE", name: "pauseButton", xPos: size.width - 120, yPos: size.height - 100, enabled: true)
+        self.pauseButton.zPosition = 1000
+        self.pauseButton.xScale = 0.5
+        self.pauseButton.yScale = 0.5
+        self.addChild(self.pauseButton)
+    }
+    
+    func setupInput() {
+        self.view?.multipleTouchEnabled = true
+        
+        if(gameData.controlScheme == "motion") {
+            //create motion manager
+            self.motionManager = CMMotionManager()
+            self.motionManager?.accelerometerUpdateInterval = 0.2
+            
+            //listen to motion events
+            self.motionManager?.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue(), withHandler: {
+                (accelerometerData: CMAccelerometerData!, error: NSError!) in
+                let acceleration = accelerometerData.acceleration
+                self.accelerationX = CGFloat(acceleration.x)
+                self.accelerationY = CGFloat(acceleration.y * 1.2)
+            })
+        }
+        else {
+            //create virtual controller
+            self.virtualController = VirtualController(size: size)
+            self.addChild(self.virtualController!)
+        }
+        
+        self.accelerationX = 0.0
+        self.accelerationY = 0.0
+    }
+    
+    //MARK: - Input -
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        for touch: AnyObject in touches {
+            
+            let touchLocation = touch.locationInNode(self)
+            let touchedNode = self.nodeAtPoint(touchLocation)
+            
+            //HUD input
+            if (touchedNode.name == "pauseButton" && self.pauseButton.enabled) {
+                self.pauseButton.enabled = false
+                
+                if (!self.view!.paused) {
+                    self.pauseButton.highlight()
+                    self.pauseButton.label.text = "UNPAUSE"
+                    
+                    self.runAction(SKAction.runBlock({
+                        self.view!.paused = true
+                        self.pauseButton.enabled = true
+                    }))
+                }
+                else {
+                    self.pauseButton.undoHighlight()
+                    self.pauseButton.label.text = "PAUSE"
+                    
+                    self.view!.paused = false
+                    self.pauseButton.enabled = true
+                }
+            }
+            
+            //game input
+            else if (gameData.controlScheme == "motion") {
+                self.fireButtonPressed = true
+            }
+            else if (gameData.controlScheme == "virtual") {
+                if(touchedNode.name == "fireButton" && self.virtualController!.fireButton.enabled) {
+                    self.fireButtonPressed = true
+                    self.virtualController!.fireButton.highlight()
+                }
+                else if(touchedNode.name == "harvestButton" && self.virtualController!.fireButton.enabled) {
+                    self.harvestButtonPressed = true
+                    self.virtualController!.harvestButton.highlight()
+                }
+                else if(touchedNode.name == "powerupButton" && self.virtualController!.fireButton.enabled) {
+                    self.powerupButtonPressed = true
+                    self.virtualController!.powerupButton.highlight()
+                }
+            }
+        }
+    }
+    
+    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+        for touch: AnyObject in touches {
+            if (fireButtonPressed) {
+                self.fireButtonPressed = false
+                
+                if (self.virtualController != nil) {
+                    self.virtualController!.fireButton.undoHighlight()
+                }
+            }
+            
+            if (harvestButtonPressed) {
+                self.harvestButtonPressed = false
+                
+                if (self.virtualController != nil) {
+                    self.virtualController!.harvestButton.undoHighlight()
+                }
+            }
+            
+            if (powerupButtonPressed) {
+                self.powerupButtonPressed = false
+                
+                if (self.virtualController != nil) {
+                    self.virtualController!.powerupButton.undoHighlight()
+                }
+            }
+        }
+    }
+    
+    func checkInput() {
+        //joystick
+        if (gameData.controlScheme == "virtual") {
+            if (self.virtualController!.joystick.velocity.x != 0 || self.virtualController!.joystick.velocity.y != 0) {
+                self.accelerationX = self.virtualController!.joystick.velocity.x / 60
+                self.accelerationY = self.virtualController!.joystick.velocity.y / 60
+            }
+                //logic for making the player slow to a stop instead of coming to a dead stop when the joystick is released
+            else if (self.virtualController!.joystick.velocity.x == 0 || self.virtualController!.joystick.velocity.y == 0) {
+                //slow down the X coordinate
+                if (self.player.physicsBody?.velocity.dx > 1.0) {
+                    self.accelerationX -= 0.02
+                }
+                else if player.physicsBody?.velocity.dx < 1.0 {
+                    self.accelerationX += 0.02
+                }
+                else {
+                    self.accelerationX = 0.0
+                    self.accelerationY = 0.0
+                }
+                
+                //slow down the Y coordinate
+                if (self.player.physicsBody?.velocity.dy > 1.0) {
+                    self.accelerationY -= 0.02
+                }
+                else if (self.player.physicsBody?.velocity.dy < 1.0) {
+                    self.accelerationY += 0.02
+                }
+                else {
+                    self.accelerationY = 0.0
+                    self.accelerationX = 0.0
+                }
+            }
+        }
+        
+        //button/touch actions
+        if (self.fireButtonPressed) {
+            self.player.fireBullet(self)
+        }
+        else if (self.harvestButtonPressed) {
+            self.player.fireHarvester()
+        }
+        else if (self.fireButtonPressed) {
+            self.player.firePowerup()
+        }
+    }
+    
+    //MARK: - Game Loop -
+    override func update(currentTime: CFTimeInterval) {
+        //check for pause
+        if (self.view!.paused) {
+            self.lastUpdateTimeInterval = 0.0
+            self.accelerationX = 0.0
+            self.accelerationY = 0.0
+            self.player.setVelocity(x: 0, y: 0, dt: 0)
+            return
+        }
+        
+        checkGameOver()
+        
+        checkBounds()
+        
+        checkInput()
+        
+        //calculate dt
+        self.dt = CGFloat(currentTime - self.lastUpdateTimeInterval)
+        self.lastUpdateTimeInterval = currentTime
+        if (dt > 1) { //catch invalid values
+            dt = 1.0 / 60.0
+        }
+        
+        //update game objects
+        updatePlayer()
+        updateEnemies()
+        updateBullets()
+        updateHUD()
+    }
+    
+    func updatePlayer() {
+        //set player velocity
+        self.player.setVelocity(x: self.accelerationX, y: self.accelerationY, dt: self.dt)
+        
+        //move player bullets
+        for (var i = 0; i < player.bullets.count; i++) {
+            player.bullets[i].position.y += player.bulletSpeed * dt
+        }
+
+    }
+    
+    func updateEnemies()
+    {
         //Move enemies left or right depending on their direction
         for enemy in self.enemies
         {
@@ -113,212 +320,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate
                 enemy.position.x -= CGFloat(enemy.movementSpeed! * dt)
             }
         }
+    }
+    
+    func updateBullets() {
         
     }
     
-    func setupHUD() {
-        //add labels
-        self.healthLabel = HUDText(text: "HEALTH \(self.player.health)", xPos: 20, yPos: size.height - 20)
-        self.addChild(self.healthLabel)
-        
-        self.scoreLabel = HUDText(text: "SCORE \(self.score)", xPos: 20, yPos: size.height - 60)
-        self.addChild(self.scoreLabel)
-        
-        //add buttons
-        self.pauseButton = MenuButton(icon: "", label: "PAUSE", name: "pauseButton", xPos: size.width - 120, yPos: size.height - 100, enabled: true)
-        self.pauseButton.zPosition = 1000
-        self.pauseButton.xScale = 0.5
-        self.pauseButton.yScale = 0.5
-        self.addChild(self.pauseButton)
-        
-        self.unpauseButton = MenuButton(icon: "", label: "UNPAUSE", name: "unpauseButton", xPos: size.width - 120, yPos: size.height - 100, enabled: true)
-        self.unpauseButton.xScale = 0.5
-        self.unpauseButton.yScale = 0.5
+    func updateHUD() {
+        healthLabel.text = "HEALTH: \(player.health)"
+        scoreLabel.text = "SCORE: \(gameData.score)"
     }
     
-    func setupInput() {
-        //determine movement scheme
-        if(gameData.controlScheme == "motion") {
-            motionManager.accelerometerUpdateInterval = 0.2
-            motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue(), withHandler: {
-                (accelerometerData: CMAccelerometerData!, error: NSError!) in
-                let acceleration = accelerometerData.acceleration
-                self.accelerationX = CGFloat(acceleration.x)
-                self.accelerationY = CGFloat(acceleration.y * 1.2)
-            })
-        }
-        else {
-            virtualController = VirtualController(size: size)
-            addChild(virtualController!)
-        }
-    }
-    
-    //MARK: - Input -
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        for touch: AnyObject in touches
-        {
-            let touchLocation = touch.locationInNode(self)
-            let touchedNode = self.nodeAtPoint(touchLocation)
-            
-            if(gameData.controlScheme == "motion")
-            {
-                player.fireBullet(self)
-            }
-            else
-            {
-                
-                if(touchedNode.name == "fireButton")
-                {
-                    player.fireBullet(self)
-                }
-                
-                else if(touchedNode.name == "harvestButton")
-                {
-                    println("harvest")
-                }
-                
-                else if(touchedNode.name == "powerupButton")
-                {
-                    player.fireBullet(self)
-                }
-                else if(touchedNode.name == "Harvest")
-                {
-                    //harvest code
-                    println("powerup")
-                }
-            }
-            
-            if (touchedNode.name == "pauseButton" && self.pauseButton.enabled)
-            {
-                self.pauseButton.enabled = false
-                
-                if(self.view!.paused == false)
-                {
-                    self.pauseButton.label.text = "pause"
-                    self.pauseButton.enabled = true
-                    self.view!.paused = false
-                }
-                else
-                {
-                
-                    self.pauseButton.label.text = "unpause"
-                    self.view!.paused = true
-                    self.pauseButton.enabled = true
-                }
-            }
-            else if (touchedNode.name == "unpauseButton" && self.unpauseButton.enabled)
-            {
-                self.pauseButton.label.text = "pause"
-                self.pauseButton.enabled = true
-                self.view!.paused = false
-                //unpauseButton.removeFromParent()
-                //addChild(pauseButton)
-            }
-        }
-    }
-    
-    
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent)
-    {
-        for touch: AnyObject in touches
-        {
-        }
-    }
-    
-    //MARK: - Game Loop -
-    override func update(currentTime: CFTimeInterval)
-    {
-        if(self.view!.paused == true)
-        {
-            return
-        }
-        else
-        {
-            //calculate dt
-            dt = CGFloat(currentTime - lastUpdateTimeInterval)
-            lastUpdateTimeInterval = currentTime
-            if (dt > 1) {
-                dt = 1.0 / 60.0
-            }
-        
-            checkBounds()
-            updatePlayer()
-            updateEnemies()
-            updateHUD()
-            moveEnemies()
-        
-            //check for level complete
-            /*if (enemiesAreDead()){
-            levelComplete()
-            }*/
-        
-            //check for player death
-            if (player.health <= 0)
-            {
-                player.health = 0;
-                levelFail();
-            }
-        }
-        
-    }
-    
-    func updatePlayer()
-    {
-        if(gameData.controlScheme == "virtual")
-        {
-            if virtualController!.joystick.velocity.x != 0 || virtualController!.joystick.velocity.y != 0
-            {
-                accelerationX = (virtualController!.joystick.velocity.x / 60)
-                accelerationY = (virtualController!.joystick.velocity.y / 60)
-            }
-                //Logic for making the player slow to a stop instead of coming to a dead stop when the joystick is released
-            else if virtualController!.joystick.velocity.x == 0 || virtualController!.joystick.velocity.y == 0
-            {
-                //Slowing down the X coordinate
-                if player.physicsBody?.velocity.dx > 1.0
-                {
-                    accelerationX -= 0.02
-                
-                }
-                else if player.physicsBody?.velocity.dx < 1.0
-                {
-                    accelerationX += 0.02
-                }
-                else
-                {
-                    accelerationX = 0.0
-                    accelerationY = 0.0
-                }
-            
-                //slowing down the Y coordinate
-                if player.physicsBody?.velocity.dy > 1.0
-                {
-                    accelerationY -= 0.02
-                
-                }
-                else if player.physicsBody?.velocity.dy < 1.0
-                {
-                    accelerationY += 0.02
-                }
-                else
-                {
-                    accelerationY = 0.0
-                    accelerationX = 0.0
-                }
-            }
-        }
-        
-        //move player
-        player.physicsBody?.velocity = CGVector(dx: (accelerationX * 100) * (player.movementSpeed * dt), dy: (accelerationY * 100) * (player.movementSpeed * dt))
-        
-        //move player bullets
-        for (var i = 0; i < player.bullets.count; i++) {
-            player.bullets[i].position.y += player.bulletSpeed * dt
-        }
-
-    }
-    
-    //checks to see if the enemies or player are hitting the edges of the screen
     func checkBounds()
     {
         //check player bounds
@@ -360,15 +372,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate
                 enemy.moveDirection = "Left"
             }
         }
-    }
-    
-    func updateEnemies() {
-        //TODO: implement method
-    }
-    
-    func updateHUD() {
-        healthLabel.text = "HEALTH: \(player.health)"
-        scoreLabel.text = "SCORE: \(score)"
     }
     
     //MARK: - Collision -
@@ -415,7 +418,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
                 return
             }
                 
-            score += 50
+            gameData.score += 50
             
                 //Remove the enemy who got shot from the enemies array
             let enemyIndex = findIndex(self.enemies, valueToFind: firstBody.node? as Enemy)
@@ -435,20 +438,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     }
 
     //MARK - Transitions -
-    func levelComplete() {
-        let levelCompleteScene = LevelCompleteScene(size: size)
-        levelCompleteScene.scaleMode = scaleMode
-        let transitionType = SKTransition.flipHorizontalWithDuration(0.5)
-        view?.presentScene(levelCompleteScene,transition: transitionType)
+    func checkGameOver() {
+        if (self.player.health <= 0) {
+            self.player.health = 0;
+            
+            //TODO: animate player death
+            //TODO: disable controls
+            
+            self.runAction(SKAction.runBlock({
+                let gameOverScene = GameOverScene(size: self.size, title: "game over")
+                gameOverScene.scaleMode = self.scaleMode
+                let transition = SKTransition.fadeWithDuration(1.0)
+                self.view?.presentScene(gameOverScene, transition: transition)
+            }))
+        }
     }
     
-    func levelFail() {
-        let gameOverScene = GameOverScene(size: size)
-        gameOverScene.scaleMode = scaleMode
-        let transitionType = SKTransition.flipHorizontalWithDuration(0.5)
-        view?.presentScene(gameOverScene,transition: transitionType)
-    }
-    
+    //MARK: - Helpers -
     func findIndex<T: Equatable>(array: [T], valueToFind: T) -> Int?
     {
         for (index, value) in enumerate(array) {

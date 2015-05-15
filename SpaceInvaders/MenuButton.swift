@@ -71,6 +71,7 @@ class MenuButton: SKSpriteNode {
         self.fill.alpha = 0.1
         self.label.fontColor = SKColor.whiteColor()
         self.icon.color = SKColor.whiteColor()
+        self.icon.colorBlendFactor = 1.0
     }
     
 }

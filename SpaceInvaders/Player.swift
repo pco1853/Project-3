@@ -13,7 +13,10 @@ import CoreMotion
 class Player: Ship {
 
     //MARK: - Variables -
-    //draw order
+    var canHarvest = true
+    var invincible = false
+    //var powerup: Powerup! //TODO: implement powerups
+    
     let zShip: CGFloat = 0
     let zHarvester: CGFloat = -1
     let zBullets: CGFloat = -2
@@ -22,28 +25,22 @@ class Player: Ship {
     let zEngineParticle: CGFloat = -5
     let zShadow: CGFloat = -6
     
-    var canHarvest = true
-    var invincible = false
-    //var powerup: Powerup! //TODO: implement powerups
-    
     //MARK: - Initialization -
-    init() { //TODO: load player data from GameData
-        let texture = SKTexture(imageNamed: "Phoenix")
-        super.init(health: 100.0, movementSpeed: 200.0, canFire: true, fireRate: 0.5, bulletSpeed: 600.0, bulletDamage: 25.0, texture: texture)
+    init() {
+        //load player vars
+        let playerShip = SKTexture(imageNamed: gameData.playerShip)
+        super.init(health: gameData.playerHealth,
+            movementSpeed: gameData.playerMovementSpeed,
+                  canFire: true,
+                 fireRate: gameData.playerFireRate,
+              bulletSpeed: gameData.playerBulletSpeed,
+             bulletDamage: gameData.playerBulletDamage,
+                  texture: playerShip)
         
-        //physics
-        self.physicsBody = SKPhysicsBody(texture: self.texture, size: self.size)
-        self.physicsBody?.dynamic = true
-        self.physicsBody?.allowsRotation = false
-        self.physicsBody?.usesPreciseCollisionDetection = false
-        self.physicsBody?.categoryBitMask = CollisionCategories.Player
-        self.physicsBody?.contactTestBitMask = CollisionCategories.Enemy | CollisionCategories.EnemyBullet
-        self.physicsBody?.collisionBitMask = 0x0
-        
-        //shadow
+        //add shadow
         let shadowOffsetX: CGFloat = 10.0
         let shadowOffsetY: CGFloat = 10.0
-        let shadow = SKSpriteNode(imageNamed: "Phoenix")
+        let shadow = SKSpriteNode(texture: self.texture)
         shadow.size = CGSizeMake(shadow.size.width + shadowOffsetX, shadow.size.height + shadowOffsetY)
         shadow.color = SKColor.blackColor()
         shadow.colorBlendFactor = 1.0;
@@ -53,19 +50,24 @@ class Player: Ship {
         shadowEffect.filter = shadowEffectBlur
         shadowEffect.zPosition = self.zShadow
         shadowEffect.addChild(shadow)
-        addChild(shadowEffect)
+        self.addChild(shadowEffect)
         
-        //engine
-        //TODO: customizable engine textures from shop
-        //let engine: SKSpriteNode = SKSpriteNode()
+        //TODO: add engine
+        
+        //add engine particle
         let engineParticle = SKEmitterNode(fileNamed: "Fire")
         engineParticle.position = CGPointMake(self.position.x, self.position.y - self.size.height / 2)
         engineParticle.zPosition = self.zEngineParticle
-        addChild(engineParticle)
+        self.addChild(engineParticle)
         
-        //TODO: customizable gun texture
+        //TODO: add guns
         
-        //TODO: add Harvester claw child
+        //TODO: add harvester
+        
+        //set collision physics
+        self.physicsBody?.categoryBitMask = CollisionCategories.Player
+        self.physicsBody?.contactTestBitMask = CollisionCategories.Enemy | CollisionCategories.EnemyBullet
+        self.physicsBody?.collisionBitMask = 0x0
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -98,20 +100,26 @@ class Player: Ship {
     }
     
     func fireHarvester() {
-        if (canHarvest) {
-            //TODO: implement harvester firing
+        if (self.canHarvest) {
+            //TODO:
         }
     }
     
+    func firePowerup() {
+        //if (self.powerup != nil) {
+            //TODO:
+        //}
+    }
+    
     func takeDamage(damage: CGFloat) {
-        if(!invincible) {
+        if (!self.invincible) {
             self.health -= damage
             turnInvincible()
         }
     }
     
     func turnInvincible(){ //makes player flash and become invincible for 1 sec after being hit
-        invincible = true
+        self.invincible = true
         
         let fadeOut = SKAction.fadeOutWithDuration(0.1)
         let fadeIn = SKAction.fadeInWithDuration(0.1)
@@ -119,4 +127,5 @@ class Player: Ship {
         let fadeOutInRepeat = SKAction.repeatAction(fadeOutIn, count: 5)
         runAction(fadeOutInRepeat, completion: { self.invincible = false })
     }
+    
 }

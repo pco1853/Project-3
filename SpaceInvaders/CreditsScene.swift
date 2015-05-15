@@ -1,62 +1,49 @@
 //
-//  GameOverScene.swift
+//  StartGameScene.swift
 //  SpaceInvaders
 //
-//  Created by Student on 5/5/15.
+//  Created by Student on 4/21/15.
 //  Copyright (c) 2015 Student. All rights reserved.
 //
 
 import UIKit
 import SpriteKit
 
-class GameOverScene: MenuScene {
+class CreditsScene: MenuScene {
     
     var text: [HUDText] = []
-    var replayButton: MenuButton!
-    var shareButton: MenuButton!
     var backButton: MenuButton!
     
     override func didMoveToView(view: SKView) {
-        //add stat text
-        addText(
-            "Score: \(gameData.score)",
+        //add text
+        addText("Harvester",
             xPos: size.width / 2,
             yPos: self.titleText.position.y - 100
         )
+        addText("Created by Derrick Hunt, Pete O'Neal & Jason Peretz",
+            xPos: size.width / 2,
+            yPos: self.titleText.position.y - 160
+        )
+        addText("Version 0.5",
+            xPos: size.width / 2,
+            yPos: self.titleText.position.y - 200
+        )
+        addText("All rights reserved",
+            xPos: size.width / 2,
+            yPos: self.titleText.position.y - 240
+        )
         
         //add buttons
-        self.replayButton = MenuButton(
-            icon: "Phoenix",
-            label: "REPLAY",
-            name: "replayButton",
-            xPos: size.width / 2 - 100.5,
-            yPos: size.height / 2 - 110,
-            enabled: true
-        )
-        self.buttons.append(self.replayButton)
-        self.addChild(self.replayButton)
-        
-        self.shareButton = MenuButton(
-            icon: "Phoenix",
-            label: "SHARE",
-            name: "shareButton",
-            xPos: size.width / 2 + 100.5,
-            yPos: self.replayButton.position.y,
-            enabled: true
-        )
-        self.buttons.append(self.shareButton)
-        addChild(self.shareButton)
-        
         self.backButton = MenuButton(
             icon: "Phoenix",
             label: "BACK",
             name: "backButton",
             xPos: size.width / 2,
-            yPos: replayButton.position.y - replayButton.size.height / 1.33,
+            yPos: size.height / 2 - 110,
             enabled: true
         )
         self.buttons.append(self.backButton)
-        addChild(self.backButton)
+        self.addChild(self.backButton)
         
         //display menu
         fadeIn()
@@ -108,18 +95,14 @@ class GameOverScene: MenuScene {
             let touchLocation = touch.locationInNode(self)
             let touchedNode = self.nodeAtPoint(touchLocation)
             
-            if (touchedNode.name == "replayButton" && self.replayButton.enabled) {
-                buttonClicked(self.replayButton, scene: GameScene(size: self.size))
-                fadeOutText()
-            }
-            else if (touchedNode.name == "shareButton" && self.shareButton.enabled) {
-                //TODO: share screenshot of results
-            }
-            else if (touchedNode.name == "backButton" && self.backButton.enabled) {
-                buttonClicked(self.backButton, scene: GameModeScene(size: self.size, title: "mode"))
+            if (touchedNode.name == "backButton" && self.backButton.enabled) {
+                buttonClicked(self.backButton, scene: StartGameScene(size: self.size, title: "harvester"))
                 fadeOutText()
             }
         }
     }
     
 }
+
+
+

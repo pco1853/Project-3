@@ -40,15 +40,35 @@ class OptionsScene: MenuScene {
         clearContent()
         
         //add default buttons
-        self.controlsButton = MenuButton(icon: "Phoenix", label: "CONTROLS", name: "controlsButton", xPos: size.width / 2 - 100.5, yPos: size.height / 2, enabled: true)
+        self.controlsButton = MenuButton(
+            icon: "Phoenix",
+            label: "CONTROLS",
+            name: "controlsButton",
+            xPos: size.width / 2 - 100.5,
+            yPos: size.height / 2,
+            enabled: true
+        )
         self.buttons.append(self.controlsButton)
         self.addChild(self.controlsButton)
         
-        self.soundButton = MenuButton(icon: "Phoenix", label: "SOUND", name: "soundButton", xPos: size.width / 2 + 100.5, yPos: size.height / 2, enabled: true)
+        self.soundButton = MenuButton(
+            icon: "Phoenix",
+            label: "SOUND",
+            name: "soundButton",
+            xPos: size.width / 2 + 100.5,
+            yPos: size.height / 2,
+            enabled: true
+        )
         self.buttons.append(self.soundButton)
         self.addChild(self.soundButton)
         
-        self.backButton = MenuButton(icon: "Phoenix", label: "BACK", name: "backButton", xPos: size.width / 2, yPos: size.height / 2 - self.controlsButton.size.height / 1.33, enabled: true)
+        self.backButton = MenuButton(
+            icon: "Phoenix",
+            label: "BACK",
+            name: "backButton",
+            xPos: size.width / 2,
+            yPos: size.height / 2 - self.controlsButton.size.height / 1.33,
+            enabled: true)
         self.buttons.append(self.backButton)
         self.addChild(self.backButton)
         
@@ -65,22 +85,41 @@ class OptionsScene: MenuScene {
         clearContent()
         
         //add buttons
-        self.motionControlsButton = MenuButton(icon: "", label: "MOTION", name: "motionControlsButton", xPos: size.width / 2 - 100.5, yPos: size.height / 2 - 110, enabled: true)
+        self.motionControlsButton = MenuButton(
+            icon: "",
+            label: "MOTION",
+            name: "motionControlsButton",
+            xPos: size.width / 2 - 100.5,
+            yPos: size.height / 2 - 110,
+            enabled: true
+        )
         self.buttons.append(self.motionControlsButton)
-        addChild(self.motionControlsButton)
+        self.addChild(self.motionControlsButton)
         
-        self.virtualControlsButton = MenuButton(icon: "", label: "VIRTUAL", name: "virtualControlsButton", xPos: size.width / 2 + 100.5, yPos: size.height / 2 - 110, enabled: true)
+        self.virtualControlsButton = MenuButton(
+            icon: "",
+            label: "VIRTUAL",
+            name: "virtualControlsButton",
+            xPos: size.width / 2 + 100.5,
+            yPos: size.height / 2 - 110,
+            enabled: true
+        )
         self.buttons.append(self.virtualControlsButton)
-        addChild(self.virtualControlsButton)
+        self.addChild(self.virtualControlsButton)
         
-        self.backButton = MenuButton(icon: "Phoenix", label: "BACK", name: "backButton", xPos: size.width / 2, yPos: size.height / 2 - self.motionControlsButton.size.height / 1.33 - 110, enabled: true)
+        self.backButton = MenuButton(
+            icon: "Phoenix",
+            label: "BACK",
+            name: "backButton",
+            xPos: size.width / 2,
+            yPos: size.height / 2 - self.motionControlsButton.size.height / 1.33 - 110,
+            enabled: true
+        )
         self.buttons.append(self.backButton)
         self.addChild(self.backButton)
         
-        //add and fade in subtitle
+        //fade in and highlight
         fadeInSubtitle("Control Scheme")
-        
-        //fade in buttons, determine which to highlight and text to display
         fadeInButtons()
         highlightControlOptions()
         
@@ -92,22 +131,41 @@ class OptionsScene: MenuScene {
         clearContent()
         
         //add buttons
-        self.soundOnButton = MenuButton(icon: "", label: "ON", name: "soundOnButton", xPos: size.width / 2 - 100.5, yPos: size.height / 2, enabled: true)
+        self.soundOnButton = MenuButton(
+            icon: "",
+            label: "ON",
+            name: "soundOnButton",
+            xPos: size.width / 2 - 100.5,
+            yPos: size.height / 2,
+            enabled: true
+        )
         self.buttons.append(self.soundOnButton)
-        addChild(self.soundOnButton)
+        self.addChild(self.soundOnButton)
         
-        self.soundOffButton = MenuButton(icon: "", label: "OFF", name: "soundOffButton", xPos: size.width / 2 + 100.5, yPos: size.height / 2, enabled: true)
+        self.soundOffButton = MenuButton(
+            icon: "",
+            label: "OFF",
+            name: "soundOffButton",
+            xPos: size.width / 2 + 100.5,
+            yPos: size.height / 2,
+            enabled: true
+        )
         self.buttons.append(self.soundOffButton)
-        addChild(self.soundOffButton)
+        self.addChild(self.soundOffButton)
         
-        self.backButton = MenuButton(icon: "Phoenix", label: "BACK", name: "backButton", xPos: size.width / 2, yPos: size.height / 2 - self.soundOnButton.size.height / 1.33, enabled: true)
+        self.backButton = MenuButton(
+            icon: "Phoenix",
+            label: "BACK",
+            name: "backButton",
+            xPos: size.width / 2,
+            yPos: size.height / 2 - self.soundOnButton.size.height / 1.33,
+            enabled: true
+        )
         self.buttons.append(self.backButton)
         self.addChild(self.backButton)
         
-        //fade in buttons
+        //fade in and highlight
         fadeInButtons()
-        
-        //add and fade in subtitle
         fadeInSubtitle("Sound")
         highlightSoundOptions()
         
@@ -190,6 +248,13 @@ class OptionsScene: MenuScene {
         self.text.append(t)
     }
     
+    func fadeOutText() {
+        self.subtitle.runAction(SKAction.fadeOutWithDuration(1.0))
+        for (var i = 0; i < self.text.count; i++) {
+            self.text[i].runAction(SKAction.fadeOutWithDuration(1.0))
+        }
+    }
+    
     func clearContent() {
         //clear buttons
         for (var i = 0; i < self.buttons.count; i++) {
@@ -219,6 +284,7 @@ class OptionsScene: MenuScene {
                 }
                 else { //return to default screen
                     buttonClicked(self.backButton, completion: { self.showOptions() })
+                    fadeOutText()
                 }
             }
             else if (touchedNode.name == "controlsButton" && self.controlsButton.enabled) {
