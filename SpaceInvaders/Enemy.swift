@@ -22,6 +22,15 @@ class Enemy: SKSpriteNode
     var canFire: Bool = true
     var moveDirection:String?
     var randomNumber:UInt32!
+    var initialFireTime:NSTimeInterval!
+    
+    //draw order
+    let zShip: CGFloat = 0
+    let zBullets: CGFloat = -1
+    let zGuns: CGFloat = -2
+    let zEngine: CGFloat = -3
+    let zEngineParticle: CGFloat = -4
+    let zShadow: CGFloat = -5
     
     init(movementSpeed: CGFloat, canFire: Bool, fireRate:NSTimeInterval, bulletSpeed: CGFloat, bulletDamage: CGFloat, texture: SKTexture)
     {
@@ -30,7 +39,7 @@ class Enemy: SKSpriteNode
         self.movementSpeed = movementSpeed
         self.bulletSpeed = bulletSpeed
         self.bulletDamage = bulletDamage
-        self.canFire = canFire
+        self.canFire = false
         self.fireRate = fireRate
         
         self.physicsBody = SKPhysicsBody(texture: self.texture, size: self.size)
@@ -43,7 +52,10 @@ class Enemy: SKSpriteNode
         
         //Sets up random number to determine if the nemey will go left or right off spawn
         randomNumber = arc4random_uniform(3 - 1) + 1
+        initialFireTime = NSTimeInterval(arc4random_uniform(4 - 1) + 1)
         
+        let initialFireDelay = SKAction.waitForDuration(initialFireTime)
+        runAction(initialFireDelay, completion: {self.canFire = true})
         if(randomNumber == 1)
         {
             self.moveDirection = "Right"
@@ -59,9 +71,27 @@ class Enemy: SKSpriteNode
         if (self.canFire)
         {
             self.canFire = false
+            let b1 = EnemyBullet(imageName: "laser")
+            b1.position.x = self.position.x - 12.0
+            b1.position.y = self.position.y + 2.0 //+ self.size.height / 2
+            b1.zPosition = self.zBullets
+            b1.name = "enemyBullet"
+            
+            let b2 = EnemyBullet(imageName: "laser")
+            b2.position.x = self.position.x + 12.0
+            b2.position.y = self.position.y + 2.0 //+ self.size.height / 2
+            b2.zPosition = self.zBullets
+            b2.name = "enemyBullet"
+            
+            //self.bullets.append(b1)
+            //self.bullets.append(b2)
+            scene.addChild(b1)
+            scene.addChild(b2)
+        
             let waitToEnableFire = SKAction.waitForDuration(self.fireRate)
             runAction(waitToEnableFire, completion: { self.canFire = true })
         }
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

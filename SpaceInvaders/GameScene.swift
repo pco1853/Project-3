@@ -272,6 +272,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.accelerationX = 0.0
             self.accelerationY = 0.0
             self.player.setVelocity(x: 0, y: 0, dt: 0)
+    override func update(currentTime: CFTimeInterval)
+    {
+        //println(enemies[0].bullets.count)
+        if(self.view!.paused == true)
+        {
             return
         }
         
@@ -374,6 +379,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func updateEnemies() {
+        
+        for enemy in self.enemies
+        {
+            enemy.fireBullet(self)
+        }
+        
+    
+        self.enumerateChildNodesWithName("enemyBullet", usingBlock: {
+            (node: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) -> Void in
+            
+            let bullet = node as Bullet
+            bullet.position.y -= (self.player.bulletSpeed - 200.0) * self.dt
+            
+            if(bullet.position.y < -50)
+            {
+                bullet.removeFromParent()
+            }
+        })
+        
+    }
+    
+    func updateHUD() {
+        healthLabel.text = "HEALTH: \(player.health)"
+        scoreLabel.text = "SCORE: \(score)"
+    }
+    
     //MARK: - Collision -
     func didBeginContact(contact: SKPhysicsContact)
     {
@@ -420,20 +452,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
             gameData.score += 50
             
+                if (contact.bodyA.node?.parent == nil || contact.bodyB.node?.parent == nil) {
+                    return
+                }
+                
+                score += 50
+                
                 //Remove the enemy who got shot from the enemies array
             let enemyIndex = findIndex(self.enemies, valueToFind: firstBody.node? as Enemy)
             if(enemyIndex != nil)
             {
                 self.enemies.removeAtIndex(enemyIndex!)
             }
+                let enemyIndex = findIndex(self.enemies, valueToFind: firstBody.node? as Enemy)
+                if(enemyIndex != nil)
+                {
+                    self.enemies.removeAtIndex(enemyIndex!)
+                }
                 
             /*
             let enemy = firstBody.node? as Enemy
             enemy.explode()
             */
                 
-            firstBody.node?.removeFromParent()
-            secondBody.node?.removeFromParent()
+                firstBody.node?.removeFromParent()
+                secondBody.node?.removeFromParent()
         }
     }
 
