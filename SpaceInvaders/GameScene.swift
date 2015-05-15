@@ -89,8 +89,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         fighter4.position = CGPoint(x: size.width / 2 - 150, y: size.height - 310)
         self.enemies.append(self.fighter)
         self.enemies.append(fighter2)
-         self.enemies.append(fighter3)
-         self.enemies.append(fighter4)
+        self.enemies.append(fighter3)
+        self.enemies.append(fighter4)
         for enemy in self.enemies
         {
             self.addChild(enemy)
@@ -228,6 +228,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     //MARK: - Game Loop -
     override func update(currentTime: CFTimeInterval)
     {
+        //println(enemies[0].bullets.count)
         if(self.view!.paused == true)
         {
             return
@@ -363,7 +364,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     }
     
     func updateEnemies() {
-        //TODO: implement method
+        
+        for enemy in self.enemies
+        {
+            enemy.fireBullet(self)
+        }
+        
+    
+        self.enumerateChildNodesWithName("enemyBullet", usingBlock: {
+            (node: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) -> Void in
+            
+            let bullet = node as Bullet
+            bullet.position.y -= (self.player.bulletSpeed - 200.0) * self.dt
+            
+            if(bullet.position.y < -50)
+            {
+                bullet.removeFromParent()
+            }
+        })
+        
     }
     
     func updateHUD() {
@@ -390,6 +409,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         if ((firstBody.categoryBitMask & CollisionCategories.Player != 0) &&
             (secondBody.categoryBitMask & CollisionCategories.EnemyBullet != 0)) {
                 player.takeDamage(25.0)
+                
+                
                 secondBody.node?.removeFromParent()
         }
         
@@ -411,26 +432,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         //player shoots enemy
         if ((firstBody.categoryBitMask & CollisionCategories.Enemy != 0) &&
             (secondBody.categoryBitMask & CollisionCategories.PlayerBullet != 0)) {
-            if (contact.bodyA.node?.parent == nil || contact.bodyB.node?.parent == nil) {
-                return
-            }
-                
-            score += 50
             
+                if (contact.bodyA.node?.parent == nil || contact.bodyB.node?.parent == nil) {
+                    return
+                }
+                
+                score += 50
+                
                 //Remove the enemy who got shot from the enemies array
-            let enemyIndex = findIndex(self.enemies, valueToFind: firstBody.node? as Enemy)
-            if(enemyIndex != nil)
-            {
-                self.enemies.removeAtIndex(enemyIndex!)
-            }
+                let enemyIndex = findIndex(self.enemies, valueToFind: firstBody.node? as Enemy)
+                if(enemyIndex != nil)
+                {
+                    self.enemies.removeAtIndex(enemyIndex!)
+                }
                 
             /*
             let enemy = firstBody.node? as Enemy
             enemy.explode()
             */
                 
-            firstBody.node?.removeFromParent()
-            secondBody.node?.removeFromParent()
+                firstBody.node?.removeFromParent()
+                secondBody.node?.removeFromParent()
         }
     }
 
