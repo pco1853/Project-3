@@ -11,11 +11,8 @@
 		3F17C8841B0257990095A6E9 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17C8831B0257990095A6E9 /* MenuScene.swift */; };
 		3F17C8871B0265CA0095A6E9 /* SquareFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F17C8861B0265CA0095A6E9 /* SquareFont.ttf */; };
 		3F352BBC1B05341D0029FD10 /* EnemyBullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F352BBB1B05341D0029FD10 /* EnemyBullet.swift */; };
-		3F60A9451B023FCF00402038 /* LeftArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F60A9431B023FCF00402038 /* LeftArrow.png */; };
-		3F60A9461B023FCF00402038 /* RightArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F60A9441B023FCF00402038 /* RightArrow.png */; };
 		3F60A9481B023FE000402038 /* VirtualController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F60A9471B023FE000402038 /* VirtualController.swift */; };
 		3F60A94A1B023FF800402038 /* OptionsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F60A9491B023FF800402038 /* OptionsScene.swift */; };
-		3F60A94E1B02467B00402038 /* shootButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F60A94D1B02467B00402038 /* shootButton.png */; };
 		3F7B09111AE74DC0000EEAD4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7B09101AE74DC0000EEAD4 /* AppDelegate.swift */; };
 		3F7B09151AE74DC0000EEAD4 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7B09141AE74DC0000EEAD4 /* GameScene.swift */; };
 		3F7B09171AE74DC0000EEAD4 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7B09161AE74DC0000EEAD4 /* GameViewController.swift */; };
@@ -24,9 +21,6 @@
 		3F7B091F1AE74DC0000EEAD4 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7B091D1AE74DC0000EEAD4 /* LaunchScreen.xib */; };
 		3F7B092B1AE74DC1000EEAD4 /* SpaceInvadersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7B092A1AE74DC1000EEAD4 /* SpaceInvadersTests.swift */; };
 		3F7B09351AE74E76000EEAD4 /* StartGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7B09341AE74E76000EEAD4 /* StartGameScene.swift */; };
-		3F7B09451AE75041000EEAD4 /* invader1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F7B09381AE75041000EEAD4 /* invader1.png */; };
-		3F7B09461AE75041000EEAD4 /* invader2.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F7B09391AE75041000EEAD4 /* invader2.png */; };
-		3F7B09471AE75041000EEAD4 /* invader3.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F7B093A1AE75041000EEAD4 /* invader3.png */; };
 		3F7B09481AE75041000EEAD4 /* laser.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3F7B093B1AE75041000EEAD4 /* laser.mp3 */; };
 		3F7B09491AE75041000EEAD4 /* laser.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F7B093C1AE75041000EEAD4 /* laser.png */; };
 		3F7B094A1AE75041000EEAD4 /* newgamebtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F7B093D1AE75041000EEAD4 /* newgamebtn.png */; };
@@ -72,11 +66,8 @@
 		3F17C8831B0257990095A6E9 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		3F17C8861B0265CA0095A6E9 /* SquareFont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SquareFont.ttf; sourceTree = "<group>"; };
 		3F352BBB1B05341D0029FD10 /* EnemyBullet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyBullet.swift; sourceTree = "<group>"; };
-		3F60A9431B023FCF00402038 /* LeftArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LeftArrow.png; sourceTree = "<group>"; };
-		3F60A9441B023FCF00402038 /* RightArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RightArrow.png; sourceTree = "<group>"; };
 		3F60A9471B023FE000402038 /* VirtualController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualController.swift; sourceTree = "<group>"; };
 		3F60A9491B023FF800402038 /* OptionsScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionsScene.swift; sourceTree = "<group>"; };
-		3F60A94D1B02467B00402038 /* shootButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shootButton.png; sourceTree = "<group>"; };
 		3F7B090B1AE74DC0000EEAD4 /* SpaceInvaders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaceInvaders.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F7B090F1AE74DC0000EEAD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F7B09101AE74DC0000EEAD4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -89,9 +80,6 @@
 		3F7B09291AE74DC1000EEAD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F7B092A1AE74DC1000EEAD4 /* SpaceInvadersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceInvadersTests.swift; sourceTree = "<group>"; };
 		3F7B09341AE74E76000EEAD4 /* StartGameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartGameScene.swift; sourceTree = "<group>"; };
-		3F7B09381AE75041000EEAD4 /* invader1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = invader1.png; sourceTree = "<group>"; };
-		3F7B09391AE75041000EEAD4 /* invader2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = invader2.png; sourceTree = "<group>"; };
-		3F7B093A1AE75041000EEAD4 /* invader3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = invader3.png; sourceTree = "<group>"; };
 		3F7B093B1AE75041000EEAD4 /* laser.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = laser.mp3; sourceTree = "<group>"; };
 		3F7B093C1AE75041000EEAD4 /* laser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = laser.png; sourceTree = "<group>"; };
 		3F7B093D1AE75041000EEAD4 /* newgamebtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newgamebtn.png; sourceTree = "<group>"; };
@@ -223,12 +211,6 @@
 			isa = PBXGroup;
 			children = (
 				3FA6C0791B04395C00C317F6 /* dpad.png */,
-				3F60A94D1B02467B00402038 /* shootButton.png */,
-				3F60A9431B023FCF00402038 /* LeftArrow.png */,
-				3F60A9441B023FCF00402038 /* RightArrow.png */,
-				3F7B09381AE75041000EEAD4 /* invader1.png */,
-				3F7B09391AE75041000EEAD4 /* invader2.png */,
-				3F7B093A1AE75041000EEAD4 /* invader3.png */,
 				3F7B093C1AE75041000EEAD4 /* laser.png */,
 				3F7B093D1AE75041000EEAD4 /* newgamebtn.png */,
 				3F7B093E1AE75041000EEAD4 /* nextlevelbtn.png */,
@@ -427,9 +409,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FB5577F1AFBAC2800916F1B /* Inversionz.otf in Resources */,
-				3F60A9461B023FCF00402038 /* RightArrow.png in Resources */,
 				3F7B094F1AE75041000EEAD4 /* start_btn.png in Resources */,
-				3F7B09451AE75041000EEAD4 /* invader1.png in Resources */,
 				3F7B09481AE75041000EEAD4 /* laser.mp3 in Resources */,
 				3F7B091F1AE74DC0000EEAD4 /* LaunchScreen.xib in Resources */,
 				3FA6C07E1B04395C00C317F6 /* joystick.png in Resources */,
@@ -437,17 +417,13 @@
 				3F17C8871B0265CA0095A6E9 /* SquareFont.ttf in Resources */,
 				3F7B09621AE75CE9000EEAD4 /* spark.png in Resources */,
 				3F7B09611AE75CE9000EEAD4 /* StarField.sks in Resources */,
-				3F7B09471AE75041000EEAD4 /* invader3.png in Resources */,
 				3F7B091C1AE74DC0000EEAD4 /* Images.xcassets in Resources */,
 				3F7B09501AE75041000EEAD4 /* ufo.png in Resources */,
 				3F7B091A1AE74DC0000EEAD4 /* Main.storyboard in Resources */,
 				3FA6C07D1B04395C00C317F6 /* dpad.png in Resources */,
-				3F7B09461AE75041000EEAD4 /* invader2.png in Resources */,
-				3F60A94E1B02467B00402038 /* shootButton.png in Resources */,
 				3F7B094E1AE75041000EEAD4 /* star.png in Resources */,
 				3F7B094B1AE75041000EEAD4 /* nextlevelbtn.png in Resources */,
 				3F7B09491AE75041000EEAD4 /* laser.png in Resources */,
-				3F60A9451B023FCF00402038 /* LeftArrow.png in Resources */,
 				3FB5577D1AFBA4B200916F1B /* Fire.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
