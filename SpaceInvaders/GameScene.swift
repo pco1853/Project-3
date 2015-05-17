@@ -16,9 +16,8 @@ struct CollisionCategories {
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
-    
+
     //MARK: - Variables -
-    
     //game
     var player: Player!
     var enemies: [Enemy] = []
@@ -49,6 +48,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //MARK: - Initialization -
     override func didMoveToView(view: SKView) {
+        //end music
+        sharedAudio.stopAudio()
+        
         //init physics
         self.physicsWorld.gravity = CGVectorMake(0, 0)
         self.physicsWorld.contactDelegate = self
@@ -166,7 +168,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //HUD input
             if (touchedNode.name == "pauseButton" && self.pauseButton.enabled) {
                 self.pauseButton.enabled = false
-                
+
                 if (!self.view!.paused) {
                     self.pauseButton.highlight()
                     self.pauseButton.label.text = "UNPAUSE"

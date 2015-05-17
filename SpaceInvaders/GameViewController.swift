@@ -13,7 +13,7 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         let startGameScene = StartGameScene(size: CGSizeMake(768, 1024), title: "harvester")
         startGameScene.scaleMode = .AspectFill //base size on iPad, scale down to iPhone
         

@@ -54,6 +54,7 @@
 		3FEF8ABA1AF9971500445871 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEF8AB91AF9971500445871 /* GameOverScene.swift */; };
 		3FEF8ABC1AF9A5E000445871 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEF8ABB1AF9A5E000445871 /* Enemy.swift */; };
 		965CAC3A1B044E4A0060C698 /* Fighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965CAC391B044E4A0060C698 /* Fighter.swift */; };
+		96BDEA051B081BD100A56A21 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BDEA041B081BD100A56A21 /* AudioManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +119,7 @@
 		3FEF8AB91AF9971500445871 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		3FEF8ABB1AF9A5E000445871 /* Enemy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		965CAC391B044E4A0060C698 /* Fighter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fighter.swift; sourceTree = "<group>"; };
+		96BDEA041B081BD100A56A21 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +198,7 @@
 				3F7B095F1AE75CE9000EEAD4 /* StarField.sks */,
 				3FB5577C1AFBA4B200916F1B /* Fire.sks */,
 				3F7B09601AE75CE9000EEAD4 /* spark.png */,
+				96BDEA041B081BD100A56A21 /* AudioManager.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -484,6 +487,7 @@
 				3FA6C07F1B04395C00C317F6 /* Joystick.swift in Sources */,
 				3F7B09111AE74DC0000EEAD4 /* AppDelegate.swift in Sources */,
 				3F7B095C1AE756A3000EEAD4 /* Utilities.swift in Sources */,
+				96BDEA051B081BD100A56A21 /* AudioManager.swift in Sources */,
 				3FEF8AB51AF98C3C00445871 /* GameData.swift in Sources */,
 				3FEA26491B019FCE00680E31 /* GameModeScene.swift in Sources */,
 			);
