@@ -17,7 +17,6 @@ class Ship: SKSpriteNode {
     var fireRate: NSTimeInterval = 0.5
     var bulletSpeed: CGFloat = 500.0
     var bulletDamage: CGFloat = 10.0
-    var bullets: [Bullet] = []
     
     init(health: CGFloat, movementSpeed: CGFloat, canFire: Bool, fireRate: NSTimeInterval, bulletSpeed: CGFloat, bulletDamage: CGFloat, texture: SKTexture) {
         super.init(texture: texture, color: SKColor.clearColor(), size: texture.size())
@@ -41,8 +40,13 @@ class Ship: SKSpriteNode {
     }
     
     func setVelocity(#x: CGFloat, y: CGFloat, dt: CGFloat) {
-        self.physicsBody?.velocity = CGVector(dx: (x * 100) * (self.movementSpeed * dt),
-                                              dy: (y * 100) * (self.movementSpeed * dt)
+        self.physicsBody?.velocity = CGVector(dx: x * dt, dy: y * dt)
+    }
+    
+    func setVelocityFromAcceleration(#accelX: CGFloat, accelY: CGFloat, dt: CGFloat) {
+        self.physicsBody?.velocity = CGVector(
+            dx: (accelX * 100) * (self.movementSpeed * dt),
+            dy: (accelY * 100) * (self.movementSpeed * dt)
         )
     }
 

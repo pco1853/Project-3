@@ -25,7 +25,6 @@ class GameData: NSCoder {
     var playerShip = "Phoenix"
     var playerGuns = ""
     var playerEngine = ""
-    
     var playerHealth: CGFloat = 100.0
     var playerMovementSpeed: CGFloat = 200.0
     var playerFireRate: NSTimeInterval = 0.5

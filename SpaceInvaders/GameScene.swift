@@ -25,7 +25,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var wave = 1
     var waveTimer: CFTimeInterval = 10.0
     var difficulty = 1
-    var fighter: Fighter!
 
     //animation
     var lastUpdateTimeInterval: CFTimeInterval = -1.0
@@ -69,7 +68,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupPlayer() {
-        //TODO: generate player based on game data
         self.player = Player()
         self.player.position = CGPoint(x: size.width / 2, y: player.size.height + 100)
         self.addChild(self.player)
@@ -77,41 +75,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func setupEnemies() {
         //TODO: generate waves from data
-        self.fighter = Fighter()
-        var fighter2 = Fighter()
-        var fighter3 = Fighter()
-        var fighter4 = Fighter()
-        var kamikazee = Kamikazee()
-        var kamikazee2 = Kamikazee()
-        var kamikazee3 = Kamikazee()
-        var kamikazee4 = Kamikazee()
-        var bomber = Bomber()
         
-        self.fighter.position = CGPoint(x: size.width / 2, y: size.height - 100)
-        fighter2.position = CGPoint(x: size.width / 2 + 50, y: size.height - 150)
-        fighter3.position = CGPoint(x: size.width / 2 - 50, y: size.height - 260)
-        fighter4.position = CGPoint(x: size.width / 2 - 150, y: size.height - 310)
-        kamikazee.position = CGPoint(x: size.width / 2 - 300, y: size.height - 370)
-        kamikazee2.position = CGPoint(x: size.width / 2 + 300, y: size.height - 320)
-        kamikazee3.position = CGPoint(x: size.width / 2 - 300, y: size.height - 100)
-        kamikazee4.position = CGPoint(x: size.width / 2 + 300, y: size.height - 200)
-        bomber.position = CGPoint(x:size.width / 2 - 50, y: size.height - 100)
+        //FOR TESTING:
+        let fighter = Fighter()
+        let kamikaze = Kamikaze()
+        let bomber = Bomber()
+        
+        fighter.position = CGPoint(x: size.width / 2, y: size.height - 150)
+        kamikaze.position = CGPoint(x: size.width / 2 - 100, y: size.height - 300)
+        bomber.position = CGPoint(x: size.width / 2 + 150, y: size.height - 100)
 
-        self.enemies.append(self.fighter)
-        self.enemies.append(fighter2)
-        self.enemies.append(fighter3)
-        self.enemies.append(fighter4)
-        self.enemies.append(kamikazee)
-        self.enemies.append(kamikazee2)
-        self.enemies.append(kamikazee3)
-        self.enemies.append(kamikazee4)
+        self.enemies.append(fighter)
+        self.enemies.append(kamikaze)
         self.enemies.append(bomber)
         
-        for enemy in self.enemies
-        {
+        for enemy in self.enemies {
             self.addChild(enemy)
         }
-
     }
     
     func setupHUD() {
@@ -290,12 +270,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.accelerationY = 0.0
             self.player.setVelocity(x: 0, y: 0, dt: 0)
         }
-
-        //println(enemies[0].bullets.count)
-        if(self.view!.paused == true)
-        {
-            return
-        }
         
         checkGameOver()
         
@@ -319,117 +293,93 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func updatePlayer() {
         //set player velocity
-        self.player.setVelocity(x: self.accelerationX, y: self.accelerationY, dt: self.dt)
-        
-        //move player bullets
-        for (var i = 0; i < player.bullets.count; i++) {
-            player.bullets[i].position.y += player.bulletSpeed * dt
-        }
-
+        self.player.setVelocityFromAcceleration(accelX: self.accelerationX, accelY: self.accelerationY, dt: self.dt)
     }
     
-    func updateEnemies()
-    {
-        //Move enemies left or right depending on their direction
-        for enemy in self.enemies
-        {
-            if enemy.moveDirection == "Right"
-            {
-                enemy.position.x += CGFloat(enemy.movementSpeed! * dt)
-            }
-            else if enemy.moveDirection == "Left"
-            {
-                enemy.position.x -= CGFloat(enemy.movementSpeed! * dt)
-            }
-            else if enemy.moveDirection == "Down"
-            {
-                enemy.position.y -= 550 * dt
-            }
-    
+    func updateEnemies() {
+        for enemy in self.enemies {
             
-            //fire enemy bullets
-            enemy.fireBullet(self)
+            //move
+            if (enemy.moveDirection == "left") {
+                enemy.setVelocity(x: -enemy.movementSpeed, y: 0.0, dt: self.dt)
+            }
+            else if (enemy.moveDirection == "right") {
+                enemy.setVelocity(x: enemy.movementSpeed, y: 0.0, dt: self.dt)
+            }
             
-            //Logic for kamikazees
-            if(enemy.type == "kamikazee")
-            {
-                if(Int(enemy.position.x) < Int(self.player.position.x))
-                {
-                    if(Int(enemy.position.x + enemy.size.width / 4) > Int(self.player.position.x))
-                    {
-                         enemy.moveDirection = "Down"
-                    }
-                    
-                }
-                else if(Int(enemy.position.x) > Int(self.player.position.x))
-                {
-                    if(Int(enemy.position.x - enemy.size.width / 4) < Int(self.player.position.x))
-                    {
-                        enemy.moveDirection = "Down"
-                    }
+            //fire bullets/bomb/self
+            if (enemy.name == "fighter") {
+                let e = enemy as Fighter
+                e.fireBullet(self)
+            }
+            else if (enemy.name == "bomber") {
+                let e = enemy as Bomber
+                e.fireBomb(self)
+            }
+            else if (enemy.name == "kamikaze") {
+                let e = enemy as Kamikaze
+                
+                if (e.position.x > self.player.position.x - self.player.size.width &&
+                    e.position.x < self.player.position.x + self.player.size.width) {
+                    e.fire()
                 }
                 
-                if(enemy.position.y < -70)
-                {
-                    var kamikazeeIndex = findIndex(enemies, valueToFind: enemy)
-                    enemies.removeAtIndex(kamikazeeIndex!)
-                    enemy.removeFromParent()
+                if (e.canFire){
+                    e.setVelocity(x: 0.0, y: e.movementSpeed, dt: self.dt)
                 }
             }
         }
-        
-        self.enumerateChildNodesWithName("enemyBullet", usingBlock: {
-            (node: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) -> Void in
-            
-            let bullet = node as Bullet
-            bullet.position.y -= (self.player.bulletSpeed - 200.0) * self.dt
-            
-            if(bullet.position.y < -50)
-            {
-                bullet.removeFromParent()
-            }
-        })
-        
-        self.enumerateChildNodesWithName("enemyBomb", usingBlock: {
-            (node: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) -> Void in
-            
-            let bullet = node as Bullet
-            
-            if(bullet.position.y < -50)
-            {
-                bullet.removeFromParent()
-            }
-            
-            if(Int(bullet.position.y) < Int(self.player.position.y))
-            {
-                if(Int(bullet.position.y + bullet.size.height / 4) > Int(self.player.position.y))
-                {
-                    //bullet.runAction(bullet.scaleAction)
-                    bullet.runAction(bullet.scaleAction, completion: { bullet.removeFromParent()})
-                }
-                else
-                {
-                     bullet.position.y -= (self.player.bulletSpeed - 400.0) * self.dt
-                }
-            }
-            else if (Int(bullet.position.y) > Int(self.player.position.y))
-            {
-                if(Int(bullet.position.y + bullet.size.height / 4) < Int(self.player.position.y))
-                {
-                    //bullet.runAction(bullet.scaleAction)
-                    bullet.runAction(bullet.scaleAction, completion: { bullet.removeFromParent()})
-                }
-                else
-                {
-                     bullet.position.y -= (self.player.bulletSpeed - 400.0) * self.dt
-                }
-            }
-        })
-        
     }
     
     func updateBullets() {
+        //player bullets
+        self.enumerateChildNodesWithName("playerBullet", usingBlock: {
+            (node: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) -> Void in
+            
+            let b = node as PlayerBullet
+            b.position.y += (self.player.bulletSpeed) * self.dt
+            
+            if (b.position.y > self.size.height + 50.0) {
+                b.removeFromParent()
+            }
+        })
         
+        //enemy fighter bullets
+        self.enumerateChildNodesWithName("enemyBullet", usingBlock: {
+            (node: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) -> Void in
+            
+            let b = node as EnemyBullet
+            b.position.y -= (400.0) * self.dt
+            
+            if (b.position.y < -50.0) {
+                b.removeFromParent()
+            }
+        })
+        
+        //enemy bombs
+        self.enumerateChildNodesWithName("enemyBomb", usingBlock: {
+            (node: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) -> Void in
+            
+            let b = node as EnemyBullet
+            
+            if (b.position.y > self.player.position.y - self.player.size.height &&
+                b.position.y < self.player.position.y + self.player.size.height) { //explode if in range
+                    let explode = SKAction.scaleXTo(20.0, duration: 2.0)
+                    let fadeOut = SKAction.fadeOutWithDuration(0.25)
+                    b.runAction(explode, completion: {
+                        b.runAction(fadeOut, completion: {
+                            b.removeFromParent()
+                        })
+                    })
+            }
+            else if (b.xScale == 1.0) { //keep moving down if not exploding
+                b.position.y -= (200.0) * self.dt
+            }
+            
+            if(b.position.y < -50.0) {
+                b.removeFromParent()
+            }
+        })
     }
     
     func updateHUD() {
@@ -454,14 +404,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         else if (player.position.y + player.size.height / 2 > self.size.height - 20.0)
         {
             player.position.y = self.size.height - player.size.height / 2 - 20.0
-        }
-        
-        //check player bullet bounds
-        for (var i = 0; i < player.bullets.count; i++) {
-            if (player.bullets[i].position.y >= self.size.height + 50){
-                player.bullets[i].removeFromParent()
-                player.bullets.removeAtIndex(i)
-            }
         }
         
         //check enemy bounds
@@ -505,20 +447,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //player and enemy hit
         if ((firstBody.categoryBitMask & CollisionCategories.Player != 0) &&
             (secondBody.categoryBitMask & CollisionCategories.Enemy != 0)) {
-                player.takeDamage(20.0)
+                if (contact.bodyA.node?.parent == nil || contact.bodyB.node?.parent == nil) {
+                    return
+                }
                 
-                //Remove the enemy who got shot from the enemies array
+                player.takeDamage(50.0)
+                
+                //Remove enemy
                 var enemyIndex = findIndex(self.enemies, valueToFind: secondBody.node? as Enemy)
-                if(enemyIndex != nil)
-                {
+                if(enemyIndex != nil) {
                     self.enemies.removeAtIndex(enemyIndex!)
-                    
                 }
-                
-                if(secondBody.node?.parent != nil)
-                {
-                    secondBody.node?.removeFromParent()
-                }
+                secondBody.node?.removeFromParent()
         }
         
         //player shoots enemy
@@ -529,13 +469,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
                 
             gameData.score += 50
-            
-                if (contact.bodyA.node?.parent == nil || contact.bodyB.node?.parent == nil) {
-                    return
-                }
                 
-                
-                //Remove the enemy who got shot from the enemies array
+            //Remove the enemy who got shot from the enemies array
             var enemyIndex = findIndex(self.enemies, valueToFind: firstBody.node? as Enemy)
             if(enemyIndex != nil)
             {
