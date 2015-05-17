@@ -17,7 +17,7 @@ class Bomber: Enemy
         let texture = SKTexture(imageNamed: "ship_bomber")
         super.init(
             health: 75.0,
-            movementSpeed: 200.0,
+            movementSpeed: 50.0,
             canFire: false,
             fireRate: 5.0,
             bulletSpeed: 200.0,

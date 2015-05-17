@@ -325,7 +325,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 
                 if (e.canFire){
-                    e.setVelocity(x: 0.0, y: e.movementSpeed, dt: self.dt)
+                    e.setVelocity(x: 0.0, y: -e.movementSpeed, dt: self.dt)
                 }
             }
         }

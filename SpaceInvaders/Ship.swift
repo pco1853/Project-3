@@ -40,13 +40,13 @@ class Ship: SKSpriteNode {
     }
     
     func setVelocity(#x: CGFloat, y: CGFloat, dt: CGFloat) {
-        self.physicsBody?.velocity = CGVector(dx: x * dt, dy: y * dt)
+        self.physicsBody?.velocity = CGVector(dx: x * dt * 100, dy: y * dt * 100)
     }
     
     func setVelocityFromAcceleration(#accelX: CGFloat, accelY: CGFloat, dt: CGFloat) {
         self.physicsBody?.velocity = CGVector(
-            dx: (accelX * 100) * (self.movementSpeed * dt),
-            dy: (accelY * 100) * (self.movementSpeed * dt)
+            dx: self.movementSpeed * accelX * dt * 100,
+            dy: self.movementSpeed * accelY * dt * 100
         )
     }
 

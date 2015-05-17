@@ -16,7 +16,7 @@ class Kamikaze: Enemy {
         let texture = SKTexture(imageNamed: "ship_kamikaze")
         super.init(
             health: 75.0,
-            movementSpeed: 2000.0,
+            movementSpeed: 100.0,
             canFire: false,
             fireRate: 0.0,
             bulletSpeed: 0.0,
@@ -36,6 +36,7 @@ class Kamikaze: Enemy {
     
     func fire() {
         self.canFire = true
+        self.movementSpeed = 700.0
     }
     
 }
