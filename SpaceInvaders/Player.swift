@@ -15,6 +15,7 @@ class Player: Ship {
     //MARK: - Variables -
     var canHarvest = true
     var invincible = false
+    var engineParticle: SKEmitterNode!
     //var powerup: Powerup! //TODO: implement powerups
     
     let zShip: CGFloat = 0
@@ -28,14 +29,16 @@ class Player: Ship {
     //MARK: - Initialization -
     init() {
         //load player vars
-        let playerShip = SKTexture(imageNamed: gameData.playerShip)
-        super.init(health: gameData.playerHealth,
+        let texture = SKTexture(imageNamed: gameData.playerShip)
+        super.init(
+            health: gameData.playerHealth,
             movementSpeed: gameData.playerMovementSpeed,
-                  canFire: true,
-                 fireRate: gameData.playerFireRate,
-              bulletSpeed: gameData.playerBulletSpeed,
-             bulletDamage: gameData.playerBulletDamage,
-                  texture: playerShip)
+            canFire: true,
+            fireRate: gameData.playerFireRate,
+            bulletSpeed: gameData.playerBulletSpeed,
+            bulletDamage: gameData.playerBulletDamage,
+            texture: texture
+        )
         
         //add shadow
         let shadowOffsetX: CGFloat = 10.0
@@ -55,10 +58,10 @@ class Player: Ship {
         //TODO: add engine
         
         //add engine particle
-        let engineParticle = SKEmitterNode(fileNamed: "Fire")
-        engineParticle.position = CGPointMake(self.position.x, self.position.y - self.size.height / 2)
-        engineParticle.zPosition = self.zEngineParticle
-        self.addChild(engineParticle)
+        self.engineParticle = SKEmitterNode(fileNamed: "Fire")
+        self.engineParticle.position = CGPointMake(self.position.x, self.position.y - self.size.height / 2)
+        self.engineParticle.zPosition = self.zEngineParticle
+        self.addChild(self.engineParticle)
         
         //TODO: add guns
         
@@ -79,18 +82,18 @@ class Player: Ship {
         if (self.canFire) {
             self.canFire = false
             
-            let b1 = PlayerBullet(imageName: "laser")
+            let b1 = PlayerBullet(imageName: "bullet_player")
             b1.position.x = self.position.x - 12.0
             b1.position.y = self.position.y + 2.0 //+ self.size.height / 2
             b1.zPosition = self.zBullets
+            b1.name = "playerBullet"
             
-            let b2 = PlayerBullet(imageName: "laser")
+            let b2 = PlayerBullet(imageName: "bullet_player")
             b2.position.x = self.position.x + 12.0
             b2.position.y = self.position.y + 2.0 //+ self.size.height / 2
             b2.zPosition = self.zBullets
+            b2.name = "playerBullet"
             
-            self.bullets.append(b1)
-            self.bullets.append(b2)
             scene.addChild(b1)
             scene.addChild(b2)
             
@@ -109,6 +112,14 @@ class Player: Ship {
         //if (self.powerup != nil) {
             //TODO:
         //}
+    }
+    
+    func setEngineParticle() {
+        var x = self.physicsBody?.velocity.dx
+        self.engineParticle.xAcceleration = -x!
+        
+        var y = self.physicsBody?.velocity.dy
+        self.engineParticle.yAcceleration = -y!
     }
     
     func takeDamage(damage: CGFloat) {
