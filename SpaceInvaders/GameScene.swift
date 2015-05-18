@@ -18,7 +18,6 @@ struct CollisionCategories {
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //MARK: - Variables -
-    
     //game
     var player: Player!
     var enemies: [Enemy] = []
@@ -49,10 +48,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //accelerometer
     var motionManager: CMMotionManager?
     
+    //sound
+    var audioTracks = ["Game Track 1.m4a", "Game Track 2.m4a", "Game Track 3.m4a", "Game Track 4.mp3"]
+    var audioTracksShuffled: [String] = []
+    var audioTracksIndex = 0
+    
     //MARK: - Initialization -
     override func didMoveToView(view: SKView) {
-        //end menu background sound
-        sharedAudio.stopAudio()
+        //stop menu menu music
+        audioManager.stopAudio()
         
         //init physics
         self.physicsWorld.gravity = CGVectorMake(0, 0)
@@ -71,6 +75,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupEnemies()
         setupHUD()
         setupInput()
+        setupMusic()
     }
     
     func setupPlayer() {
@@ -140,6 +145,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.accelerationX = 0.0
         self.accelerationY = 0.0
+    }
+    
+    func setupMusic() {
+        if (gameData.soundEnabled) {
+            self.audioTracksShuffled = self.audioTracks.shuffled()
+            audioManager.playBackgroundMusic(self.audioTracksShuffled[audioTracksIndex], loops: 1)
+        }
     }
     
     //MARK: - Input -
@@ -270,7 +282,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             return
         }
         
-        
         checkGameOver()
         
         checkBounds()
@@ -289,6 +300,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         updateEnemies()
         updateBullets()
         updateHUD()
+        updateMusic()
     }
     
     func updatePlayer() {
@@ -363,10 +375,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             let b = node as EnemyBullet
             
-            if (b.position.y > self.player.position.y - self.player.size.height &&
-                b.position.y < self.player.position.y + self.player.size.height) { //explode if in range
+            if (b.position.y > self.player.position.y - self.player.size.height / 2 &&
+                b.position.y < self.player.position.y + self.player.size.height / 2) { //explode if in range
                     let texture = SKTexture(imageNamed: "bullet_bombExploding")
                     b.texture = texture
+                    
+                    audioManager.playSoundEffect("bullet_bombExplosion.m4a", node: self)
+                    
                     let explode = SKAction.scaleXTo(50.0, duration: 2.0)
                     let fadeOut = SKAction.fadeOutWithDuration(0.25)
                     b.runAction(explode, completion: {
@@ -390,8 +405,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.text = "SCORE: \(gameData.score)"
     }
     
-    func checkBounds()
-    {
+    func updateMusic() {
+        if (gameData.soundEnabled && audioManager.player.playing == false) {
+            self.audioTracksIndex++
+            
+            if (self.audioTracksIndex > self.audioTracksShuffled.count - 1) {
+                self.audioTracksIndex = 0
+                //self.audioTracksShuffled = self.audioTracks.shuffled()
+            }
+            
+            audioManager.playBackgroundMusic(self.audioTracksShuffled[self.audioTracksIndex], loops: 1)
+        }
+    }
+    
+    func checkBounds() {
         //check player bounds
         if (player.position.x - player.size.width / 2 < 20.0) { //left edge
             player.position.x = player.size.width / 2 + 20.0
@@ -499,6 +526,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //TODO: disable controls
             
             self.runAction(SKAction.runBlock({
+                audioManager.stopAudio()
+                
                 let gameOverScene = GameOverScene(size: self.size, title: "game over")
                 gameOverScene.scaleMode = self.scaleMode
                 let transition = SKTransition.fadeWithDuration(1.0)
@@ -508,8 +537,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     //MARK: - Helpers -
-    func findIndex<T: Equatable>(array: [T], valueToFind: T) -> Int?
-    {
+    func findIndex<T: Equatable>(array: [T], valueToFind: T) -> Int? {
         for (index, value) in enumerate(array) {
             if value == valueToFind {
                 return index

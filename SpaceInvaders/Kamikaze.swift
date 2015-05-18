@@ -35,8 +35,12 @@ class Kamikaze: Enemy {
     }
     
     func fire() {
-        self.canFire = true
-        self.movementSpeed = 700.0
+        if (!self.canFire) {
+            self.canFire = true
+            self.movementSpeed = 700.0
+        
+            audioManager.playSoundEffect("ship_kamikazeLock.m4a", node: self)
+        }
     }
     
 }

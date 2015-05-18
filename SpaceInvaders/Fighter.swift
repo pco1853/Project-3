@@ -57,6 +57,8 @@ class Fighter: Enemy {
             
             let waitToEnableFire = SKAction.waitForDuration(self.fireRate)
             self.runAction(waitToEnableFire, completion: { self.canFire = true })
+            
+            audioManager.playSoundEffect("bullet_enemy.mp3", node: self)
         }
     }
 

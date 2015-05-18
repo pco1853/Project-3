@@ -99,6 +99,8 @@ class Player: Ship {
             
             let waitToEnableFire = SKAction.waitForDuration(self.fireRate)
             runAction(waitToEnableFire, completion: { self.canFire = true })
+            
+            audioManager.playSoundEffect("bullet_player.m4a", node: self)
         }
     }
     

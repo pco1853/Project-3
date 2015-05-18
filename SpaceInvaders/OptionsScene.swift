@@ -307,15 +307,14 @@ class OptionsScene: MenuScene {
             //sound options
             else if (touchedNode.name == "soundOnButton" && self.soundOnButton.enabled) {
                 gameData.soundEnabled = true
-                //add menu sound
-                sharedAudio.playBackgroundSound("laser.mp3", loops: -1)
                 highlightSoundOptions()
             }
             else if (touchedNode.name == "soundOffButton" && self.soundOffButton.enabled) {
                 gameData.soundEnabled = false
-                sharedAudio.stopAudio()
+                audioManager.stopAudio()
                 highlightSoundOptions()
             }
+            
         }
     }
     

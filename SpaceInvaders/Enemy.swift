@@ -74,6 +74,8 @@ class Enemy: Ship {
     func explode() {
         //TODO: animate explosion
         self.removeFromParent()
+        
+        audioManager.playSoundEffect("ship_enemyExplosion.m4a", node: self)
     }
 
 }

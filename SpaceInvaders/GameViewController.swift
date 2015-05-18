@@ -17,16 +17,14 @@ class GameViewController: UIViewController {
         
         //viewcontroller for sharing on facebook
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "shareScore", name: "share", object: nil)
+        
         let startGameScene = StartGameScene(size: CGSizeMake(768, 1024), title: "harvester")
-        startGameScene.scaleMode = .AspectFill //base size on iPad, scale down to iPhone
+        startGameScene.scaleMode = .AspectFit //base size on iPad, scale down to iPhone
         
         let skView = view as SKView
         skView.ignoresSiblingOrder = true
         skView.showsFPS = true
         skView.showsNodeCount = true
-        
-        //add menu sound
-        sharedAudio.playBackgroundSound("laser.mp3", loops: -1)
         
         skView.presentScene(startGameScene)
     }

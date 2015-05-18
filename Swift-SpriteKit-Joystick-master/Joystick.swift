@@ -9,7 +9,8 @@
 import Foundation
 import SpriteKit
 
-class Joystick : SKNode {
+class Joystick: SKNode {
+    
     let kThumbSpringBackDuration: Double =  0.3
     let backdropNode, thumbNode: SKSpriteNode
     var isTracking: Bool = false
@@ -22,7 +23,7 @@ class Joystick : SKNode {
         return CGPointMake(0, 0)
     }
     
-    init(thumbNode: SKSpriteNode = SKSpriteNode(imageNamed: "ui_joystickOutline-1"), backdropNode: SKSpriteNode = SKSpriteNode(imageNamed: "ui_joystickOutline")) {
+    init(thumbNode: SKSpriteNode = SKSpriteNode(imageNamed: "ui_joystick"), backdropNode: SKSpriteNode = SKSpriteNode(imageNamed: "ui_joystickOutline")) {
         self.thumbNode = thumbNode
         self.backdropNode = backdropNode
         
@@ -84,6 +85,5 @@ class Joystick : SKNode {
         easeOut.timingMode = SKActionTimingMode.EaseOut
         self.thumbNode.runAction(easeOut)
     }
-    
     
 }
