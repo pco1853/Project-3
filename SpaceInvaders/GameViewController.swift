@@ -25,6 +25,9 @@ class GameViewController: UIViewController {
         skView.showsFPS = true
         skView.showsNodeCount = true
         
+        //add menu sound
+        sharedAudio.playBackgroundSound("laser.mp3", loops: -1)
+        
         skView.presentScene(startGameScene)
     }
     

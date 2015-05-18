@@ -22,7 +22,7 @@ class Joystick : SKNode {
         return CGPointMake(0, 0)
     }
     
-    init(thumbNode: SKSpriteNode = SKSpriteNode(imageNamed: "ui_joystick"), backdropNode: SKSpriteNode = SKSpriteNode(imageNamed: "ui_joystickOutline")) {
+    init(thumbNode: SKSpriteNode = SKSpriteNode(imageNamed: "ui_joystickOutline-1"), backdropNode: SKSpriteNode = SKSpriteNode(imageNamed: "ui_joystickOutline")) {
         self.thumbNode = thumbNode
         self.backdropNode = backdropNode
         
