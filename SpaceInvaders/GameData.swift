@@ -20,6 +20,7 @@ class GameData: NSCoder {
     var highScores: [Int] = []
     var score = 0
     var credits = 0
+    var scoreImage: UIImage?
     
     //player vars
     var playerShip = "Phoenix"

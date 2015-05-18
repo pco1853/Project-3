@@ -8,12 +8,15 @@
 
 import UIKit
 import SpriteKit
+import Social
 
 class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //viewcontroller for sharing on facebook
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "shareScore", name: "share", object: nil)
         let startGameScene = StartGameScene(size: CGSizeMake(768, 1024), title: "harvester")
         startGameScene.scaleMode = .AspectFill //base size on iPad, scale down to iPhone
         
@@ -28,5 +31,25 @@ class GameViewController: UIViewController {
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
-
+    
+    func shareScore()
+    {
+        let facebook = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
+        facebook.completionHandler = {
+            result in
+            switch result{
+            case SLComposeViewControllerResult.Cancelled:
+                break
+                
+            case SLComposeViewControllerResult.Done:
+                break
+            }
+        
+        }
+        
+        facebook.setInitialText("I scored \(gameData.score) points in Harvester")
+        //facebook.addImage(gameData.scoreImage!)
+        self.presentViewController(facebook, animated: false, completion: nil)
+    }
+    
 }

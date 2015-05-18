@@ -415,12 +415,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if (enemy.position.x - enemy.size.width / 2 < 20.0 && enemy.moveDirection != "None") //left edge
             {
                 enemy.position.x = enemy.size.width / 2 + 20.0
-                enemy.moveDirection = "Right"
+                enemy.moveDirection = "right"
             }
             else if(enemy.position.x + enemy.size.width / 2 > self.size.width - 20.0 && enemy.moveDirection != "None")//right edge
             {
                 enemy.position.x = self.size.width - enemy.size.width / 2 - 20.0
-                enemy.moveDirection = "Left"
+                enemy.moveDirection = "left"
             }
         }
     }
