@@ -15,6 +15,7 @@ class Player: Ship {
     //MARK: - Variables -
     var canHarvest = true
     var invincible = false
+    var isDead = false
     var engineParticle: SKEmitterNode!
     //var powerup: Powerup! //TODO: implement powerups
     
@@ -124,10 +125,17 @@ class Player: Ship {
         self.engineParticle.yAcceleration = -y!
     }
     
-    func takeDamage(damage: CGFloat) {
+    func takeDamage(damage: CGFloat, scene: SKScene) {
         if (!self.invincible) {
             self.health -= damage
-            turnInvincible()
+            
+            if (self.health <= 0) {
+                self.health = 0
+                explode(scene)
+            }
+            else {
+                turnInvincible()
+            }
         }
     }
     
@@ -139,6 +147,19 @@ class Player: Ship {
         let fadeOutIn = SKAction.sequence([fadeOut, fadeIn])
         let fadeOutInRepeat = SKAction.repeatAction(fadeOutIn, count: 3)
         self.runAction(fadeOutInRepeat, completion: { self.invincible = false })
+    }
+    
+    func explode(scene: SKScene) {
+        if (!self.isDead) {
+            println("player died")
+            
+            self.isDead = true
+            self.alpha = 0
+        
+            let explosion = Explosion(type: "PlayerExplosion", duration: 2.0, x: self.position.x, y: self.position.y)
+            scene.addChild(explosion)
+            audioManager.playSoundEffect("ship_playerExplosion.m4a", node: self)
+        }
     }
     
 }

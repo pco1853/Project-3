@@ -30,8 +30,6 @@ class Explosion: SKSpriteNode {
                     self.removeFromParent()
                 })
         })
-        
-        println("explosion?...")
     }
 
     required init?(coder aDecoder: NSCoder) {

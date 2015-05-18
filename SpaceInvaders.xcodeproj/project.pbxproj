@@ -25,6 +25,7 @@
 		3F1685C51B0A806C00086F69 /* ship_playerExplosion.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3F1685BA1B0A806C00086F69 /* ship_playerExplosion.m4a */; };
 		3F1685C71B0A88FC00086F69 /* EnemyExplosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3F1685C61B0A88FC00086F69 /* EnemyExplosion.sks */; };
 		3F1685C91B0A89B100086F69 /* Explosion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1685C81B0A89B100086F69 /* Explosion.swift */; };
+		3F1685CD1B0A994E00086F69 /* PlayerExplosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3F1685CC1B0A994E00086F69 /* PlayerExplosion.sks */; };
 		3F17C8821B024B860095A6E9 /* CreditsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17C8811B024B860095A6E9 /* CreditsScene.swift */; };
 		3F17C8841B0257990095A6E9 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17C8831B0257990095A6E9 /* MenuScene.swift */; };
 		3F17C8871B0265CA0095A6E9 /* SquareFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F17C8861B0265CA0095A6E9 /* SquareFont.ttf */; };
@@ -93,6 +94,7 @@
 		3F1685BA1B0A806C00086F69 /* ship_playerExplosion.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ship_playerExplosion.m4a; sourceTree = "<group>"; };
 		3F1685C61B0A88FC00086F69 /* EnemyExplosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = EnemyExplosion.sks; sourceTree = "<group>"; };
 		3F1685C81B0A89B100086F69 /* Explosion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Explosion.swift; sourceTree = "<group>"; };
+		3F1685CC1B0A994E00086F69 /* PlayerExplosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PlayerExplosion.sks; sourceTree = "<group>"; };
 		3F17C8811B024B860095A6E9 /* CreditsScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditsScene.swift; sourceTree = "<group>"; };
 		3F17C8831B0257990095A6E9 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		3F17C8861B0265CA0095A6E9 /* SquareFont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SquareFont.ttf; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 				3F7B095F1AE75CE9000EEAD4 /* StarField.sks */,
 				3FB5577C1AFBA4B200916F1B /* Fire.sks */,
 				3F1685C61B0A88FC00086F69 /* EnemyExplosion.sks */,
+				3F1685CC1B0A994E00086F69 /* PlayerExplosion.sks */,
 				3F7B09601AE75CE9000EEAD4 /* spark.png */,
 			);
 			name = "Supporting Files";
@@ -460,6 +463,7 @@
 				3F7B09481AE75041000EEAD4 /* bullet_enemy.mp3 in Resources */,
 				3F1685BF1B0A806C00086F69 /* harvester_fired.m4a in Resources */,
 				3F1685BD1B0A806C00086F69 /* bullet_laser.m4a in Resources */,
+				3F1685CD1B0A994E00086F69 /* PlayerExplosion.sks in Resources */,
 				3F7B091F1AE74DC0000EEAD4 /* LaunchScreen.xib in Resources */,
 				3F17C8871B0265CA0095A6E9 /* SquareFont.ttf in Resources */,
 				3F1685C01B0A806C00086F69 /* powerup_blackHole.m4a in Resources */,

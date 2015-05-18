@@ -12,7 +12,7 @@ import SpriteKit
 class Enemy: Ship {
     
     //MARK: - Variables -
-    var hasPowerup: Bool = false
+    //var hasPowerup: Bool = false
     var moveDirection:String?
     
     //draw order
@@ -67,7 +67,11 @@ class Enemy: Ship {
             let turnNormal = SKAction.colorizeWithColor(SKColor.whiteColor(), colorBlendFactor: 1.0, duration: 0.1)
             let flashRed = SKAction.sequence([turnRed, turnNormal])
             let flashRedRepeat = SKAction.repeatAction(flashRed, count: 3)
-            self.runAction(flashRedRepeat)
+            self.runAction(flashRedRepeat, completion: { //catch error where ship sometimes disappears
+                self.color = SKColor.whiteColor()
+                self.colorBlendFactor = 1.0
+                self.alpha = 1.0
+            })
         }
     }
     

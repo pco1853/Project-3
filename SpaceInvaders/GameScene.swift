@@ -24,6 +24,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var wave = 1
     var waveTimer: CFTimeInterval = 10.0
     var difficulty = 1
+    var isGameOver = false
 
     //animation
     var lastUpdateTimeInterval: CFTimeInterval = -1.0
@@ -79,6 +80,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupPlayer() {
+        gameData.score = 0
+        
         self.player = Player()
         self.player.position = CGPoint(x: size.width / 2, y: player.size.height + 100)
         self.addChild(self.player)
@@ -310,7 +313,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func updateEnemies() {
-        for (var i = self.enemies.count - 1; i > 0; i--) {
+        for (var i = self.enemies.count - 1; i > -1; i--) {
             let enemy = enemies[i]
             
             //check for death
@@ -486,7 +489,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 
                 //TODO: Check type of bullet and deal damage accordingly
-                player.takeDamage(25.0)
+                player.takeDamage(25.0, scene: self)
                 
                 //remove enemy bullet
                 secondBody.node?.removeFromParent()
@@ -500,7 +503,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 
                 //damage player
-                player.takeDamage(50.0)
+                player.takeDamage(50.0, scene: self)
                 
                 //explode and remove enemy
                 let enemyIndex = findIndex(self.enemies, valueToFind: secondBody.node? as Enemy)
@@ -529,22 +532,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     //MARK - Transitions -
     func checkGameOver() {
-        if (self.player.health <= 0) {
-            self.player.health = 0;
+        if (!self.isGameOver && self.player.isDead) {
             
-            //TODO: animate player death
+            println("game over called")
+            
+            self.isGameOver = true
+            
+            audioManager.stopAudio()
             //TODO: disable controls
+            gameData.highScores.append(gameData.score)
             
-            self.runAction(SKAction.runBlock({
-                audioManager.stopAudio()
-                gameData.highScores.append(gameData.score)
-                gameData.score = 0
-                
+            self.runAction(SKAction.waitForDuration(2.0), completion: {
                 let gameOverScene = GameOverScene(size: self.size, title: "game over")
                 gameOverScene.scaleMode = self.scaleMode
                 let transition = SKTransition.fadeWithDuration(1.0)
                 self.view?.presentScene(gameOverScene, transition: transition)
-            }))
+            })
         }
     }
     
