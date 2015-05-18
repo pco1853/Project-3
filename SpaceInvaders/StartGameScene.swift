@@ -17,11 +17,11 @@ class StartGameScene: MenuScene {
    
     override func didMoveToView(view: SKView) {
         //add menu sound
-        sharedAudio.playBackgroundSound("laser.mp3", loops: -1)
+        //sharedAudio.playBackgroundSound("laser.mp3", loops: -1)
         
         //add buttons
         self.playButton = MenuButton(
-            icon: "Phoenix",
+            icon: "play",
             label: "PLAY",
             name: "playButton",
             xPos: size.width / 2,
@@ -32,7 +32,7 @@ class StartGameScene: MenuScene {
         self.addChild(self.playButton)
         
         self.optionsButton = MenuButton(
-            icon: "Phoenix",
+            icon: "settings",
             label: "OPTIONS",
             name: "optionsButton",
             xPos: size.width / 2 - 100.5,

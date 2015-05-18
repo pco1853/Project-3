@@ -20,7 +20,7 @@ class GameModeScene: MenuScene {
     override func didMoveToView(view: SKView) {
         //add buttons
         self.soloButton = MenuButton(
-            icon: "Phoenix",
+            icon: "solo",
             label: "SOLO",
             name: "soloButton",
             xPos: size.width / 2 - 100.5,
@@ -31,7 +31,7 @@ class GameModeScene: MenuScene {
         self.addChild(self.soloButton)
         
         self.coopButton = MenuButton(
-            icon: "Phoenix",
+            icon: "coop",
             label: "CO-OP",
             name: "coopButton",
             xPos: size.width / 2 + 100.5,
@@ -42,7 +42,7 @@ class GameModeScene: MenuScene {
         self.addChild(self.coopButton)
         
         self.storeButton = MenuButton(
-            icon: "Phoenix",
+            icon: "store",
             label: "STORE",
             name: "storeButton",
             xPos: size.width / 2,
@@ -53,7 +53,7 @@ class GameModeScene: MenuScene {
         self.addChild(self.storeButton)
         
         self.backButton = MenuButton(
-            icon: "Phoenix",
+            icon: "back",
             label: "BACK",
             name: "backButton",
             xPos: size.width / 2 - self.storeButton.size.width - 0.5,
@@ -63,7 +63,7 @@ class GameModeScene: MenuScene {
         self.addChild(self.backButton)
         
         self.scoresButton = MenuButton(
-            icon: "Phoenix",
+            icon: "trophy",
             label: "SCORES",
             name: "scoresButton",
             xPos: size.width / 2 + self.storeButton.size.width + 0.5,

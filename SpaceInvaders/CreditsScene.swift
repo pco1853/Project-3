@@ -35,7 +35,7 @@ class CreditsScene: MenuScene {
         
         //add buttons
         self.backButton = MenuButton(
-            icon: "Phoenix",
+            icon: "back",
             label: "BACK",
             name: "backButton",
             xPos: size.width / 2,

@@ -41,7 +41,7 @@ class OptionsScene: MenuScene {
         
         //add default buttons
         self.controlsButton = MenuButton(
-            icon: "Phoenix",
+            icon: "controls",
             label: "CONTROLS",
             name: "controlsButton",
             xPos: size.width / 2 - 100.5,
@@ -52,7 +52,7 @@ class OptionsScene: MenuScene {
         self.addChild(self.controlsButton)
         
         self.soundButton = MenuButton(
-            icon: "Phoenix",
+            icon: "sound",
             label: "SOUND",
             name: "soundButton",
             xPos: size.width / 2 + 100.5,
@@ -63,7 +63,7 @@ class OptionsScene: MenuScene {
         self.addChild(self.soundButton)
         
         self.backButton = MenuButton(
-            icon: "Phoenix",
+            icon: "back",
             label: "BACK",
             name: "backButton",
             xPos: size.width / 2,
@@ -108,7 +108,7 @@ class OptionsScene: MenuScene {
         self.addChild(self.virtualControlsButton)
         
         self.backButton = MenuButton(
-            icon: "Phoenix",
+            icon: "back",
             label: "BACK",
             name: "backButton",
             xPos: size.width / 2,
@@ -132,7 +132,7 @@ class OptionsScene: MenuScene {
         
         //add buttons
         self.soundOnButton = MenuButton(
-            icon: "",
+            icon: "soundOn",
             label: "ON",
             name: "soundOnButton",
             xPos: size.width / 2 - 100.5,
@@ -143,7 +143,7 @@ class OptionsScene: MenuScene {
         self.addChild(self.soundOnButton)
         
         self.soundOffButton = MenuButton(
-            icon: "",
+            icon: "soundOff",
             label: "OFF",
             name: "soundOffButton",
             xPos: size.width / 2 + 100.5,
@@ -154,7 +154,7 @@ class OptionsScene: MenuScene {
         self.addChild(self.soundOffButton)
         
         self.backButton = MenuButton(
-            icon: "Phoenix",
+            icon: "back",
             label: "BACK",
             name: "backButton",
             xPos: size.width / 2,
