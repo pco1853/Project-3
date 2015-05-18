@@ -131,14 +131,14 @@ class Player: Ship {
         }
     }
     
-    func turnInvincible(){ //makes player flash and become invincible for 1 sec after being hit
+    func turnInvincible(){ //makes player flash and become invincible briefly after being hurt
         self.invincible = true
         
         let fadeOut = SKAction.fadeOutWithDuration(0.1)
         let fadeIn = SKAction.fadeInWithDuration(0.1)
         let fadeOutIn = SKAction.sequence([fadeOut, fadeIn])
-        let fadeOutInRepeat = SKAction.repeatAction(fadeOutIn, count: 5)
-        runAction(fadeOutInRepeat, completion: { self.invincible = false })
+        let fadeOutInRepeat = SKAction.repeatAction(fadeOutIn, count: 3)
+        self.runAction(fadeOutInRepeat, completion: { self.invincible = false })
     }
     
 }

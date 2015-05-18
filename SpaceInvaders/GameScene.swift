@@ -310,7 +310,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func updateEnemies() {
-        for enemy in self.enemies {
+        for (var i = self.enemies.count - 1; i > 0; i--) {
+            let enemy = enemies[i]
+            
+            //check for death
+            if (enemy.health <= 0) {
+                enemy.explode(self)
+                self.enemies.removeAtIndex(i)
+                
+                gameData.score += 50
+                
+                continue
+            }
             
             //move
             if (enemy.moveDirection == "left") {
@@ -394,7 +405,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 b.position.y -= (200.0) * self.dt
             }
             
-            if(b.position.y < -50.0) {
+            if (b.position.y < -50.0) {
                 b.removeFromParent()
             }
         })
@@ -474,7 +485,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     return
                 }
                 
+                //TODO: Check type of bullet and deal damage accordingly
                 player.takeDamage(25.0)
+                
+                //remove enemy bullet
                 secondBody.node?.removeFromParent()
         }
         
@@ -485,14 +499,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     return
                 }
                 
+                //damage player
                 player.takeDamage(50.0)
                 
-                //Remove enemy
-                var enemyIndex = findIndex(self.enemies, valueToFind: secondBody.node? as Enemy)
+                //explode and remove enemy
+                let enemyIndex = findIndex(self.enemies, valueToFind: secondBody.node? as Enemy)
                 if(enemyIndex != nil) {
+                    self.enemies[enemyIndex!].explode(self)
                     self.enemies.removeAtIndex(enemyIndex!)
                 }
-                secondBody.node?.removeFromParent()
+                //secondBody.node?.removeFromParent() -> handled in the explode() call
         }
         
         //player shoots enemy
@@ -502,18 +518,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 return
             }
                 
-            gameData.score += 50
+            //damage enemy
+            let e = firstBody.node? as Enemy
+            e.takeDamage(self.player.bulletDamage, scene: self)
                 
-            //Remove the enemy who got shot from the enemies array
-            var enemyIndex = findIndex(self.enemies, valueToFind: firstBody.node? as Enemy)
-            if(enemyIndex != nil)
-            {
-                self.enemies.removeAtIndex(enemyIndex!)
-            }
-        
-                
-                firstBody.node?.removeFromParent()
-                secondBody.node?.removeFromParent()
+            //remove player bullet
+            secondBody.node?.removeFromParent()
         }
     }
 
@@ -527,6 +537,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             self.runAction(SKAction.runBlock({
                 audioManager.stopAudio()
+                gameData.highScores.append(gameData.score)
+                gameData.score = 0
                 
                 let gameOverScene = GameOverScene(size: self.size, title: "game over")
                 gameOverScene.scaleMode = self.scaleMode

@@ -56,26 +56,27 @@ class Enemy: Ship {
         super.init(coder: aDecoder)
     }
     
-    func takeDamage(damage: CGFloat) {
+    func takeDamage(damage: CGFloat, scene: SKScene) {
         self.health -= damage
         
         if (self.health <= 0) {
-            explode()
+            explode(scene)
         }
         else {
-            let fadeOut = SKAction.fadeOutWithDuration(0.1)
-            let fadeIn = SKAction.fadeInWithDuration(0.1)
-            let fadeOutIn = SKAction.sequence([fadeOut, fadeIn])
-            let fadeOutInRepeat = SKAction.repeatAction(fadeOutIn, count: 5)
-            runAction(fadeOutInRepeat)
+            let turnRed = SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.1)
+            let turnNormal = SKAction.colorizeWithColor(SKColor.whiteColor(), colorBlendFactor: 1.0, duration: 0.1)
+            let flashRed = SKAction.sequence([turnRed, turnNormal])
+            let flashRedRepeat = SKAction.repeatAction(flashRed, count: 3)
+            self.runAction(flashRedRepeat)
         }
     }
     
-    func explode() {
-        //TODO: animate explosion
-        self.removeFromParent()
-        
+    func explode(scene: SKScene) {
+        let explosion = Explosion(type: "EnemyExplosion", duration: 1.0, x: self.position.x, y: self.position.y)
+        scene.addChild(explosion)
         audioManager.playSoundEffect("ship_enemyExplosion.m4a", node: self)
+        
+        self.removeFromParent()
     }
 
 }

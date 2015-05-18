@@ -11,8 +11,7 @@ import SpriteKit
 
 class Bomber: Enemy
 {
-    init()
-    {
+    init() {
         //set vars
         let texture = SKTexture(imageNamed: "ship_bomber")
         super.init(
@@ -52,7 +51,7 @@ class Bomber: Enemy
             let waitToEnableFire = SKAction.waitForDuration(self.fireRate)
             self.runAction(waitToEnableFire, completion: { self.canFire = true })
         
-            //TODO: audioManager.playSoundEffect("bullet_bomb.m4a", node: self)
+            audioManager.playSoundEffect("bullet_enemy.mp3", node: self)
         }
     }
     
