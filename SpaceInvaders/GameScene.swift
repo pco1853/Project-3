@@ -34,16 +34,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var healthLabel: HUDText!
     var scoreLabel: HUDText!
     var pauseButton: MenuButton!
-    
+    var pauseMenu: PauseScene!
+
     //input
     var accelerationX: CGFloat = 0.0
     var accelerationY: CGFloat = 0.0
     
+    //virtual joystick
     var virtualController: VirtualController?
     var fireButtonPressed = false
     var harvestButtonPressed = false
     var powerupButtonPressed = false
     
+    //accelerometer
     var motionManager: CMMotionManager?
     
     //MARK: - Initialization -
@@ -151,22 +154,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.pauseButton.enabled = false
                 
                 if (!self.view!.paused) {
-                    self.pauseButton.highlight()
-                    self.pauseButton.label.text = "UNPAUSE"
                     
                     self.runAction(SKAction.runBlock({
-                        self.view!.paused = true
-                        self.pauseButton.enabled = true
+                        self.pauseButton.removeFromParent()
+                        self.paused = true
                     }))
-                }
-                else {
-                    self.pauseButton.undoHighlight()
-                    self.pauseButton.label.text = "PAUSE"
                     
-                    self.view!.paused = false
-                    self.pauseButton.enabled = true
+                    self.pauseMenu = PauseScene(size: self.size, title: "PAUSE", view: self.view!)
+                    addChild(self.pauseMenu)
                 }
+                
             }
+                
             
             //game input
             else if (gameData.controlScheme == "motion") {
@@ -267,12 +266,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //MARK: - Game Loop -
     override func update(currentTime: CFTimeInterval) {
         //check for pause
-        if (self.view!.paused) {
-            self.lastUpdateTimeInterval = 0.0
-            self.accelerationX = 0.0
-            self.accelerationY = 0.0
-            self.player.setVelocity(x: 0, y: 0, dt: 0)
+        if (self.paused) {
+            return
         }
+        
         
         checkGameOver()
         

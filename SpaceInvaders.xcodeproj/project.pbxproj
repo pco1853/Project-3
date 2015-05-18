@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F108A5E1B097BC300BEAD06 /* PauseScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F108A5D1B097BC300BEAD06 /* PauseScene.swift */; };
 		3F17C8821B024B860095A6E9 /* CreditsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17C8811B024B860095A6E9 /* CreditsScene.swift */; };
 		3F17C8841B0257990095A6E9 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17C8831B0257990095A6E9 /* MenuScene.swift */; };
 		3F17C8871B0265CA0095A6E9 /* SquareFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F17C8861B0265CA0095A6E9 /* SquareFont.ttf */; };
@@ -57,6 +58,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F108A5D1B097BC300BEAD06 /* PauseScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PauseScene.swift; sourceTree = "<group>"; };
 		3F17C8811B024B860095A6E9 /* CreditsScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditsScene.swift; sourceTree = "<group>"; };
 		3F17C8831B0257990095A6E9 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		3F17C8861B0265CA0095A6E9 /* SquareFont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SquareFont.ttf; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				3F17C8811B024B860095A6E9 /* CreditsScene.swift */,
 				3FEA26481B019FCE00680E31 /* GameModeScene.swift */,
 				3FEF8AB91AF9971500445871 /* GameOverScene.swift */,
+				3F108A5D1B097BC300BEAD06 /* PauseScene.swift */,
 			);
 			name = "Menu Scenes";
 			sourceTree = "<group>";
@@ -417,6 +420,7 @@
 				3F17C8841B0257990095A6E9 /* MenuScene.swift in Sources */,
 				3F7B09151AE74DC0000EEAD4 /* GameScene.swift in Sources */,
 				3FEF8ABA1AF9971500445871 /* GameOverScene.swift in Sources */,
+				3F108A5E1B097BC300BEAD06 /* PauseScene.swift in Sources */,
 				3F7B09351AE74E76000EEAD4 /* StartGameScene.swift in Sources */,
 				3FEA26411B01570200680E31 /* TitleText.swift in Sources */,
 				3F352BBC1B05341D0029FD10 /* EnemyBullet.swift in Sources */,
