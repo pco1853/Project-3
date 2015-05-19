@@ -39,7 +39,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var enemies: [Enemy] = []
     var enemyWaves: EnemyWaves!
     var wave = 1
-    var waveTimer: CFTimeInterval = 10.0
+    var waveIndex = 0
     var difficulty = 1
     var isPaused = false
     var isGameOver = false
@@ -428,8 +428,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         else
         {
             self.wave += 1
-            var randomNum = Int(arc4random_uniform(5))
-            self.enemies = self.enemyWaves.setNewWave(self.wave, index: randomNum)
+            self.enemies = self.enemyWaves.setNewWave(self.wave, index: self.waveIndex)
+            self.waveIndex += 1
+            //we have 5 levels in each difficulty this will cycle through all of them
+            if(self.waveIndex > 4)
+            {
+                self.waveIndex = 0
+            }
             
             for enemy in self.enemies {
                 self.addChild(enemy)
