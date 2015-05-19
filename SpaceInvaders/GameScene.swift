@@ -71,7 +71,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didMoveToView(view: SKView) {
         audioManager.stopAudio()
         enemyWaves = EnemyWaves(size: self.size)
-
+        var swipeUp = UISwipeGestureRecognizer(target: self, action: "Harvest")
+        swipeUp.direction = UISwipeGestureRecognizerDirection.Up
+    
         
         //init physics
         self.physicsWorld.gravity = CGVectorMake(0, 0)
@@ -91,6 +93,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupHUD()
         setupInput()
         setupMusic()
+    }
+    
+    func Harvest(){
+        println("swipeUp")
     }
     
     func setupPlayer() {
