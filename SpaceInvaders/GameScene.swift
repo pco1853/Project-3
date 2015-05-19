@@ -15,6 +15,21 @@ struct CollisionCategories {
     static let EnemyBullet: UInt32 = 0x1 << 3
 }
 
+struct DrawOrder {
+    static let Background: CGFloat = -1000
+    static let EnemyBullets: CGFloat = 0
+    static let Enemies: CGFloat = 1
+    static let PlayerBullets: CGFloat = 2
+    static let HarvesterLinks: CGFloat = 3
+    static let Harvester: CGFloat = 4
+    static let PlayerParticle: CGFloat = 5
+    static let Player: CGFloat = 6
+    static let Explosions: CGFloat = 7
+    static let UI: CGFloat = 8
+    static let PauseMenuBackground: CGFloat = 9
+    static let PauseMenu: CGFloat = 10
+}
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //MARK: - Variables -
@@ -25,9 +40,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var wave = 1
     var waveTimer: CFTimeInterval = 10.0
     var difficulty = 1
+    var isPaused = false
     var isGameOver = false
-
-    //animation
     var lastUpdateTimeInterval: CFTimeInterval = -1.0
     var dt: CGFloat = 0.0
     
@@ -35,20 +49,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var healthLabel: HUDText!
     var scoreLabel: HUDText!
     var pauseButton: MenuButton!
-    var pauseMenu: PauseScene!
 
     //input
     var accelerationX: CGFloat = 0.0
     var accelerationY: CGFloat = 0.0
-    
-    //virtual joystick
     var virtualController: VirtualController?
     var fireButtonPressed = false
     var harvestButtonPressed = false
-    var powerupButtonPressed = false
-    
-    //accelerometer
+    //var powerupButtonPressed = false
     var motionManager: CMMotionManager?
+    
+    //pause scene
+    var pauseScene: PauseScene!
     
     //sound
     var audioTracks = ["Game Track 1.m4a", "Game Track 2.m4a", "Game Track 3.m4a", "Game Track 4.mp3"]
@@ -57,7 +69,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //MARK: - Initialization -
     override func didMoveToView(view: SKView) {
-        //stop menu menu music
         audioManager.stopAudio()
         enemyWaves = EnemyWaves(size: self.size)
 
@@ -69,8 +80,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //set background
         backgroundColor = SKColor.blackColor()
         let starField = SKEmitterNode(fileNamed: "StarField")
-        starField.position = CGPointMake(size.width / 2, size.height + 100)
-        starField.zPosition = -1000
+        starField.position = CGPointMake(self.size.width / 2, self.size.height + 100)
+        starField.zPosition = DrawOrder.Background
         starField.advanceSimulationTime(15.0)
         addChild(starField)
         
@@ -86,33 +97,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameData.score = 0
         
         self.player = Player()
-        self.player.position = CGPoint(x: size.width / 2, y: player.size.height + 100)
+        self.player.position = CGPoint(x: self.size.width / 2, y: player.size.height + 100)
         self.addChild(self.player)
     }
 
+    //spawn an easy wave and have enemies slide in
     func setupEnemies()
     {
         var randomNum = Int(arc4random_uniform(3))
         self.enemies = self.enemyWaves.setNewWave(self.wave, index: randomNum)
         for enemy in self.enemies {
             self.addChild(enemy)
+            
+            var slideInAction = SKAction.moveToY(enemy.position.y - 500, duration: 2)
+            enemy.runAction(slideInAction, completion: {
+                enemy.finishedSpawningIn = true
+            })
         }
     }
     
     func setupHUD() {
-        //add labels
-        self.healthLabel = HUDText(text: "HEALTH \(self.player.health)", xPos: 20, yPos: size.height - 20)
-        self.addChild(self.healthLabel)
-        
-        self.scoreLabel = HUDText(text: "SCORE \(gameData.score)", xPos: 20, yPos: size.height - 60)
-        self.addChild(self.scoreLabel)
-        
         //add buttons
-        self.pauseButton = MenuButton(icon: "", label: "PAUSE", name: "pauseButton", xPos: size.width - 120, yPos: size.height - 100, enabled: true)
-        self.pauseButton.zPosition = 1000
+        self.pauseButton = MenuButton(icon: "", label: "PAUSE", name: "pauseButton", xPos: size.width - 120, yPos: size.height - 120, enabled: true)
+        self.pauseButton.zPosition = DrawOrder.UI
         self.pauseButton.xScale = 0.5
         self.pauseButton.yScale = 0.5
         self.addChild(self.pauseButton)
+        
+        //add labels
+        self.healthLabel = HUDText(text: "HEALTH \(self.player.health)", xPos: 60, yPos: self.pauseButton.position.y + self.pauseButton.size.height / 2)
+        self.addChild(self.healthLabel)
+        
+        self.scoreLabel = HUDText(text: "SCORE \(gameData.score)", xPos: 60, yPos: self.healthLabel.position.y - 40)
+        self.addChild(self.scoreLabel)
     }
     
     func setupInput() {
@@ -157,22 +174,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             //HUD input
             if (touchedNode.name == "pauseButton" && self.pauseButton.enabled) {
-                self.pauseButton.enabled = false
-                
-                if (!self.view!.paused) {
-                    
+                if (!self.isPaused) {
                     self.runAction(SKAction.runBlock({
-                        self.pauseButton.removeFromParent()
-                        self.paused = true
-                    }))
-                    
-                    self.pauseMenu = PauseScene(size: self.size, title: "PAUSE", view: self.view!)
-                    addChild(self.pauseMenu)
+                        self.pauseButton.enabled = false
+                        self.pauseButton.highlight()
+                    }), completion: {
+                        self.pause()
+                    })
                 }
-                
             }
                 
-            
             //game input
             else if (gameData.controlScheme == "motion") {
                 self.fireButtonPressed = true
@@ -186,10 +197,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.harvestButtonPressed = true
                     self.virtualController!.harvestButton.highlight()
                 }
+                /*
                 else if(touchedNode.name == "powerupButton" && self.virtualController!.fireButton.enabled) {
                     self.powerupButtonPressed = true
                     self.virtualController!.powerupButton.highlight()
                 }
+                */
             }
         }
     }
@@ -212,6 +225,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
             
+            /*
             if (powerupButtonPressed) {
                 self.powerupButtonPressed = false
                 
@@ -219,6 +233,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.virtualController!.powerupButton.undoHighlight()
                 }
             }
+            */
         }
     }
     
@@ -264,15 +279,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         else if (self.harvestButtonPressed) {
             self.player.fireHarvester()
         }
+        /*
         else if (self.fireButtonPressed) {
             self.player.firePowerup()
         }
+        */
     }
     
     //MARK: - Game Loop -
     override func update(currentTime: CFTimeInterval) {
         //check for pause
-        if (self.paused) {
+        if (self.isPaused) {
             return
         }
         
@@ -308,51 +325,58 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for (var i = self.enemies.count - 1; i > -1; i--) {
             let enemy = enemies[i]
             
-            //check for death
-            if (enemy.health <= 0) {
-                enemy.explode(self)
-                self.enemies.removeAtIndex(i)
+            if(enemy.finishedSpawningIn)
+            {
+                //check for death
+                if (enemy.health <= 0) {
+                    enemy.explode(self)
+                    self.enemies.removeAtIndex(i)
                 
-                gameData.score += 50
+                    gameData.score += 50
                 
-                continue
-            }
-            
-            //move
-            if (enemy.moveDirection == "left") {
-                enemy.setVelocity(x: -enemy.movementSpeed, y: 0.0, dt: self.dt)
-            }
-            else if (enemy.moveDirection == "right") {
-                enemy.setVelocity(x: enemy.movementSpeed, y: 0.0, dt: self.dt)
-            }
-            
-            //remove enemies who go below screen
-            if (enemy.position.y < -50) {
-                enemy.canFire = false
-                enemy.removeFromParent()
-                var enemyIndex = findIndex(self.enemies, valueToFind: enemy)
-                self.enemies.removeAtIndex(enemyIndex!)
-            }
-            
-            //fire bullets/bomb/self
-            if (enemy.name == "fighter") {
-                let e = enemy as Fighter
-                e.fireBullet(self)
-            }
-            else if (enemy.name == "bomber") {
-                let e = enemy as Bomber
-                e.fireBomb(self)
-            }
-            else if (enemy.name == "kamikaze") {
-                let e = enemy as Kamikaze
-                
-                if (e.position.x > self.player.position.x - self.player.size.width &&
-                    e.position.x < self.player.position.x + self.player.size.width) {
-                    e.fire()
+                    continue
                 }
+            
+                //move
+                if (enemy.moveDirection == "left") {
+                    enemy.setVelocity(x: -enemy.movementSpeed, y: 0.0, dt: self.dt)
+                }
+                else if (enemy.moveDirection == "right") {
+                    enemy.setVelocity(x: enemy.movementSpeed, y: 0.0, dt: self.dt)
+                }
+                else
+                {
+                        
+                }
+            
+                //remove enemies who go below screen
+                if (enemy.position.y < -50) {
+                    enemy.canFire = false
+                    enemy.removeFromParent()
+                    var enemyIndex = findIndex(self.enemies, valueToFind: enemy)
+                    self.enemies.removeAtIndex(enemyIndex!)
+                }
+            
+                //fire bullets/bomb/self
+                if (enemy.name == "fighter") {
+                    let e = enemy as Fighter
+                    e.fireBullet(self)
+                }
+                else if (enemy.name == "bomber") {
+                    let e = enemy as Bomber
+                    e.fireBomb(self)
+                }
+                else if (enemy.name == "kamikaze") {
+                    let e = enemy as Kamikaze
                 
-                if (e.canFire){
-                    e.setVelocity(x: 0.0, y: -e.movementSpeed, dt: self.dt)
+                    if (e.position.x > self.player.position.x - self.player.size.width &&
+                        e.position.x < self.player.position.x + self.player.size.width) {
+                            e.fire()
+                    }
+                
+                    if (e.canFire){
+                        e.setVelocity(x: 0.0, y: -e.movementSpeed, dt: self.dt)
+                    }
                 }
             }
         }
@@ -367,11 +391,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         else
         {
             self.wave += 1
-            var randomNum = Int(arc4random_uniform(3))
+            var randomNum = Int(arc4random_uniform(5))
             self.enemies = self.enemyWaves.setNewWave(self.wave, index: randomNum)
             
             for enemy in self.enemies {
                 self.addChild(enemy)
+                //slide in enemies when a new wave spawns
+                var slideInAction = SKAction.moveToY(enemy.position.y - 500, duration: 2)
+                enemy.runAction(slideInAction, completion: {
+                    enemy.finishedSpawningIn = true
+                })
             }
         }
     }
@@ -458,26 +487,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         else if (player.position.x + player.size.width / 2 > self.size.width - 20.0) { //right edge
             player.position.x = self.size.width - player.size.width / 2 - 20.0
         }
-        
-        if(player.position.y - player.size.height / 2 < 20.0)
-        {
-            player.position.y = player.size.height / 2 + 20.0
-        }
-        else if (player.position.y + player.size.height / 2 > self.size.height - 20.0)
-        {
+        if (player.position.y + player.size.height / 2 > self.size.height - 20.0) { //top edge
             player.position.y = self.size.height - player.size.height / 2 - 20.0
         }
+        else if (player.position.y - player.size.height / 2 < 20.0) { //bottom edge
+            player.position.y = player.size.height / 2 + 20.0
+        }
+        
         
         //check enemy bounds
-        for enemy in self.enemies
-        {
-            if (enemy.position.x - enemy.size.width / 2 < 20.0 && enemy.moveDirection != "None") //left edge
-            {
+        for (var i = self.enemies.count - 1; i > -1; i--) {
+            let enemy = self.enemies[i]
+            
+            if (enemy.position.y <= -100) { //off bottom of screen
+                self.enemies.removeAtIndex(i)
+                enemy.removeFromParent()
+                continue
+            }
+            
+            if (enemy.position.x - enemy.size.width / 2 < 20.0 && enemy.moveDirection != "none") { //left edge
                 enemy.position.x = enemy.size.width / 2 + 20.0
                 enemy.moveDirection = "right"
             }
-            else if(enemy.position.x + enemy.size.width / 2 > self.size.width - 20.0 && enemy.moveDirection != "None")//right edge
-            {
+            else if(enemy.position.x + enemy.size.width / 2 > self.size.width - 20.0 && enemy.moveDirection != "none") { //right edge
                 enemy.position.x = self.size.width - enemy.size.width / 2 - 20.0
                 enemy.moveDirection = "left"
             }
@@ -548,12 +580,44 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
-    //MARK - Transitions -
+    //MARK: - Transitions -
+    func pause() {
+        self.isPaused = true
+        
+        self.pauseButton.alpha = 0
+        self.healthLabel.alpha = 0
+        self.scoreLabel.alpha = 0
+        self.virtualController?.alpha = 0
+        
+        let screen = self.getBlurredScreenshot()
+        self.pauseScene = PauseScene(size: self.size, title: "pause", background: screen)
+        
+        self.paused = true
+        self.addChild(self.pauseScene)
+    }
+    
+    func resume() {
+        self.pauseButton.enabled = true
+        self.pauseButton.undoHighlight()
+        
+        self.pauseButton.alpha = 1.0
+        self.healthLabel.alpha = 1.0
+        self.scoreLabel.alpha = 1.0
+        self.virtualController?.alpha = 1.0
+        self.pauseScene.removeFromParent()
+        
+        self.isPaused = false
+    }
+    
+    func quit() {
+        let scene = GameModeScene(size: self.size, title: "mode")
+        scene.scaleMode = self.scaleMode
+        let transition = SKTransition.fadeWithDuration(1.0)
+        self.view?.presentScene(scene, transition: transition)
+    }
+    
     func checkGameOver() {
         if (!self.isGameOver && self.player.isDead) {
-            
-            println("game over called")
-            
             self.isGameOver = true
             
             audioManager.stopAudio()
@@ -570,6 +634,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     //MARK: - Helpers -
+    //credit: http://stackoverflow.com/questions/22490818/how-do-i-blur-a-scene-in-spritekit
+    func getBlurredScreenshot() -> SKSpriteNode {
+        UIGraphicsBeginImageContextWithOptions(CGSize(
+            width: self.view!.frame.size.width,
+            height: self.view!.frame.size.height),
+            true,
+            1
+        )
+        self.view!.drawViewHierarchyInRect(self.view!.frame, afterScreenUpdates: true)
+        
+        let context = UIGraphicsGetCurrentContext()
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        
+        let ciContext = CIContext(options: nil)
+        let coreImage = CIImage(image: image)
+        let filter = CIFilter(name: "CIGaussianBlur")
+        filter.setValue(coreImage, forKey: kCIInputImageKey)
+        filter.setValue(10, forKey: kCIInputRadiusKey)
+        
+        let filteredImageData = filter.valueForKey(kCIOutputImageKey) as CIImage
+        let filteredImageRef = ciContext.createCGImage(filteredImageData, fromRect: filteredImageData.extent())
+        let filteredImage = UIImage(CGImage: filteredImageRef)
+        
+        let texture = SKTexture(image: filteredImage!)
+        let sprite = SKSpriteNode(texture: texture, color: SKColor.clearColor(), size: self.size)
+        
+        return sprite
+    }
+    
     func findIndex<T: Equatable>(array: [T], valueToFind: T) -> Int? {
         for (index, value) in enumerate(array) {
             if value == valueToFind {
