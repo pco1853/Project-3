@@ -22,6 +22,7 @@ class Enemy: Ship {
     let zEngine: CGFloat = -3
     let zEngineParticle: CGFloat = -4
     let zShadow: CGFloat = -5
+    var finishedSpawningIn = false
     
     override init(health: CGFloat, movementSpeed: CGFloat, canFire: Bool, fireRate: NSTimeInterval, bulletSpeed: CGFloat, bulletDamage: CGFloat, texture: SKTexture, lockedPosition: Bool) {
         //set vars
@@ -42,14 +43,22 @@ class Enemy: Ship {
         self.physicsBody?.collisionBitMask = 0x0
         
         //determine movement direction
-        let rand = Int(arc4random_uniform(3))
-        switch rand {
-        case 0:
-            self.moveDirection = "left"
-        case 1:
-            self.moveDirection = "right"
-        default:
-            self.moveDirection = "none"
+        
+        if(self.lockedPosition)
+        {
+            self.moveDirection = "None"
+        }
+        else
+        {
+            let rand = Int(arc4random_uniform(3))
+            switch rand {
+            case 0:
+                self.moveDirection = "left"
+            case 1:
+                self.moveDirection = "right"
+            default:
+                self.moveDirection = "left"
+            }
         }
     }
     

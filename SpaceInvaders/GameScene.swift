@@ -89,12 +89,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(self.player)
     }
 
+    //spawn an easy wave and have enemies slide in
     func setupEnemies()
     {
         var randomNum = Int(arc4random_uniform(3))
         self.enemies = self.enemyWaves.setNewWave(self.wave, index: randomNum)
+        //self.enemies = self.enemyWaves.setNewWave(5, index: 4)
         for enemy in self.enemies {
             self.addChild(enemy)
+            
+            var slideInAction = SKAction.moveToY(enemy.position.y - 500, duration: 2)
+            enemy.runAction(slideInAction, completion: {
+                enemy.finishedSpawningIn = true
+            })
         }
     }
     
@@ -307,51 +314,58 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for (var i = self.enemies.count - 1; i > -1; i--) {
             let enemy = enemies[i]
             
-            //check for death
-            if (enemy.health <= 0) {
-                enemy.explode(self)
-                self.enemies.removeAtIndex(i)
+            if(enemy.finishedSpawningIn)
+            {
+                //check for death
+                if (enemy.health <= 0) {
+                    enemy.explode(self)
+                    self.enemies.removeAtIndex(i)
                 
-                gameData.score += 50
+                    gameData.score += 50
                 
-                continue
-            }
-            
-            //move
-            if (enemy.moveDirection == "left") {
-                enemy.setVelocity(x: -enemy.movementSpeed, y: 0.0, dt: self.dt)
-            }
-            else if (enemy.moveDirection == "right") {
-                enemy.setVelocity(x: enemy.movementSpeed, y: 0.0, dt: self.dt)
-            }
-            
-            //remove enemies who go below screen
-            if (enemy.position.y < -50) {
-                enemy.canFire = false
-                enemy.removeFromParent()
-                var enemyIndex = findIndex(self.enemies, valueToFind: enemy)
-                self.enemies.removeAtIndex(enemyIndex!)
-            }
-            
-            //fire bullets/bomb/self
-            if (enemy.name == "fighter") {
-                let e = enemy as Fighter
-                e.fireBullet(self)
-            }
-            else if (enemy.name == "bomber") {
-                let e = enemy as Bomber
-                e.fireBomb(self)
-            }
-            else if (enemy.name == "kamikaze") {
-                let e = enemy as Kamikaze
-                
-                if (e.position.x > self.player.position.x - self.player.size.width &&
-                    e.position.x < self.player.position.x + self.player.size.width) {
-                    e.fire()
+                    continue
                 }
+            
+                //move
+                if (enemy.moveDirection == "left") {
+                    enemy.setVelocity(x: -enemy.movementSpeed, y: 0.0, dt: self.dt)
+                }
+                else if (enemy.moveDirection == "right") {
+                    enemy.setVelocity(x: enemy.movementSpeed, y: 0.0, dt: self.dt)
+                }
+                else
+                {
+                        
+                }
+            
+                //remove enemies who go below screen
+                if (enemy.position.y < -50) {
+                    enemy.canFire = false
+                    enemy.removeFromParent()
+                    var enemyIndex = findIndex(self.enemies, valueToFind: enemy)
+                    self.enemies.removeAtIndex(enemyIndex!)
+                }
+            
+                //fire bullets/bomb/self
+                if (enemy.name == "fighter") {
+                    let e = enemy as Fighter
+                    e.fireBullet(self)
+                }
+                else if (enemy.name == "bomber") {
+                    let e = enemy as Bomber
+                    e.fireBomb(self)
+                }
+                else if (enemy.name == "kamikaze") {
+                    let e = enemy as Kamikaze
                 
-                if (e.canFire){
-                    e.setVelocity(x: 0.0, y: -e.movementSpeed, dt: self.dt)
+                    if (e.position.x > self.player.position.x - self.player.size.width &&
+                        e.position.x < self.player.position.x + self.player.size.width) {
+                            e.fire()
+                    }
+                
+                    if (e.canFire){
+                        e.setVelocity(x: 0.0, y: -e.movementSpeed, dt: self.dt)
+                    }
                 }
             }
         }
@@ -366,11 +380,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         else
         {
             self.wave += 1
-            var randomNum = Int(arc4random_uniform(3))
+            var randomNum = Int(arc4random_uniform(5))
             self.enemies = self.enemyWaves.setNewWave(self.wave, index: randomNum)
             
             for enemy in self.enemies {
                 self.addChild(enemy)
+                //slide in enemies when a new wave spawns
+                var slideInAction = SKAction.moveToY(enemy.position.y - 500, duration: 2)
+                enemy.runAction(slideInAction, completion: {
+                    enemy.finishedSpawningIn = true
+                })
             }
         }
     }

@@ -15,10 +15,10 @@ class Fighter: Enemy {
         //set vars
         let texture = SKTexture(imageNamed: "ship_fighter")
         super.init(
-            health: 100.0,
+            health: 40.0,
             movementSpeed: 100.0,
             canFire: false,
-            fireRate: 1.0,
+            fireRate: 2.0,
             bulletSpeed: 400.0,
             bulletDamage: 10.0,
             texture: texture,
