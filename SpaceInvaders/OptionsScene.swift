@@ -309,6 +309,8 @@ class OptionsScene: MenuScene {
             //sound options
             else if (touchedNode.name == "soundOnButton" && self.soundOnButton.enabled) {
                 gameData.soundEnabled = true
+                audioManager.playBackgroundMusic("Title Track.mp3", loops: -1)
+                
                 gameData.saveOptions()
                 highlightSoundOptions()
             }

@@ -45,7 +45,7 @@ class AudioManager {
     }
     
     func stopAudio() {
-        if (gameData.soundEnabled) {
+        if (self.player.playing) {
             self.player.stop()
             self.isPlaying = false
         }
