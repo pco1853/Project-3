@@ -17,8 +17,9 @@ class Ship: SKSpriteNode {
     var fireRate: NSTimeInterval = 0.5
     var bulletSpeed: CGFloat = 500.0
     var bulletDamage: CGFloat = 10.0
+    var lockedPosition: Bool = false
     
-    init(health: CGFloat, movementSpeed: CGFloat, canFire: Bool, fireRate: NSTimeInterval, bulletSpeed: CGFloat, bulletDamage: CGFloat, texture: SKTexture) {
+    init(health: CGFloat, movementSpeed: CGFloat, canFire: Bool, fireRate: NSTimeInterval, bulletSpeed: CGFloat, bulletDamage: CGFloat, texture: SKTexture, lockedPosition: Bool) {
         super.init(texture: texture, color: SKColor.clearColor(), size: texture.size())
         
         //physics
@@ -33,6 +34,7 @@ class Ship: SKSpriteNode {
         self.canFire = canFire
         self.fireRate = fireRate
         self.bulletSpeed = bulletSpeed
+        self.lockedPosition = lockedPosition
     }
     
     required init?(coder aDecoder: NSCoder) {

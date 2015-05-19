@@ -23,7 +23,7 @@ class Enemy: Ship {
     let zEngineParticle: CGFloat = -4
     let zShadow: CGFloat = -5
     
-    override init(health: CGFloat, movementSpeed: CGFloat, canFire: Bool, fireRate: NSTimeInterval, bulletSpeed: CGFloat, bulletDamage: CGFloat, texture: SKTexture) {
+    override init(health: CGFloat, movementSpeed: CGFloat, canFire: Bool, fireRate: NSTimeInterval, bulletSpeed: CGFloat, bulletDamage: CGFloat, texture: SKTexture, lockedPosition: Bool) {
         //set vars
         super.init(
             health: health,
@@ -32,7 +32,8 @@ class Enemy: Ship {
             fireRate: fireRate,
             bulletSpeed: bulletSpeed,
             bulletDamage: bulletDamage,
-            texture: texture
+            texture: texture,
+            lockedPosition: lockedPosition
         )
         
         //set collision phsyics

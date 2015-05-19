@@ -21,6 +21,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //game
     var player: Player!
     var enemies: [Enemy] = []
+    var enemyWaves: EnemyWaves!
     var wave = 1
     var waveTimer: CFTimeInterval = 10.0
     var difficulty = 1
@@ -58,6 +59,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didMoveToView(view: SKView) {
         //stop menu menu music
         audioManager.stopAudio()
+        enemyWaves = EnemyWaves(size: self.size)
         
         //init physics
         self.physicsWorld.gravity = CGVectorMake(0, 0)
@@ -86,23 +88,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.player.position = CGPoint(x: size.width / 2, y: player.size.height + 100)
         self.addChild(self.player)
     }
-    
-    func setupEnemies() {
-        //TODO: generate waves from data
-        
-        //FOR TESTING:
-        let fighter = Fighter()
-        let kamikaze = Kamikaze()
-        let bomber = Bomber()
-        
-        fighter.position = CGPoint(x: size.width / 2, y: size.height - 150)
-        kamikaze.position = CGPoint(x: size.width / 2 - 100, y: size.height - 300)
-        bomber.position = CGPoint(x: size.width / 2 + 150, y: size.height - 100)
 
-        self.enemies.append(fighter)
-        self.enemies.append(kamikaze)
-        self.enemies.append(bomber)
-        
+    func setupEnemies()
+    {
+        var randomNum = Int(arc4random_uniform(3))
+        self.enemies = self.enemyWaves.setNewWave(self.wave, index: randomNum)
         for enemy in self.enemies {
             self.addChild(enemy)
         }
@@ -303,6 +293,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         updateEnemies()
         updateBullets()
         updateHUD()
+        manageWaves()
         updateMusic()
     }
     
@@ -334,6 +325,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 enemy.setVelocity(x: enemy.movementSpeed, y: 0.0, dt: self.dt)
             }
             
+            //remove enemies who go below screen
+            if (enemy.position.y < -50) {
+                enemy.canFire = false
+                enemy.removeFromParent()
+                var enemyIndex = findIndex(self.enemies, valueToFind: enemy)
+                self.enemies.removeAtIndex(enemyIndex!)
+            }
+            
             //fire bullets/bomb/self
             if (enemy.name == "fighter") {
                 let e = enemy as Fighter
@@ -354,6 +353,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if (e.canFire){
                     e.setVelocity(x: 0.0, y: -e.movementSpeed, dt: self.dt)
                 }
+            }
+        }
+    }
+    
+    //controls the new waves that spawn in the game
+    func manageWaves() {
+        
+        if(self.enemies.count > 0) {
+            return
+        }
+        else
+        {
+            self.wave += 1
+            var randomNum = Int(arc4random_uniform(3))
+            self.enemies = self.enemyWaves.setNewWave(self.wave, index: randomNum)
+            
+            for enemy in self.enemies {
+                self.addChild(enemy)
             }
         }
     }
