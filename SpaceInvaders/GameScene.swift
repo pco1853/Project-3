@@ -643,6 +643,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     let e = firstBody.node? as Enemy
                     self.player.harvest(e.health / 2.0)
                 
+                    gameData.score += 50
+                    
                     //explode and remove enemy
                     let enemyIndex = findIndex(self.enemies, valueToFind: firstBody.node? as Enemy)
                     if(enemyIndex != nil) {
