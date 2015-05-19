@@ -1,29 +1,29 @@
 import UIKit
 import SpriteKit
 
-class PauseScene: MenuScene {
+class PauseScene: SKSpriteNode {
     
     var gameScene: GameScene!
+    var titleText: TitleText!
     var resumeButton: MenuButton!
     var quitButton: MenuButton!
+    var buttons: [MenuButton] = []
     
-    init(size: CGSize, title: String, background: SKSpriteNode) {
-        super.init(size: size, title: title)
-        self.starField.alpha = 0
+    init(size: CGSize, background: SKSpriteNode) {
+        super.init(texture: background.texture, color: SKColor.clearColor(), size: size)
+        self.userInteractionEnabled = true
         
-        let b = background
-        b.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
-        b.xScale *= 1.1
-        b.yScale *= 1.1
-        self.addChild(b)
+        //add title
+        self.titleText = TitleText(text: "pause", xPos: 0, yPos: self.size.height / 2 - 200)
+        addChild(self.titleText)
         
         //add buttons        
-            self.resumeButton = MenuButton(
+        self.resumeButton = MenuButton(
             icon: "play",
             label: "RESUME",
             name: "resumeButton",
-            xPos: size.width / 2 - 100.5,
-            yPos: size.height / 2,
+            xPos: -100.5,
+            yPos: 0,
             enabled: true
         )
         self.buttons.append(self.resumeButton)
@@ -33,15 +33,15 @@ class PauseScene: MenuScene {
             icon: "quit",
             label: "QUIT",
             name: "quitButton",
-            xPos: size.width / 2 + 100.5,
-            yPos: size.height / 2,
+            xPos: 100.5,
+            yPos: 0,
             enabled: true
         )
         self.buttons.append(self.quitButton)
         self.addChild(self.quitButton)
         
         //set z index
-        b.zPosition = DrawOrder.PauseMenuBackground
+        self.zPosition = DrawOrder.PauseMenuBackground
         self.titleText.zPosition = DrawOrder.PauseMenu
         for button in self.buttons {
             button.zPosition = DrawOrder.PauseMenu + 3
@@ -70,6 +70,30 @@ class PauseScene: MenuScene {
             }
         }
     }
+    
+    func buttonClicked(button: MenuButton, completion block: (() -> Void)!) {
+        if (button.enabled) {
+            button.enabled = false
+            button.zPosition = 1000
+            button.highlight()
+            
+            let fadeOut = SKAction.fadeOutWithDuration(0.25)
+            for (var i = 0; i < buttons.count; i++) {
+                if (buttons[i].name != button.name) {
+                    self.buttons[i].enabled = false
+                    buttons[i].runAction(fadeOut)
+                }
+            }
+            
+            button.fill.runAction(SKAction.fadeAlphaTo(1.0, duration: 0.25))
+            button.runAction(SKAction.scaleBy(1.25, duration: 0.25), completion: {
+                button.runAction(fadeOut, completion: {
+                    block()
+                })
+            })
+        }
+    }
+
     
 }
 
