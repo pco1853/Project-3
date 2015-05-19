@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SpriteKit
 
-class GameData: NSCoder {
+class GameData: NSObject, NSCoding {
     
     //option vars
     var controlScheme = "virtual"
@@ -33,19 +33,55 @@ class GameData: NSCoder {
     var playerBulletDamage: CGFloat = 20.0
     
     override init() {
-        //TODO: set vars from loaded file
+        super.init()
+    }
+    
+    func save(){
+        //var pathToFile = FilePathInDocumentsDirectory("gameData.archive")
+        //var success = NSKeyedArchiver.archiveRootObject(gameData, toFile: pathToFile)
+        
+        let saveData = NSKeyedArchiver.archivedDataWithRootObject(gameData);
+      
+        let path = DocumentsDirectory().stringByAppendingPathComponent("GameData.archive");
+        
+        println("Saved = \(saveData) to \(path)")
+        
+        saveData.writeToFile(path, atomically: true);
+        
+        //gameData = NSKeyedUnarchiver.unarchiveObjectWithFile(pathToFile)
+
+    }
+    
+    func load() -> GameData?{
+        var path = DocumentsDirectory().stringByAppendingPathComponent("GameData.archive");
+        if let rawData = NSData(contentsOfFile: path){
+        
+        if let data = NSKeyedUnarchiver.unarchiveObjectWithData(rawData) as? GameData {
+            println(data)
+            return data
+        }
+        }
+        else{
+            println("nothing there")
+        }
+        
+        return nil
+    }
+    
+    required init(coder aDecoder: NSCoder){
+        self.soundEnabled = aDecoder.decodeBoolForKey("sound") as Bool
+        self.controlScheme = aDecoder.decodeObjectForKey("controls") as NSString
+        super.init()
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(gameData, forKey: "gameData")
+        println("\(__FUNCTION__) called")
         aCoder.encodeBool(soundEnabled, forKey: "sound")
         aCoder.encodeObject(controlScheme, forKey: "controls")
     }
     
-    required init?(coder aDecoder: NSCoder) {
-    }
-
     
 }
 
-var gameData = GameData()
+let gameData = GameData()
+

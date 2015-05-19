@@ -17,8 +17,8 @@ class PauseScene: MenuScene {
         b.yScale *= 1.1
         self.addChild(b)
         
-        //add buttons
-        self.resumeButton = MenuButton(
+        //add buttons        
+            self.resumeButton = MenuButton(
             icon: "play",
             label: "RESUME",
             name: "resumeButton",
@@ -30,7 +30,7 @@ class PauseScene: MenuScene {
         self.addChild(self.resumeButton)
         
         self.quitButton = MenuButton(
-            icon: "back",
+            icon: "quit",
             label: "QUIT",
             name: "quitButton",
             xPos: size.width / 2 + 100.5,

@@ -25,11 +25,22 @@ class MenuButton: SKSpriteNode {
         self.position.y = yPos
         self.enabled = enabled
         
+        
+        if(enabled == true){
         //set up fill
         self.fill = SKSpriteNode(imageNamed: "button_menuFill")
         self.fill.zPosition = -3
         self.fill.alpha = 0.1
         self.addChild(self.fill)
+        } else{
+            self.fill = SKSpriteNode(imageNamed: "button_menuFill")
+            self.fill.zPosition = 1
+            self.fill.color = UIColor.blackColor()
+            self.fill.colorBlendFactor = 0.5
+            self.fill.alpha = 0.6
+            self.addChild(self.fill)
+        }
+        
         
         //set up label
         self.label = SKLabelNode(text: label)

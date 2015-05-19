@@ -36,7 +36,7 @@ class GameModeScene: MenuScene {
             name: "coopButton",
             xPos: size.width / 2 + 100.5,
             yPos: size.height / 2,
-            enabled: true
+            enabled: false
         )
         self.buttons.append(self.coopButton)
         self.addChild(self.coopButton)
@@ -47,7 +47,7 @@ class GameModeScene: MenuScene {
             name: "storeButton",
             xPos: size.width / 2,
             yPos: size.height / 2 - self.soloButton.size.height / 1.33,
-            enabled: true
+            enabled: false
         )
         self.buttons.append(self.storeButton)
         self.addChild(self.storeButton)
@@ -68,7 +68,7 @@ class GameModeScene: MenuScene {
             name: "scoresButton",
             xPos: size.width / 2 + self.storeButton.size.width + 0.5,
             yPos: size.height / 2 - self.soloButton.size.height / 1.33,
-            enabled: true
+            enabled: false
         )
         self.buttons.append(self.scoresButton)
         self.addChild(self.scoresButton)

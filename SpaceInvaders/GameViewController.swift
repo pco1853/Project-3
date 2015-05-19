@@ -15,6 +15,8 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //println(DocumentsDirectory())
+        
         //viewcontroller for sharing on facebook
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "shareScore", name: "share", object: nil)
         
@@ -27,6 +29,8 @@ class GameViewController: UIViewController {
         skView.showsNodeCount = true
         
         skView.presentScene(startGameScene)
+        
+        
     }
     
     override func prefersStatusBarHidden() -> Bool {

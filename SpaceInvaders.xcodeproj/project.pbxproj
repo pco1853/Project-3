@@ -65,6 +65,7 @@
 		3FEF8ABC1AF9A5E000445871 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEF8ABB1AF9A5E000445871 /* Enemy.swift */; };
 		965CAC3A1B044E4A0060C698 /* Fighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965CAC391B044E4A0060C698 /* Fighter.swift */; };
 		969317A41B08422E008299C4 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969317A31B08422E008299C4 /* AudioManager.swift */; };
+		96E221581B0AD08C00EB81D9 /* DocumentsDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E221571B0AD08C00EB81D9 /* DocumentsDirectory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,6 +141,7 @@
 		3FEF8ABB1AF9A5E000445871 /* Enemy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		965CAC391B044E4A0060C698 /* Fighter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fighter.swift; sourceTree = "<group>"; };
 		969317A31B08422E008299C4 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		96E221571B0AD08C00EB81D9 /* DocumentsDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentsDirectory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,6 +250,7 @@
 				3F1685C61B0A88FC00086F69 /* EnemyExplosion.sks */,
 				3F1685CC1B0A994E00086F69 /* PlayerExplosion.sks */,
 				3F7B09601AE75CE9000EEAD4 /* spark.png */,
+				96E221571B0AD08C00EB81D9 /* DocumentsDirectory.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -524,6 +527,7 @@
 				3FEF8AB81AF98CDA00445871 /* Ship.swift in Sources */,
 				3FEF8ABC1AF9A5E000445871 /* Enemy.swift in Sources */,
 				3F7B09561AE753B1000EEAD4 /* Bullet.swift in Sources */,
+				96E221581B0AD08C00EB81D9 /* DocumentsDirectory.swift in Sources */,
 				3F7B09171AE74DC0000EEAD4 /* GameViewController.swift in Sources */,
 				3FCE6BD41B06DAA80092E015 /* Kamikaze.swift in Sources */,
 				3F7B09541AE7532E000EEAD4 /* Player.swift in Sources */,
