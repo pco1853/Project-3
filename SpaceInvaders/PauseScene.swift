@@ -24,7 +24,7 @@ class PauseScene: MenuScene {
         self.mainMenu = StartGameScene(size: CGSizeMake(768, 1024), title: "harvester")
         //add buttons
         self.unpauseButton = MenuButton(
-            icon: "Phoenix",
+            icon: "play",
             label: "UNPAUSE",
             name: "unpauseButton",
             xPos: self.size.width / 2 - 100.5,
@@ -39,7 +39,7 @@ class PauseScene: MenuScene {
         self.addChild(self.unpauseButton)
         
         self.quitButton = MenuButton(
-            icon: "Phoenix",
+            icon: "quit",
             label: "QUIT",
             name: "quitButton",
             xPos: self.size.width / 2 + 100.5,

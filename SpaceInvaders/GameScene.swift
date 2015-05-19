@@ -52,7 +52,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //MARK: - Initialization -
     override func didMoveToView(view: SKView) {
         //end menu background sound
-        sharedAudio.stopAudio()
+        //sharedAudio.stopAudio()
         
         //init physics
         self.physicsWorld.gravity = CGVectorMake(0, 0)

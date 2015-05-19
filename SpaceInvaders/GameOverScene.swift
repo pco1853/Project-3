@@ -26,7 +26,7 @@ class GameOverScene: MenuScene {
         
         //add buttons
         self.replayButton = MenuButton(
-            icon: "Phoenix",
+            icon: "replay",
             label: "REPLAY",
             name: "replayButton",
             xPos: size.width / 2 - 100.5,
@@ -37,7 +37,7 @@ class GameOverScene: MenuScene {
         self.addChild(self.replayButton)
         
         self.shareButton = MenuButton(
-            icon: "Phoenix",
+            icon: "share",
             label: "SHARE",
             name: "shareButton",
             xPos: size.width / 2 + 100.5,
@@ -48,7 +48,7 @@ class GameOverScene: MenuScene {
         addChild(self.shareButton)
         
         self.backButton = MenuButton(
-            icon: "Phoenix",
+            icon: "back",
             label: "BACK",
             name: "backButton",
             xPos: size.width / 2,
