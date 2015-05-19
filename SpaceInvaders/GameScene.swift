@@ -105,7 +105,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //spawn an easy wave and have enemies slide in
     func setupEnemies()
     {
-        var randomNum = Int(arc4random_uniform(3))
+        var randomNum = Int(arc4random_uniform(5))
         self.enemies = self.enemyWaves.setNewWave(self.wave, index: randomNum)
         for enemy in self.enemies {
             self.addChild(enemy)
