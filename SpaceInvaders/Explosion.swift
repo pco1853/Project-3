@@ -18,7 +18,6 @@ class Explosion: SKSpriteNode {
         super.init(texture: nil, color: SKColor.clearColor(), size: CGSize(width: 100.0, height: 100.0))
         
         self.particle = SKEmitterNode(fileNamed: type)
-        //self.particle.zPosition = -1000
         self.timer = duration
         self.position.x = x
         self.position.y = y

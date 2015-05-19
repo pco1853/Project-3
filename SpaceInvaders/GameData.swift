@@ -18,6 +18,7 @@ class GameData: NSObject, NSCoding {
     
     //game vars
     var highScores: [Int] = []
+    var newHighScore = false
     var score = 0
     var credits = 0
     var scoreImage: UIImage?
@@ -64,10 +65,13 @@ class GameData: NSObject, NSCoding {
     
     //filters the top scores
     func filterHighScores(score: Int) {
+        newHighScore = false
+        
         //if no highscores then add player score
         if(highScores.count == 0 && score != 0)
         {
             highScores.append(score)
+            newHighScore = true
         }
             //if one highscore check against the highscore and add if higher
         else if( highScores.count == 1)
@@ -76,10 +80,13 @@ class GameData: NSObject, NSCoding {
             {
                 var temp = highScores[0]
                 highScores.append(temp)
+                highScores[0] = score
+                newHighScore = true
             }
             else
             {
                 highScores.append(score)
+                newHighScore = true
             }
         }
             //otherwise sort the highscores and filter out if more than 10 exist
@@ -93,6 +100,14 @@ class GameData: NSObject, NSCoding {
                 highScores.removeAtIndex(10)
             }
             
+            //detect if player got new highscore
+            for( var i = 0; i < highScores.count; i++)
+            {
+                if(score >= highScores[i])
+                {
+                    newHighScore = true
+                }
+            }
         }
         
         saveScores()

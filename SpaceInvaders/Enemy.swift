@@ -12,7 +12,6 @@ import SpriteKit
 class Enemy: Ship {
     
     //MARK: - Variables -
-    //var hasPowerup: Bool = false
     var moveDirection:String?
     var finishedSpawningIn = false
     

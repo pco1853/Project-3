@@ -18,6 +18,7 @@ class GameModeScene: MenuScene {
     var scoresButton: MenuButton!
     
     override func didMoveToView(view: SKView) {
+        
         //add buttons
         self.soloButton = MenuButton(
             icon: "solo",
@@ -68,7 +69,7 @@ class GameModeScene: MenuScene {
             name: "scoresButton",
             xPos: size.width / 2 + self.storeButton.size.width + 0.5,
             yPos: size.height / 2 - self.soloButton.size.height / 1.33,
-            enabled: false
+            enabled: true
         )
         self.buttons.append(self.scoresButton)
         self.addChild(self.scoresButton)
@@ -89,7 +90,9 @@ class GameModeScene: MenuScene {
             else if (touchedNode.name == "backButton" && backButton.enabled) {
                 buttonClicked(self.backButton, scene: StartGameScene(size: self.size, title: "harvester"))
             }
-            
+            else if (touchedNode.name == "scoresButton" && scoresButton.enabled) {
+                buttonClicked(self.scoresButton, scene: HighScoresScene(size: self.size, title: "highscores"))
+            }
             //TODO: Implement other scene buttons...
         }
     }

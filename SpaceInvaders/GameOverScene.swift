@@ -25,6 +25,11 @@ class GameOverScene: MenuScene {
             yPos: self.titleText.position.y - 100
         )
         
+        //if new highscore then add text
+        if(gameData.newHighScore) {
+            addText("New High Score!", xPos: size.width / 2, yPos: self.titleText.position.y - 160)
+        }
+        
         //add buttons
         self.replayButton = MenuButton(
             icon: "replay",
