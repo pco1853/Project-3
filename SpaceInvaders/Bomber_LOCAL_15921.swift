@@ -11,7 +11,7 @@ import SpriteKit
 
 class Bomber: Enemy {
     
-    init(lockedPosition: Bool) {
+    init() {
         //set vars
         let texture = SKTexture(imageNamed: "ship_bomber")
         super.init(
@@ -21,8 +21,7 @@ class Bomber: Enemy {
             fireRate: 5.0,
             bulletSpeed: 200.0,
             bulletDamage: 25.0,
-            texture: texture,
-            lockedPosition: lockedPosition
+            texture: texture
         )
         
         self.name = "bomber"

@@ -14,21 +14,9 @@ class Enemy: Ship {
     //MARK: - Variables -
     //var hasPowerup: Bool = false
     var moveDirection:String?
-    
-<<<<<<< HEAD
-    override init(health: CGFloat, movementSpeed: CGFloat, canFire: Bool, fireRate: NSTimeInterval, bulletSpeed: CGFloat, bulletDamage: CGFloat, texture: SKTexture) {
-=======
-    //draw order
-    let zShip: CGFloat = 0
-    let zBullets: CGFloat = -1
-    let zGuns: CGFloat = -2
-    let zEngine: CGFloat = -3
-    let zEngineParticle: CGFloat = -4
-    let zShadow: CGFloat = -5
     var finishedSpawningIn = false
     
     override init(health: CGFloat, movementSpeed: CGFloat, canFire: Bool, fireRate: NSTimeInterval, bulletSpeed: CGFloat, bulletDamage: CGFloat, texture: SKTexture, lockedPosition: Bool) {
->>>>>>> c9e4566c3599dbfec1bb694647fb54054dd6e501
         //set vars
         super.init(
             health: health,
@@ -47,21 +35,18 @@ class Enemy: Ship {
         self.physicsBody?.collisionBitMask = 0x0
         
         //determine movement direction
-        
-        if(self.lockedPosition)
-        {
+        if(self.lockedPosition) {
             self.moveDirection = "None"
         }
-        else
-        {
-            let rand = Int(arc4random_uniform(3))
+        else {
+            let rand = Int(arc4random_uniform(2))
             switch rand {
             case 0:
                 self.moveDirection = "left"
             case 1:
                 self.moveDirection = "right"
             default:
-                self.moveDirection = "left"
+                self.moveDirection = "right"
             }
         }
     }

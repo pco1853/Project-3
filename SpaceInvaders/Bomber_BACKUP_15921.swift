@@ -9,9 +9,15 @@
 import Foundation
 import SpriteKit
 
+<<<<<<< HEAD
 class Bomber: Enemy {
     
+    init() {
+=======
+class Bomber: Enemy
+{
     init(lockedPosition: Bool) {
+>>>>>>> c9e4566c3599dbfec1bb694647fb54054dd6e501
         //set vars
         let texture = SKTexture(imageNamed: "ship_bomber")
         super.init(
