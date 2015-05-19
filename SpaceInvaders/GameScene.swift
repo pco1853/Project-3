@@ -71,9 +71,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //MARK: - Initialization -
     override func didMoveToView(view: SKView) {
         audioManager.stopAudio()
+        
         enemyWaves = EnemyWaves(size: self.size)
-        var swipeUp = UISwipeGestureRecognizer(target: self, action: "Harvest")
-        swipeUp.direction = UISwipeGestureRecognizerDirection.Up
         
         //init physics
         self.physicsWorld.gravity = CGVectorMake(0, 0)
@@ -93,10 +92,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupHUD()
         setupInput()
         setupMusic()
-    }
-    
-    func Harvest(){
-        println("swipeUp")
     }
     
     func setupPlayer() {
@@ -253,8 +248,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func handleSwipes(sender: UISwipeGestureRecognizer) {
         if (sender.direction == .Up) {
-            //println("Swiped up...")
-            
             if (self.player.canHarvest) {
                 self.harvestButtonPressed = true
             }
@@ -429,7 +422,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //controls the new waves that spawn in the game
     func manageWaves() {
-        
         if(self.enemies.count > 0) {
             return
         }
@@ -628,6 +620,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     e.removeFromParent()
                 }
             }
+            
             //remove player bullet
             secondBody.node?.removeFromParent()
         }
@@ -696,8 +689,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.isGameOver = true
             
             //TODO: disable controls
-            gameData.highScores.append(gameData.score)
-            
             gameData.filterHighScores(gameData.score)
             
             self.runAction(SKAction.waitForDuration(2.0), completion: {

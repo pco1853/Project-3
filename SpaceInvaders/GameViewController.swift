@@ -23,20 +23,17 @@ class GameViewController: UIViewController {
         
         let skView = view as SKView
         skView.ignoresSiblingOrder = true
-        skView.showsFPS = true
-        skView.showsNodeCount = true
+        //skView.showsFPS = true
+        //skView.showsNodeCount = true
         
         skView.presentScene(startGameScene)
-        
-        
     }
     
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
     
-    func shareScore()
-    {
+    func shareScore() {
         let facebook = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
         facebook.completionHandler = {
             result in
@@ -47,7 +44,6 @@ class GameViewController: UIViewController {
             case SLComposeViewControllerResult.Done:
                 break
             }
-        
         }
         
         facebook.setInitialText("I scored \(gameData.score) points in Harvester")
