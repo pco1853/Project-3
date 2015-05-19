@@ -44,32 +44,11 @@ class Player: Ship {
             lockedPosition: false
         )
         
-        //add shadow
-        /*
-        let shadowOffsetX: CGFloat = 10.0
-        let shadowOffsetY: CGFloat = 10.0
-        let shadow = SKSpriteNode(texture: self.texture)
-        shadow.size = CGSizeMake(shadow.size.width + shadowOffsetX, shadow.size.height + shadowOffsetY)
-        shadow.color = SKColor.blackColor()
-        shadow.colorBlendFactor = 1.0;
-        shadow.alpha = 0.5;
-        let shadowEffect = SKEffectNode()
-        let shadowEffectBlur = CIFilter(name: "CIGaussianBlur", withInputParameters: ["inputRadius": 5.0])
-        shadowEffect.filter = shadowEffectBlur
-        shadowEffect.zPosition = self.zShadow
-        shadowEffect.addChild(shadow)
-        self.addChild(shadowEffect)
-        */
-        
-        //TODO: add engine
-        
         //add engine particle
         self.engineParticle = SKEmitterNode(fileNamed: "Fire")
         self.engineParticle.position = CGPointMake(self.position.x, self.position.y - self.size.height / 2)
         self.engineParticle.zPosition = self.zEngineParticle
         self.addChild(self.engineParticle)
-        
-        //TODO: add guns
         
         //TODO: add harvester
         self.harvester = Harvester(length: 5)

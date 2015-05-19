@@ -18,6 +18,7 @@ class GameData: NSObject, NSCoding {
     
     //game vars
     var highScores: [Int] = []
+    var newHighScore = false
     var score = 0
     var credits = 0
     var scoreImage: UIImage?
@@ -36,37 +37,6 @@ class GameData: NSObject, NSCoding {
         super.init()
     }
     
-    func save(){
-        //var pathToFile = FilePathInDocumentsDirectory("gameData.archive")
-        //var success = NSKeyedArchiver.archiveRootObject(gameData, toFile: pathToFile)
-        
-        let saveData = NSKeyedArchiver.archivedDataWithRootObject(gameData);
-      
-        let path = DocumentsDirectory().stringByAppendingPathComponent("GameData.archive");
-        
-        println("Saved = \(saveData) to \(path)")
-        
-        saveData.writeToFile(path, atomically: true);
-        
-        //gameData = NSKeyedUnarchiver.unarchiveObjectWithFile(pathToFile)
-
-    }
-    
-    func load() -> GameData?{
-        var path = DocumentsDirectory().stringByAppendingPathComponent("GameData.archive");
-        if let rawData = NSData(contentsOfFile: path){
-        
-        if let data = NSKeyedUnarchiver.unarchiveObjectWithData(rawData) as? GameData {
-            println(data)
-            return data
-        }
-        }
-        else{
-            println("nothing there")
-        }
-        
-        return nil
-    }
     
     required init(coder aDecoder: NSCoder){
         self.soundEnabled = aDecoder.decodeBoolForKey("sound") as Bool
@@ -80,7 +50,68 @@ class GameData: NSObject, NSCoding {
         aCoder.encodeObject(controlScheme, forKey: "controls")
     }
     
+    //Saves our game data whenever we change options
+    func saveOptions() {
+        NSUserDefaults.standardUserDefaults().setObject(gameData.controlScheme, forKey: "Controls")
+        NSUserDefaults.standardUserDefaults().setObject(gameData.soundEnabled, forKey: "Sound")
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
     
+    //saves score everytime you die
+    func saveScores() {
+        NSUserDefaults.standardUserDefaults().setObject(gameData.highScores, forKey: "HighScores")
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
+    //filters the top scores
+    func filterHighScores(score: Int) {
+        newHighScore = false
+        
+        //if no highscores then add player score
+        if(highScores.count == 0 && score != 0)
+        {
+            highScores.append(score)
+            newHighScore = true
+        }
+            //if one highscore check against the highscore and add if higher
+        else if( highScores.count == 1)
+        {
+            if(score > highScores[0])
+            {
+                var temp = highScores[0]
+                highScores.append(temp)
+                highScores[0] = score
+                newHighScore = true
+            }
+            else
+            {
+                highScores.append(score)
+                newHighScore = true
+            }
+        }
+            //otherwise sort the highscores and filter out if more than 10 exist
+        else
+        {
+            highScores.append(score)
+            highScores.sort(>)
+          
+            if(highScores.count > 10)
+            {
+                highScores.removeAtIndex(10)
+            }
+            
+            //detect if player got new highscore
+            for( var i = 0; i < highScores.count; i++)
+            {
+                if(score >= highScores[i])
+                {
+                    newHighScore = true
+                }
+            }
+        }
+        
+        saveScores()
+    }
 }
 
 let gameData = GameData()

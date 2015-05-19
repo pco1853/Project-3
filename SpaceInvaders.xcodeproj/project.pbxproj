@@ -55,6 +55,7 @@
 		3FB5577F1AFBAC2800916F1B /* Inversionz.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3FB5577E1AFBAC2800916F1B /* Inversionz.otf */; };
 		3FCE6BD41B06DAA80092E015 /* Kamikaze.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCE6BD31B06DAA80092E015 /* Kamikaze.swift */; };
 		3FCE6BD61B06ECBE0092E015 /* Bomber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCE6BD51B06ECBE0092E015 /* Bomber.swift */; };
+		3FDDC5071B0BDAEA00D2D69D /* HighScoresScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDDC5061B0BDAEA00D2D69D /* HighScoresScene.swift */; };
 		3FEA26411B01570200680E31 /* TitleText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA26401B01570200680E31 /* TitleText.swift */; };
 		3FEA26441B016C7300680E31 /* HUDText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA26431B016C7300680E31 /* HUDText.swift */; };
 		3FEA26461B01717C00680E31 /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA26451B01717C00680E31 /* MenuButton.swift */; };
@@ -131,6 +132,7 @@
 		3FB5577E1AFBAC2800916F1B /* Inversionz.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inversionz.otf; sourceTree = "<group>"; };
 		3FCE6BD31B06DAA80092E015 /* Kamikaze.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kamikaze.swift; sourceTree = "<group>"; };
 		3FCE6BD51B06ECBE0092E015 /* Bomber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bomber.swift; sourceTree = "<group>"; };
+		3FDDC5061B0BDAEA00D2D69D /* HighScoresScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighScoresScene.swift; sourceTree = "<group>"; };
 		3FEA26401B01570200680E31 /* TitleText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleText.swift; sourceTree = "<group>"; };
 		3FEA26431B016C7300680E31 /* HUDText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDText.swift; sourceTree = "<group>"; };
 		3FEA26451B01717C00680E31 /* MenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; wrapsLines = 1; };
@@ -331,6 +333,7 @@
 				3F7B09141AE74DC0000EEAD4 /* GameScene.swift */,
 				3F108A5D1B097BC300BEAD06 /* PauseScene.swift */,
 				3FEF8AB91AF9971500445871 /* GameOverScene.swift */,
+				3FDDC5061B0BDAEA00D2D69D /* HighScoresScene.swift */,
 				3F17C8851B02579F0095A6E9 /* Menu Scenes */,
 			);
 			name = Scenes;
@@ -522,6 +525,7 @@
 				3F7B09351AE74E76000EEAD4 /* StartGameScene.swift in Sources */,
 				3FEA26411B01570200680E31 /* TitleText.swift in Sources */,
 				3F352BBC1B05341D0029FD10 /* EnemyBullet.swift in Sources */,
+				3FDDC5071B0BDAEA00D2D69D /* HighScoresScene.swift in Sources */,
 				3FA6C0801B04395C00C317F6 /* README.md in Sources */,
 				3F60A94A1B023FF800402038 /* OptionsScene.swift in Sources */,
 				3FEF8AB81AF98CDA00445871 /* Ship.swift in Sources */,

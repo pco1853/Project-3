@@ -15,8 +15,6 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //println(DocumentsDirectory())
-        
         //viewcontroller for sharing on facebook
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "shareScore", name: "share", object: nil)
         
@@ -53,7 +51,6 @@ class GameViewController: UIViewController {
         }
         
         facebook.setInitialText("I scored \(gameData.score) points in Harvester")
-        //facebook.addImage(gameData.scoreImage!)
         self.presentViewController(facebook, animated: false, completion: nil)
     }
     

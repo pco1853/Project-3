@@ -58,7 +58,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var virtualController: VirtualController?
     var fireButtonPressed = false
     var harvestButtonPressed = false
-    //var powerupButtonPressed = false
     var motionManager: CMMotionManager?
     
     //pause scene
@@ -75,7 +74,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemyWaves = EnemyWaves(size: self.size)
         var swipeUp = UISwipeGestureRecognizer(target: self, action: "Harvest")
         swipeUp.direction = UISwipeGestureRecognizerDirection.Up
-    
         
         //init physics
         self.physicsWorld.gravity = CGVectorMake(0, 0)
@@ -229,12 +227,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         self.virtualController!.harvestButton.highlight()
                     }
                 }
-                /*
-                else if(touchedNode.name == "powerupButton" && self.virtualController!.fireButton.enabled) {
-                    self.powerupButtonPressed = true
-                    self.virtualController!.powerupButton.highlight()
-                }
-                */
             }
         }
     }
@@ -256,16 +248,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.virtualController!.harvestButton.undoHighlight()
                 }
             }
-            
-            /*
-            if (powerupButtonPressed) {
-                self.powerupButtonPressed = false
-                
-                if (self.virtualController != nil) {
-                    self.virtualController!.powerupButton.undoHighlight()
-                }
-            }
-            */
         }
     }
     
@@ -535,7 +517,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             if (self.audioTracksIndex > self.audioTracksShuffled.count - 1) {
                 self.audioTracksIndex = 0
-                //self.audioTracksShuffled = self.audioTracks.shuffled()
             }
             
             audioManager.playBackgroundMusic(self.audioTracksShuffled[self.audioTracksIndex], loops: 1)
@@ -606,6 +587,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
                 //remove enemy bullet
                 secondBody.node?.removeFromParent()
+                
         }
         
         //player and enemy hit
@@ -624,7 +606,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.enemies[enemyIndex!].explode(self)
                     self.enemies.removeAtIndex(enemyIndex!)
                 }
-                //secondBody.node?.removeFromParent() -> handled in the explode() call
         }
         
         //player shoots enemy
@@ -637,7 +618,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //damage enemy
             let e = firstBody.node? as Enemy
             e.takeDamage(self.player.bulletDamage, scene: self)
-                
+            if(e.health <= 0 && e.finishedSpawningIn == false)
+            {
+                let enemyIndex = findIndex(self.enemies, valueToFind: e)
+                if(enemyIndex != nil)
+                {
+                    self.enemies.removeAtIndex(enemyIndex!)
+                    gameData.score += 50
+                    e.removeFromParent()
+                }
+            }
             //remove player bullet
             secondBody.node?.removeFromParent()
         }
@@ -707,6 +697,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             //TODO: disable controls
             gameData.highScores.append(gameData.score)
+            
+            gameData.filterHighScores(gameData.score)
             
             self.runAction(SKAction.waitForDuration(2.0), completion: {
                 audioManager.stopAudio()

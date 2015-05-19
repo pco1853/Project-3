@@ -80,8 +80,8 @@ class EnemyWaves:SKSpriteNode{
                 //easy wave 4
                 var easy4: [Enemy] = []
                 var e4Fighter = createEnemy("fighter", xpos: size.width / 2 - 80, ypos: self.size.height + 200, moving: true)
-                var e4Fighter1 = createEnemy("fighter", xpos: size.width / 2 - 80, ypos: self.size.height + 200, moving: true)
-                var e4Fighter2 = createEnemy("fighter", xpos: size.width / 2 + 80, ypos: self.size.height + 100, moving: true)
+                var e4Fighter1 = createEnemy("fighter", xpos: size.width / 2 + 80, ypos: self.size.height + 200, moving: true)
+                var e4Fighter2 = createEnemy("fighter", xpos: size.width / 2 - 80, ypos: self.size.height + 100, moving: true)
                 var e4Fighter3 = createEnemy("fighter", xpos: size.width / 2 + 80, ypos: self.size.height + 100, moving: true)
                 var e4Bomber = createEnemy("bomber", xpos: size.width / 2, ypos: self.size.height + 300, moving: true)
                 easy4.append(e4Fighter)
