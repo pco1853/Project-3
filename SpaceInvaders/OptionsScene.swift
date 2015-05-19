@@ -311,8 +311,10 @@ class OptionsScene: MenuScene {
             }
             else if (touchedNode.name == "soundOffButton" && self.soundOffButton.enabled) {
                 gameData.soundEnabled = false
+                audioManager.stopAudio()
                 highlightSoundOptions()
             }
+            
         }
     }
     

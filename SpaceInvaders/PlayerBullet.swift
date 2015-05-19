@@ -11,7 +11,7 @@ import SpriteKit
 
 class PlayerBullet: Bullet {
    
-    override init(imageName: String){
+    override init(imageName: String) {
         super.init(imageName: imageName)
         
         //set collision physics

@@ -11,7 +11,7 @@ import SpriteKit
 
 class Kamikaze: Enemy {
     
-    init() {
+    init(lockedPosition: Bool) {
         //set vars
         let texture = SKTexture(imageNamed: "ship_kamikaze")
         super.init(
@@ -21,7 +21,8 @@ class Kamikaze: Enemy {
             fireRate: 0.0,
             bulletSpeed: 0.0,
             bulletDamage: 0.0,
-            texture: texture
+            texture: texture,
+            lockedPosition: lockedPosition
         )
         
         self.name = "kamikaze"
@@ -35,8 +36,12 @@ class Kamikaze: Enemy {
     }
     
     func fire() {
-        self.canFire = true
-        self.movementSpeed = 700.0
+        if (!self.canFire) {
+            self.canFire = true
+            self.movementSpeed = 700.0
+        
+            audioManager.playSoundEffect("ship_kamikazeLock.m4a", node: self)
+        }
     }
     
 }

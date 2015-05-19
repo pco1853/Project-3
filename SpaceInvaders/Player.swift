@@ -15,6 +15,7 @@ class Player: Ship {
     //MARK: - Variables -
     var canHarvest = true
     var invincible = false
+    var isDead = false
     var engineParticle: SKEmitterNode!
     //var powerup: Powerup! //TODO: implement powerups
     
@@ -37,7 +38,8 @@ class Player: Ship {
             fireRate: gameData.playerFireRate,
             bulletSpeed: gameData.playerBulletSpeed,
             bulletDamage: gameData.playerBulletDamage,
-            texture: texture
+            texture: texture,
+            lockedPosition: false
         )
         
         //add shadow
@@ -99,6 +101,8 @@ class Player: Ship {
             
             let waitToEnableFire = SKAction.waitForDuration(self.fireRate)
             runAction(waitToEnableFire, completion: { self.canFire = true })
+            
+            audioManager.playSoundEffect("bullet_player.m4a", node: self)
         }
     }
     
@@ -122,21 +126,41 @@ class Player: Ship {
         self.engineParticle.yAcceleration = -y!
     }
     
-    func takeDamage(damage: CGFloat) {
+    func takeDamage(damage: CGFloat, scene: SKScene) {
         if (!self.invincible) {
             self.health -= damage
-            turnInvincible()
+            
+            if (self.health <= 0) {
+                self.health = 0
+                explode(scene)
+            }
+            else {
+                turnInvincible()
+            }
         }
     }
     
-    func turnInvincible(){ //makes player flash and become invincible for 1 sec after being hit
+    func turnInvincible(){ //makes player flash and become invincible briefly after being hurt
         self.invincible = true
         
         let fadeOut = SKAction.fadeOutWithDuration(0.1)
         let fadeIn = SKAction.fadeInWithDuration(0.1)
         let fadeOutIn = SKAction.sequence([fadeOut, fadeIn])
-        let fadeOutInRepeat = SKAction.repeatAction(fadeOutIn, count: 5)
-        runAction(fadeOutInRepeat, completion: { self.invincible = false })
+        let fadeOutInRepeat = SKAction.repeatAction(fadeOutIn, count: 3)
+        self.runAction(fadeOutInRepeat, completion: { self.invincible = false })
+    }
+    
+    func explode(scene: SKScene) {
+        if (!self.isDead) {
+            println("player died")
+            
+            self.isDead = true
+            self.alpha = 0
+        
+            let explosion = Explosion(type: "PlayerExplosion", duration: 2.0, x: self.position.x, y: self.position.y)
+            scene.addChild(explosion)
+            audioManager.playSoundEffect("ship_playerExplosion.m4a", node: self)
+        }
     }
     
 }

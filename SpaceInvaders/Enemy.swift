@@ -12,7 +12,7 @@ import SpriteKit
 class Enemy: Ship {
     
     //MARK: - Variables -
-    var hasPowerup: Bool = false
+    //var hasPowerup: Bool = false
     var moveDirection:String?
     
     //draw order
@@ -23,7 +23,7 @@ class Enemy: Ship {
     let zEngineParticle: CGFloat = -4
     let zShadow: CGFloat = -5
     
-    override init(health: CGFloat, movementSpeed: CGFloat, canFire: Bool, fireRate: NSTimeInterval, bulletSpeed: CGFloat, bulletDamage: CGFloat, texture: SKTexture) {
+    override init(health: CGFloat, movementSpeed: CGFloat, canFire: Bool, fireRate: NSTimeInterval, bulletSpeed: CGFloat, bulletDamage: CGFloat, texture: SKTexture, lockedPosition: Bool) {
         //set vars
         super.init(
             health: health,
@@ -32,7 +32,8 @@ class Enemy: Ship {
             fireRate: fireRate,
             bulletSpeed: bulletSpeed,
             bulletDamage: bulletDamage,
-            texture: texture
+            texture: texture,
+            lockedPosition: lockedPosition
         )
         
         //set collision phsyics
@@ -56,23 +57,30 @@ class Enemy: Ship {
         super.init(coder: aDecoder)
     }
     
-    func takeDamage(damage: CGFloat) {
+    func takeDamage(damage: CGFloat, scene: SKScene) {
         self.health -= damage
         
         if (self.health <= 0) {
-            explode()
+            explode(scene)
         }
         else {
-            let fadeOut = SKAction.fadeOutWithDuration(0.1)
-            let fadeIn = SKAction.fadeInWithDuration(0.1)
-            let fadeOutIn = SKAction.sequence([fadeOut, fadeIn])
-            let fadeOutInRepeat = SKAction.repeatAction(fadeOutIn, count: 5)
-            runAction(fadeOutInRepeat)
+            let turnRed = SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.1)
+            let turnNormal = SKAction.colorizeWithColor(SKColor.whiteColor(), colorBlendFactor: 1.0, duration: 0.1)
+            let flashRed = SKAction.sequence([turnRed, turnNormal])
+            let flashRedRepeat = SKAction.repeatAction(flashRed, count: 3)
+            self.runAction(flashRedRepeat, completion: { //catch error where ship sometimes disappears
+                self.color = SKColor.whiteColor()
+                self.colorBlendFactor = 1.0
+                self.alpha = 1.0
+            })
         }
     }
     
-    func explode() {
-        //TODO: animate explosion
+    func explode(scene: SKScene) {
+        let explosion = Explosion(type: "EnemyExplosion", duration: 1.0, x: self.position.x, y: self.position.y)
+        scene.addChild(explosion)
+        audioManager.playSoundEffect("ship_enemyExplosion.m4a", node: self)
+        
         self.removeFromParent()
     }
 

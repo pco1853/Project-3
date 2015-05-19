@@ -9,7 +9,8 @@
 import Foundation
 import SpriteKit
 
-class Joystick : SKNode {
+class Joystick: SKNode {
+    
     let kThumbSpringBackDuration: Double =  0.3
     let backdropNode, thumbNode: SKSpriteNode
     var isTracking: Bool = false
@@ -84,6 +85,5 @@ class Joystick : SKNode {
         easeOut.timingMode = SKActionTimingMode.EaseOut
         self.thumbNode.runAction(easeOut)
     }
-    
     
 }

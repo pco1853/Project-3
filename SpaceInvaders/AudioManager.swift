@@ -7,40 +7,50 @@
 //
 
 import Foundation
+import UIKit
+import SpriteKit
 import AVFoundation
 
+
 class AudioManager {
-    var backgroundSound: AVAudioPlayer!
     
-    init(){
+    var player = AVAudioPlayer() //use for background music, use SKActions for effects
+    var isPlaying = false
+    
+    func playBackgroundMusic(fileName: String, loops: Int) {
+        if (gameData.soundEnabled) {
+            let source = NSBundle.mainBundle().URLForResource(fileName, withExtension: nil)
+            var error: NSError?
         
+            self.player = AVAudioPlayer(contentsOfURL: source, error: &error)
+
+            if (source == nil) {
+                println("Could not find file: \(fileName).")
+                return
+            }
+        
+            self.player.numberOfLoops = loops
+            self.player.prepareToPlay()
+            self.player.volume = 0.5
+            self.player.play()
+            
+            self.isPlaying = true
+        }
     }
     
-    func playBackgroundSound(filename: String, loops: Int){
-        let source = NSBundle.mainBundle().URLForResource(filename, withExtension: nil)
-        var error: NSError?
-        
-        backgroundSound = AVAudioPlayer(contentsOfURL: source, error: &error)
-
-        if source == nil {
-            println("Could not find file: \(filename)")
-            return
+    func playSoundEffect(fileName: String, node: SKNode) {
+        if (gameData.soundEnabled) {
+            node.runAction(SKAction.playSoundFileNamed(fileName, waitForCompletion: false))
         }
-        if backgroundSound == nil {
-            println("Could not create audio player")
-            return
-        }
-        
-        backgroundSound.numberOfLoops = loops
-        backgroundSound.prepareToPlay()
-        backgroundSound.play()
     }
     
     func stopAudio(){
-        backgroundSound.stop()
+        self.player.stop()
+        self.isPlaying = false
     }
+    
 }
 
-let sharedAudio = AudioManager()
+let audioManager = AudioManager()
     
     

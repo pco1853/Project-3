@@ -28,6 +28,10 @@ class MenuScene: SKScene {
         
         self.titleText = TitleText(text: title, xPos: size.width / 2, yPos: size.height - 200)
         self.addChild(self.titleText)
+        
+        if (!audioManager.isPlaying) {
+            audioManager.playBackgroundMusic("Title Track.mp3", loops: -1)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {

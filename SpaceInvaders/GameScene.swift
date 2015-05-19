@@ -18,13 +18,14 @@ struct CollisionCategories {
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //MARK: - Variables -
-    
     //game
     var player: Player!
     var enemies: [Enemy] = []
+    var enemyWaves: EnemyWaves!
     var wave = 1
     var waveTimer: CFTimeInterval = 10.0
     var difficulty = 1
+    var isGameOver = false
 
     //animation
     var lastUpdateTimeInterval: CFTimeInterval = -1.0
@@ -49,10 +50,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //accelerometer
     var motionManager: CMMotionManager?
     
+    //sound
+    var audioTracks = ["Game Track 1.m4a", "Game Track 2.m4a", "Game Track 3.m4a", "Game Track 4.mp3"]
+    var audioTracksShuffled: [String] = []
+    var audioTracksIndex = 0
+    
     //MARK: - Initialization -
     override func didMoveToView(view: SKView) {
-        //end menu background sound
-        //sharedAudio.stopAudio()
+        //stop menu menu music
+        audioManager.stopAudio()
+        enemyWaves = EnemyWaves(size: self.size)
+
         
         //init physics
         self.physicsWorld.gravity = CGVectorMake(0, 0)
@@ -71,30 +79,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupEnemies()
         setupHUD()
         setupInput()
+        setupMusic()
     }
     
     func setupPlayer() {
+        gameData.score = 0
+        
         self.player = Player()
         self.player.position = CGPoint(x: size.width / 2, y: player.size.height + 100)
         self.addChild(self.player)
     }
-    
-    func setupEnemies() {
-        //TODO: generate waves from data
-        
-        //FOR TESTING:
-        let fighter = Fighter()
-        let kamikaze = Kamikaze()
-        let bomber = Bomber()
-        
-        fighter.position = CGPoint(x: size.width / 2, y: size.height - 150)
-        kamikaze.position = CGPoint(x: size.width / 2 - 100, y: size.height - 300)
-        bomber.position = CGPoint(x: size.width / 2 + 150, y: size.height - 100)
 
-        self.enemies.append(fighter)
-        self.enemies.append(kamikaze)
-        self.enemies.append(bomber)
-        
+    func setupEnemies()
+    {
+        var randomNum = Int(arc4random_uniform(3))
+        self.enemies = self.enemyWaves.setNewWave(self.wave, index: randomNum)
         for enemy in self.enemies {
             self.addChild(enemy)
         }
@@ -140,6 +139,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.accelerationX = 0.0
         self.accelerationY = 0.0
+    }
+    
+    func setupMusic() {
+        if (gameData.soundEnabled) {
+            self.audioTracksShuffled = self.audioTracks.shuffled()
+            audioManager.playBackgroundMusic(self.audioTracksShuffled[audioTracksIndex], loops: 1)
+        }
     }
     
     //MARK: - Input -
@@ -270,7 +276,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             return
         }
         
-        
         checkGameOver()
         
         checkBounds()
@@ -289,6 +294,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         updateEnemies()
         updateBullets()
         updateHUD()
+        manageWaves()
+        updateMusic()
     }
     
     func updatePlayer() {
@@ -298,7 +305,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func updateEnemies() {
-        for enemy in self.enemies {
+        for (var i = self.enemies.count - 1; i > -1; i--) {
+            let enemy = enemies[i]
+            
+            //check for death
+            if (enemy.health <= 0) {
+                enemy.explode(self)
+                self.enemies.removeAtIndex(i)
+                
+                gameData.score += 50
+                
+                continue
+            }
             
             //move
             if (enemy.moveDirection == "left") {
@@ -306,6 +324,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             else if (enemy.moveDirection == "right") {
                 enemy.setVelocity(x: enemy.movementSpeed, y: 0.0, dt: self.dt)
+            }
+            
+            //remove enemies who go below screen
+            if (enemy.position.y < -50) {
+                enemy.canFire = false
+                enemy.removeFromParent()
+                var enemyIndex = findIndex(self.enemies, valueToFind: enemy)
+                self.enemies.removeAtIndex(enemyIndex!)
             }
             
             //fire bullets/bomb/self
@@ -328,6 +354,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if (e.canFire){
                     e.setVelocity(x: 0.0, y: -e.movementSpeed, dt: self.dt)
                 }
+            }
+        }
+    }
+    
+    //controls the new waves that spawn in the game
+    func manageWaves() {
+        
+        if(self.enemies.count > 0) {
+            return
+        }
+        else
+        {
+            self.wave += 1
+            var randomNum = Int(arc4random_uniform(3))
+            self.enemies = self.enemyWaves.setNewWave(self.wave, index: randomNum)
+            
+            for enemy in self.enemies {
+                self.addChild(enemy)
             }
         }
     }
@@ -363,10 +407,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             let b = node as EnemyBullet
             
-            if (b.position.y > self.player.position.y - self.player.size.height &&
-                b.position.y < self.player.position.y + self.player.size.height) { //explode if in range
+            if (b.position.y > self.player.position.y - self.player.size.height / 2 &&
+                b.position.y < self.player.position.y + self.player.size.height / 2) { //explode if in range
                     let texture = SKTexture(imageNamed: "bullet_bombExploding")
                     b.texture = texture
+                    
+                    audioManager.playSoundEffect("bullet_bombExplosion.m4a", node: self)
+                    
                     let explode = SKAction.scaleXTo(50.0, duration: 2.0)
                     let fadeOut = SKAction.fadeOutWithDuration(0.25)
                     b.runAction(explode, completion: {
@@ -379,7 +426,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 b.position.y -= (200.0) * self.dt
             }
             
-            if(b.position.y < -50.0) {
+            if (b.position.y < -50.0) {
                 b.removeFromParent()
             }
         })
@@ -390,8 +437,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.text = "SCORE: \(gameData.score)"
     }
     
-    func checkBounds()
-    {
+    func updateMusic() {
+        if (gameData.soundEnabled && audioManager.player.playing == false) {
+            self.audioTracksIndex++
+            
+            if (self.audioTracksIndex > self.audioTracksShuffled.count - 1) {
+                self.audioTracksIndex = 0
+                //self.audioTracksShuffled = self.audioTracks.shuffled()
+            }
+            
+            audioManager.playBackgroundMusic(self.audioTracksShuffled[self.audioTracksIndex], loops: 1)
+        }
+    }
+    
+    func checkBounds() {
         //check player bounds
         if (player.position.x - player.size.width / 2 < 20.0) { //left edge
             player.position.x = player.size.width / 2 + 20.0
@@ -415,12 +474,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if (enemy.position.x - enemy.size.width / 2 < 20.0 && enemy.moveDirection != "None") //left edge
             {
                 enemy.position.x = enemy.size.width / 2 + 20.0
-                enemy.moveDirection = "Right"
+                enemy.moveDirection = "right"
             }
             else if(enemy.position.x + enemy.size.width / 2 > self.size.width - 20.0 && enemy.moveDirection != "None")//right edge
             {
                 enemy.position.x = self.size.width - enemy.size.width / 2 - 20.0
-                enemy.moveDirection = "Left"
+                enemy.moveDirection = "left"
             }
         }
     }
@@ -447,7 +506,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     return
                 }
                 
-                player.takeDamage(25.0)
+                //TODO: Check type of bullet and deal damage accordingly
+                player.takeDamage(25.0, scene: self)
+                
+                //remove enemy bullet
                 secondBody.node?.removeFromParent()
         }
         
@@ -458,14 +520,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     return
                 }
                 
-                player.takeDamage(50.0)
+                //damage player
+                player.takeDamage(50.0, scene: self)
                 
-                //Remove enemy
-                var enemyIndex = findIndex(self.enemies, valueToFind: secondBody.node? as Enemy)
+                //explode and remove enemy
+                let enemyIndex = findIndex(self.enemies, valueToFind: secondBody.node? as Enemy)
                 if(enemyIndex != nil) {
+                    self.enemies[enemyIndex!].explode(self)
                     self.enemies.removeAtIndex(enemyIndex!)
                 }
-                secondBody.node?.removeFromParent()
+                //secondBody.node?.removeFromParent() -> handled in the explode() call
         }
         
         //player shoots enemy
@@ -475,41 +539,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 return
             }
                 
-            gameData.score += 50
+            //damage enemy
+            let e = firstBody.node? as Enemy
+            e.takeDamage(self.player.bulletDamage, scene: self)
                 
-            //Remove the enemy who got shot from the enemies array
-            var enemyIndex = findIndex(self.enemies, valueToFind: firstBody.node? as Enemy)
-            if(enemyIndex != nil)
-            {
-                self.enemies.removeAtIndex(enemyIndex!)
-            }
-        
-                
-                firstBody.node?.removeFromParent()
-                secondBody.node?.removeFromParent()
+            //remove player bullet
+            secondBody.node?.removeFromParent()
         }
     }
 
     //MARK - Transitions -
     func checkGameOver() {
-        if (self.player.health <= 0) {
-            self.player.health = 0;
+        if (!self.isGameOver && self.player.isDead) {
             
-            //TODO: animate player death
+            println("game over called")
+            
+            self.isGameOver = true
+            
+            audioManager.stopAudio()
             //TODO: disable controls
+            gameData.highScores.append(gameData.score)
             
-            self.runAction(SKAction.runBlock({
+            self.runAction(SKAction.waitForDuration(2.0), completion: {
                 let gameOverScene = GameOverScene(size: self.size, title: "game over")
                 gameOverScene.scaleMode = self.scaleMode
                 let transition = SKTransition.fadeWithDuration(1.0)
                 self.view?.presentScene(gameOverScene, transition: transition)
-            }))
+            })
         }
     }
     
     //MARK: - Helpers -
-    func findIndex<T: Equatable>(array: [T], valueToFind: T) -> Int?
-    {
+    func findIndex<T: Equatable>(array: [T], valueToFind: T) -> Int? {
         for (index, value) in enumerate(array) {
             if value == valueToFind {
                 return index

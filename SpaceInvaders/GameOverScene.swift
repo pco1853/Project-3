@@ -8,6 +8,7 @@
 
 import UIKit
 import SpriteKit
+import Social
 
 class GameOverScene: MenuScene {
     
@@ -114,7 +115,15 @@ class GameOverScene: MenuScene {
             }
             else if (touchedNode.name == "shareButton" && self.shareButton.enabled) {
                 //TODO: share screenshot of results
+                UIGraphicsBeginImageContext(self.size)
+                self.view?.layer.renderInContext(UIGraphicsGetCurrentContext())
+                let image = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                gameData.scoreImage = image
+                NSNotificationCenter.defaultCenter().postNotificationName("share", object: nil)
+                
             }
+                
             else if (touchedNode.name == "backButton" && self.backButton.enabled) {
                 buttonClicked(self.backButton, scene: GameModeScene(size: self.size, title: "mode"))
                 fadeOutText()

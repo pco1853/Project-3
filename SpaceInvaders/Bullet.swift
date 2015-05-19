@@ -11,7 +11,6 @@ import SpriteKit
 
 class Bullet: SKSpriteNode {
     
-    var scaleAction = SKAction.scaleXTo(50.0, duration: 1.8)
     init(imageName: String) {
         let texture = SKTexture(imageNamed: imageName)
         super.init(texture: texture, color: SKColor.clearColor(), size: texture.size())

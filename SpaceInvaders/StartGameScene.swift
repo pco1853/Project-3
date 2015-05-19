@@ -16,8 +16,6 @@ class StartGameScene: MenuScene {
     var creditsButton: MenuButton!
    
     override func didMoveToView(view: SKView) {
-        //add menu sound
-        //sharedAudio.playBackgroundSound("laser.mp3", loops: -1)
         
         //add buttons
         self.playButton = MenuButton(
