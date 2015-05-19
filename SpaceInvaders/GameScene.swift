@@ -582,10 +582,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //damage enemy
             let e = firstBody.node? as Enemy
             e.takeDamage(self.player.bulletDamage, scene: self)
-                
+            if(e.health <= 0 && e.finishedSpawningIn == false)
+            {
+                let enemyIndex = findIndex(self.enemies, valueToFind: e)
+                if(enemyIndex != nil)
+                {
+                    self.enemies.removeAtIndex(enemyIndex!)
+                    gameData.score += 50
+                    e.removeFromParent()
+                }
+            }
             //remove player bullet
             secondBody.node?.removeFromParent()
         }
+            
     }
 
     //MARK: - Transitions -
@@ -629,8 +639,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.isGameOver = true
             
             audioManager.stopAudio()
-            //TODO: disable controls
-            gameData.highScores.append(gameData.score)
+            
+            //gameData.highScores.append(gameData.score)
+            gameData.filterHighScores(gameData.score)
             
             self.runAction(SKAction.waitForDuration(2.0), completion: {
                 let gameOverScene = GameOverScene(size: self.size, title: "game over")

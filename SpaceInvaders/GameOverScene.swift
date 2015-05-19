@@ -58,7 +58,7 @@ class GameOverScene: MenuScene {
         )
         self.buttons.append(self.backButton)
         addChild(self.backButton)
-        
+            
         //display menu
         fadeIn()
     }

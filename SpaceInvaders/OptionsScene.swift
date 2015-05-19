@@ -297,20 +297,24 @@ class OptionsScene: MenuScene {
             //control options
             else if (touchedNode.name == "motionControlsButton" && self.motionControlsButton.enabled) {
                 gameData.controlScheme = "motion"
+                gameData.saveOptions()
                 highlightControlOptions()
             }
             else if (touchedNode.name == "virtualControlsButton" && self.virtualControlsButton.enabled) {
                 gameData.controlScheme = "virtual"
+                gameData.saveOptions()
                 highlightControlOptions()
             }
             
             //sound options
             else if (touchedNode.name == "soundOnButton" && self.soundOnButton.enabled) {
                 gameData.soundEnabled = true
+                gameData.saveOptions()
                 highlightSoundOptions()
             }
             else if (touchedNode.name == "soundOffButton" && self.soundOffButton.enabled) {
                 gameData.soundEnabled = false
+                gameData.saveOptions()
                 audioManager.stopAudio()
                 highlightSoundOptions()
             }
