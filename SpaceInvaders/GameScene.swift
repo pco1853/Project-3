@@ -637,17 +637,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     return
                 }
                 
-                //heal player
-                let e = firstBody.node? as Enemy
-                self.player.harvest(e.health / 2.0)
+                if (self.player.harvester.isActive) { //stops accidental harvesting
                 
-                //explode and remove enemy
-                let enemyIndex = findIndex(self.enemies, valueToFind: firstBody.node? as Enemy)
-                if(enemyIndex != nil) {
-                    self.enemies[enemyIndex!].explode(self)
-                    self.enemies.removeAtIndex(enemyIndex!)
+                    //heal player
+                    let e = firstBody.node? as Enemy
+                    self.player.harvest(e.health / 2.0)
+                
+                    //explode and remove enemy
+                    let enemyIndex = findIndex(self.enemies, valueToFind: firstBody.node? as Enemy)
+                    if(enemyIndex != nil) {
+                        self.enemies[enemyIndex!].explode(self)
+                        self.enemies.removeAtIndex(enemyIndex!)
+                    }
+                    //firstBody.node?.removeFromParent() -> handled in the explode() call
                 }
-                //firstBody.node?.removeFromParent() -> handled in the explode() call
         }
     }
 
@@ -661,7 +664,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.virtualController?.alpha = 0
         
         let screen = self.getBlurredScreenshot()
-        self.pauseScene = PauseScene(size: self.size, title: "pause", background: screen)
+        self.pauseScene = PauseScene(size: self.size, background: screen)
+        self.pauseScene.position.x = self.size.width / 2
+        self.pauseScene.position.y = self.size.height / 2
         
         self.paused = true
         self.addChild(self.pauseScene)
