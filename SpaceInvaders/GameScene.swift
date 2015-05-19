@@ -13,6 +13,7 @@ struct CollisionCategories {
     static let Enemy: UInt32 = 0x1 << 1
     static let PlayerBullet: UInt32 = 0x1 << 2
     static let EnemyBullet: UInt32 = 0x1 << 3
+    static let Harvester: UInt32 = 0x1 << 4
 }
 
 struct DrawOrder {
@@ -318,6 +319,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func updatePlayer() {
         //set player velocity
         self.player.setVelocityFromAcceleration(accelX: self.accelerationX, accelY: self.accelerationY, dt: self.dt)
+        //self.player.harvester.updatePos()
         self.player.setEngineParticle()
     }
     

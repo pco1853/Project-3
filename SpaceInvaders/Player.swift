@@ -17,6 +17,7 @@ class Player: Ship {
     var invincible = false
     var isDead = false
     var engineParticle: SKEmitterNode!
+    var harvester: Harvester!
     //var powerup: Powerup! //TODO: implement powerups
     
     let zShip: CGFloat = 0
@@ -70,6 +71,11 @@ class Player: Ship {
         //TODO: add guns
         
         //TODO: add harvester
+        /*
+        self.harvester = Harvester(length: 5)
+        self.harvester.zPosition = self.zHarvester
+        self.addChild(self.harvester)
+        */
         
         //set collision physics
         self.physicsBody?.categoryBitMask = CollisionCategories.Player
@@ -110,7 +116,8 @@ class Player: Ship {
     
     func fireHarvester() {
         if (self.canHarvest) {
-            //TODO:
+            self.canHarvest = false
+            self.harvester.fire()
         }
     }
     

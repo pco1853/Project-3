@@ -26,6 +26,7 @@
 		3F1685C71B0A88FC00086F69 /* EnemyExplosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3F1685C61B0A88FC00086F69 /* EnemyExplosion.sks */; };
 		3F1685C91B0A89B100086F69 /* Explosion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1685C81B0A89B100086F69 /* Explosion.swift */; };
 		3F1685CD1B0A994E00086F69 /* PlayerExplosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3F1685CC1B0A994E00086F69 /* PlayerExplosion.sks */; };
+		3F1685D11B0AEAAF00086F69 /* Harvester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1685D01B0AEAAF00086F69 /* Harvester.swift */; };
 		3F17C8821B024B860095A6E9 /* CreditsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17C8811B024B860095A6E9 /* CreditsScene.swift */; };
 		3F17C8841B0257990095A6E9 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17C8831B0257990095A6E9 /* MenuScene.swift */; };
 		3F17C8871B0265CA0095A6E9 /* SquareFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F17C8861B0265CA0095A6E9 /* SquareFont.ttf */; };
@@ -96,6 +97,7 @@
 		3F1685C61B0A88FC00086F69 /* EnemyExplosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = EnemyExplosion.sks; sourceTree = "<group>"; };
 		3F1685C81B0A89B100086F69 /* Explosion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Explosion.swift; sourceTree = "<group>"; };
 		3F1685CC1B0A994E00086F69 /* PlayerExplosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PlayerExplosion.sks; sourceTree = "<group>"; };
+		3F1685D01B0AEAAF00086F69 /* Harvester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Harvester.swift; sourceTree = "<group>"; };
 		3F17C8811B024B860095A6E9 /* CreditsScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditsScene.swift; sourceTree = "<group>"; };
 		3F17C8831B0257990095A6E9 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		3F17C8861B0265CA0095A6E9 /* SquareFont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SquareFont.ttf; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 		3FEF8AB11AF9893500445871 /* Game Objects */ = {
 			isa = PBXGroup;
 			children = (
+				3F1685D01B0AEAAF00086F69 /* Harvester.swift */,
 				3F1685C81B0A89B100086F69 /* Explosion.swift */,
 				3FB557801AFBDBA400916F1B /* Ships */,
 				3FB557811AFBDBAF00916F1B /* Bullets */,
@@ -507,6 +510,7 @@
 				3F1685C91B0A89B100086F69 /* Explosion.swift in Sources */,
 				965CAC3A1B044E4A0060C698 /* Fighter.swift in Sources */,
 				3F7B095A1AE75465000EEAD4 /* PlayerBullet.swift in Sources */,
+				3F1685D11B0AEAAF00086F69 /* Harvester.swift in Sources */,
 				3F60A9481B023FE000402038 /* VirtualController.swift in Sources */,
 				3F17C8841B0257990095A6E9 /* MenuScene.swift in Sources */,
 				3F7B09151AE74DC0000EEAD4 /* GameScene.swift in Sources */,
