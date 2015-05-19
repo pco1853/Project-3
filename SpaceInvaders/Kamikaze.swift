@@ -38,7 +38,10 @@ class Kamikaze: Enemy {
     func fire() {
         if (!self.canFire) {
             self.canFire = true
-            self.movementSpeed = 700.0
+            
+            self.movementSpeed = 500.0
+            self.color = SKColor.yellowColor()
+            self.colorBlendFactor = 0.5
         
             audioManager.playSoundEffect("ship_kamikazeLock.m4a", node: self)
         }

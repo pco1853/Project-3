@@ -16,7 +16,6 @@ class StartGameScene: MenuScene {
     var creditsButton: MenuButton!
    
     override func didMoveToView(view: SKView) {
-        
         //add buttons
         self.playButton = MenuButton(
             icon: "play",

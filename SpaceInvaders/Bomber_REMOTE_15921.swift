@@ -9,8 +9,8 @@
 import Foundation
 import SpriteKit
 
-class Bomber: Enemy {
-    
+class Bomber: Enemy
+{
     init(lockedPosition: Bool) {
         //set vars
         let texture = SKTexture(imageNamed: "ship_bomber")
@@ -28,7 +28,7 @@ class Bomber: Enemy {
         self.name = "bomber"
         
         //determine fire delay
-        let rand = NSTimeInterval(arc4random_uniform(UInt32(self.fireRate * 2)))
+        let rand = NSTimeInterval(arc4random_uniform(UInt32(self.fireRate)))
         let waitToEnableFire = SKAction.waitForDuration(rand)
         self.runAction(waitToEnableFire, completion: { self.canFire = true })
     }
@@ -44,13 +44,12 @@ class Bomber: Enemy {
             let b = EnemyBullet(imageName: "bullet_bomb")
             b.position.x = self.position.x
             b.position.y = self.position.y + 2.0
-            b.zPosition = -1
+            b.zPosition = self.zBullets
             b.name = "enemyBomb"
             
             scene.addChild(b)
             
-            let rand = NSTimeInterval(arc4random_uniform(UInt32(self.fireRate * 4)))
-            let waitToEnableFire = SKAction.waitForDuration(rand)
+            let waitToEnableFire = SKAction.waitForDuration(self.fireRate)
             self.runAction(waitToEnableFire, completion: { self.canFire = true })
         
             audioManager.playSoundEffect("bullet_enemy.mp3", node: self)

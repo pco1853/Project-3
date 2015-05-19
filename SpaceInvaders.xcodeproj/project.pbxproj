@@ -196,8 +196,6 @@
 				3F60A9491B023FF800402038 /* OptionsScene.swift */,
 				3F17C8811B024B860095A6E9 /* CreditsScene.swift */,
 				3FEA26481B019FCE00680E31 /* GameModeScene.swift */,
-				3FEF8AB91AF9971500445871 /* GameOverScene.swift */,
-				3F108A5D1B097BC300BEAD06 /* PauseScene.swift */,
 			);
 			name = "Menu Scenes";
 			sourceTree = "<group>";
@@ -326,6 +324,8 @@
 			isa = PBXGroup;
 			children = (
 				3F7B09141AE74DC0000EEAD4 /* GameScene.swift */,
+				3F108A5D1B097BC300BEAD06 /* PauseScene.swift */,
+				3FEF8AB91AF9971500445871 /* GameOverScene.swift */,
 				3F17C8851B02579F0095A6E9 /* Menu Scenes */,
 			);
 			name = Scenes;

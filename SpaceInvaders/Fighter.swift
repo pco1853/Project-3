@@ -44,13 +44,13 @@ class Fighter: Enemy {
             let b1 = EnemyBullet(imageName: "bullet_enemy")
             b1.position.x = self.position.x - 12.0
             b1.position.y = self.position.y + 2.0
-            b1.zPosition = self.zBullets
+            b1.zPosition = -1
             b1.name = "enemyBullet"
             
             let b2 = EnemyBullet(imageName: "bullet_enemy")
             b2.position.x = self.position.x + 12.0
             b2.position.y = self.position.y + 2.0
-            b2.zPosition = self.zBullets
+            b2.zPosition = -1
             b2.name = "enemyBullet"
             
             scene.addChild(b1)
