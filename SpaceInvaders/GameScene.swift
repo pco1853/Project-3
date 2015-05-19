@@ -49,6 +49,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //ui
     var healthLabel: HUDText!
     var scoreLabel: HUDText!
+    var harvesterReadyLabel: HUDText!
     var pauseButton: MenuButton!
 
     //input
@@ -137,6 +138,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.scoreLabel = HUDText(text: "SCORE \(gameData.score)", xPos: 60, yPos: self.healthLabel.position.y - 40)
         self.addChild(self.scoreLabel)
+        
+        self.harvesterReadyLabel = HUDText(text: "HARVESTER READY", xPos: 60, yPos: self.healthLabel.position.y - 80)
+        self.addChild(self.harvesterReadyLabel)
+        self.harvesterReadyLabel.alpha = 0
     }
     
     func setupInput() {
@@ -152,8 +157,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 (accelerometerData: CMAccelerometerData!, error: NSError!) in
                 let acceleration = accelerometerData.acceleration
                 self.accelerationX = CGFloat(acceleration.x)
-                self.accelerationY = CGFloat(acceleration.y * 1.2)
+                self.accelerationY = CGFloat(acceleration.y)
+                
+                println(self.accelerationY)
+                
+                if (self.accelerationY > -0.55) {
+                    self.accelerationY = 1.0 + CGFloat(self.motionManager!.accelerometerData.acceleration.y)
+                }
+                else if (self.accelerationY < -0.75) {
+                    self.accelerationY = CGFloat(self.motionManager!.accelerometerData.acceleration.y)
+                }
+                else {
+                    self.accelerationY = 0.0
+                }
             })
+            
+            //set up gesture recognizers
+            var upSwipe = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipes:"))
+            upSwipe.direction = .Up
+            self.view?.addGestureRecognizer(upSwipe)
         }
         else {
             //create virtual controller
@@ -195,14 +217,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             else if (gameData.controlScheme == "motion") {
                 self.fireButtonPressed = true
             }
+    
             else if (gameData.controlScheme == "virtual") {
                 if(touchedNode.name == "fireButton" && self.virtualController!.fireButton.enabled) {
                     self.fireButtonPressed = true
                     self.virtualController!.fireButton.highlight()
                 }
                 else if(touchedNode.name == "harvestButton" && self.virtualController!.fireButton.enabled) {
-                    self.harvestButtonPressed = true
-                    self.virtualController!.harvestButton.highlight()
+                    if (self.player.canHarvest) {
+                        self.harvestButtonPressed = true
+                        self.virtualController!.harvestButton.highlight()
+                    }
                 }
                 /*
                 else if(touchedNode.name == "powerupButton" && self.virtualController!.fireButton.enabled) {
@@ -241,6 +266,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
             */
+        }
+    }
+    
+    func handleSwipes(sender: UISwipeGestureRecognizer) {
+        if (sender.direction == .Up) {
+            //println("Swiped up...")
+            
+            if (self.player.canHarvest) {
+                self.harvestButtonPressed = true
+            }
+            
+            self.fireButtonPressed = false
         }
     }
     
@@ -291,6 +328,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.player.firePowerup()
         }
         */
+        
+        //show harvester availability
+        if (gameData.controlScheme == "virtual") {
+            if (self.player.canHarvest) {
+                self.virtualController!.harvestButton.alpha = 1.0
+            }
+            else {
+                self.virtualController!.harvestButton.alpha = 0.25
+            }
+        }
+        else {
+            if (self.player.canHarvest) {
+                self.harvesterReadyLabel.alpha = 1.0
+            }
+            else {
+                self.harvesterReadyLabel.alpha = 0
+            }
+        }
     }
     
     //MARK: - Game Loop -
@@ -325,7 +380,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func updatePlayer() {
         //set player velocity
         self.player.setVelocityFromAcceleration(accelX: self.accelerationX, accelY: self.accelerationY, dt: self.dt)
-        //self.player.harvester.updatePos()
+        self.player.setHarvester(self.dt)
         self.player.setEngineParticle()
     }
     
@@ -586,6 +641,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //remove player bullet
             secondBody.node?.removeFromParent()
         }
+        
+        //player harvests enemy
+        if ((firstBody.categoryBitMask & CollisionCategories.Enemy != 0) &&
+            (secondBody.categoryBitMask & CollisionCategories.Harvester != 0)) {
+                if (contact.bodyA.node?.parent == nil || contact.bodyB.node?.parent == nil) {
+                    return
+                }
+                
+                //heal player
+                let e = firstBody.node? as Enemy
+                self.player.harvest(e.health / 2.0)
+                
+                //explode and remove enemy
+                let enemyIndex = findIndex(self.enemies, valueToFind: firstBody.node? as Enemy)
+                if(enemyIndex != nil) {
+                    self.enemies[enemyIndex!].explode(self)
+                    self.enemies.removeAtIndex(enemyIndex!)
+                }
+                //firstBody.node?.removeFromParent() -> handled in the explode() call
+        }
     }
 
     //MARK: - Transitions -
@@ -618,6 +693,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func quit() {
+        audioManager.stopAudio()
+        
         let scene = GameModeScene(size: self.size, title: "mode")
         scene.scaleMode = self.scaleMode
         let transition = SKTransition.fadeWithDuration(1.0)
@@ -628,11 +705,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (!self.isGameOver && self.player.isDead) {
             self.isGameOver = true
             
-            audioManager.stopAudio()
             //TODO: disable controls
             gameData.highScores.append(gameData.score)
             
             self.runAction(SKAction.waitForDuration(2.0), completion: {
+                audioManager.stopAudio()
+                
                 let gameOverScene = GameOverScene(size: self.size, title: "game over")
                 gameOverScene.scaleMode = self.scaleMode
                 let transition = SKTransition.fadeWithDuration(1.0)

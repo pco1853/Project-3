@@ -18,6 +18,7 @@ class Player: Ship {
     var isDead = false
     var engineParticle: SKEmitterNode!
     var harvester: Harvester!
+    var harvesterFireRate: NSTimeInterval = 10.0
     //var powerup: Powerup! //TODO: implement powerups
     
     let zShip: CGFloat = 0
@@ -71,11 +72,9 @@ class Player: Ship {
         //TODO: add guns
         
         //TODO: add harvester
-        /*
         self.harvester = Harvester(length: 5)
         self.harvester.zPosition = self.zHarvester
         self.addChild(self.harvester)
-        */
         
         //set collision physics
         self.physicsBody?.categoryBitMask = CollisionCategories.Player
@@ -118,6 +117,11 @@ class Player: Ship {
         if (self.canHarvest) {
             self.canHarvest = false
             self.harvester.fire()
+            
+            let waitToEnableHarvesting = SKAction.waitForDuration(self.harvesterFireRate)
+            runAction(waitToEnableHarvesting, completion: { self.canHarvest = true })
+            
+            audioManager.playSoundEffect("harvester_fired.m4a", node: self)
         }
     }
     
@@ -127,12 +131,24 @@ class Player: Ship {
         //}
     }
     
+    func setHarvester(dt: CGFloat) {
+        self.harvester.update(dt)
+    }
+    
     func setEngineParticle() {
         var x = self.physicsBody?.velocity.dx
         self.engineParticle.xAcceleration = -x!
         
         var y = self.physicsBody?.velocity.dy
         self.engineParticle.yAcceleration = -y!
+    }
+    
+    func harvest(health: CGFloat) {
+        self.health += health
+        
+        if (self.health > gameData.playerHealth) {
+            self.health = gameData.playerHealth
+        }
     }
     
     func takeDamage(damage: CGFloat, scene: SKScene) {

@@ -31,7 +31,7 @@ class VirtualController: SKSpriteNode {
             icon: "",
             label: "FIRE",
             name: "fireButton",
-            xPos: self.size.width / 2 - 120,
+            xPos: self.size.width / 2 - 170.5,
             yPos: 0,
             enabled: true
         )
@@ -40,7 +40,6 @@ class VirtualController: SKSpriteNode {
         self.fireButton.yScale = 0.5
         self.addChild(self.fireButton)
         
-        /*
         self.harvestButton = MenuButton(
             icon: "",
             label: "HARVEST",
@@ -53,7 +52,6 @@ class VirtualController: SKSpriteNode {
         self.harvestButton.xScale = 0.5
         self.harvestButton.yScale = 0.5
         self.addChild(self.harvestButton)
-        */
         
         /*
         self.powerupButton = MenuButton(icon: "", label: "POWERUP", name: "powerupButton", xPos: self.fireButton.position.x + self.fireButton.size.width / 2 + 0.25, yPos: self.fireButton.position.y + self.fireButton.size.height / 1.33, enabled: false)
