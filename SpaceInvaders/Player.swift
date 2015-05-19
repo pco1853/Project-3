@@ -38,7 +38,8 @@ class Player: Ship {
             fireRate: gameData.playerFireRate,
             bulletSpeed: gameData.playerBulletSpeed,
             bulletDamage: gameData.playerBulletDamage,
-            texture: texture
+            texture: texture,
+            lockedPosition: false
         )
         
         //add shadow

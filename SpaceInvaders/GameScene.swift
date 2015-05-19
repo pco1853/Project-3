@@ -36,6 +36,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //game
     var player: Player!
     var enemies: [Enemy] = []
+    var enemyWaves: EnemyWaves!
     var wave = 1
     var waveTimer: CFTimeInterval = 10.0
     var difficulty = 1
@@ -69,6 +70,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //MARK: - Initialization -
     override func didMoveToView(view: SKView) {
         audioManager.stopAudio()
+        enemyWaves = EnemyWaves(size: self.size)
         
         //init physics
         self.physicsWorld.gravity = CGVectorMake(0, 0)
@@ -97,25 +99,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.player.position = CGPoint(x: self.size.width / 2, y: player.size.height + 100)
         self.addChild(self.player)
     }
-    
-    func setupEnemies() {
-        //TODO: generate waves from data
-        
-        //FOR TESTING:
-        let fighter = Fighter()
-        let kamikaze = Kamikaze()
-        let bomber = Bomber()
-        
-        fighter.position = CGPoint(x: size.width / 2, y: size.height - 150)
-        kamikaze.position = CGPoint(x: size.width / 2 - 100, y: size.height - 300)
-        bomber.position = CGPoint(x: size.width / 2 + 150, y: size.height - 100)
 
-        self.enemies.append(fighter)
-        self.enemies.append(kamikaze)
-        self.enemies.append(bomber)
-        
+    //spawn an easy wave and have enemies slide in
+    func setupEnemies()
+    {
+        var randomNum = Int(arc4random_uniform(3))
+        self.enemies = self.enemyWaves.setNewWave(self.wave, index: randomNum)
+        //self.enemies = self.enemyWaves.setNewWave(5, index: 4)
         for enemy in self.enemies {
             self.addChild(enemy)
+            
+            var slideInAction = SKAction.moveToY(enemy.position.y - 500, duration: 2)
+            enemy.runAction(slideInAction, completion: {
+                enemy.finishedSpawningIn = true
+            })
         }
     }
     
@@ -314,6 +311,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         updateEnemies()
         updateBullets()
         updateHUD()
+        manageWaves()
         updateMusic()
     }
     
@@ -327,44 +325,82 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for (var i = self.enemies.count - 1; i > -1; i--) {
             let enemy = enemies[i]
             
-            //check for death
-            if (enemy.health <= 0) {
-                enemy.explode(self)
-                self.enemies.removeAtIndex(i)
+            if(enemy.finishedSpawningIn)
+            {
+                //check for death
+                if (enemy.health <= 0) {
+                    enemy.explode(self)
+                    self.enemies.removeAtIndex(i)
                 
-                gameData.score += 50
+                    gameData.score += 50
                 
-                continue
-            }
-            
-            //move
-            if (enemy.moveDirection == "left") {
-                enemy.setVelocity(x: -enemy.movementSpeed, y: 0.0, dt: self.dt)
-            }
-            else if (enemy.moveDirection == "right") {
-                enemy.setVelocity(x: enemy.movementSpeed, y: 0.0, dt: self.dt)
-            }
-            
-            //fire bullets/bomb/self
-            if (enemy.name == "fighter") {
-                let e = enemy as Fighter
-                e.fireBullet(self)
-            }
-            else if (enemy.name == "bomber") {
-                let e = enemy as Bomber
-                e.fireBomb(self)
-            }
-            else if (enemy.name == "kamikaze") {
-                let e = enemy as Kamikaze
-                
-                if (e.position.x > self.player.position.x - self.player.size.width &&
-                    e.position.x < self.player.position.x + self.player.size.width) {
-                    e.fire()
+                    continue
                 }
-                
-                if (e.canFire){
-                    e.setVelocity(x: 0.0, y: -e.movementSpeed, dt: self.dt)
+            
+                //move
+                if (enemy.moveDirection == "left") {
+                    enemy.setVelocity(x: -enemy.movementSpeed, y: 0.0, dt: self.dt)
                 }
+                else if (enemy.moveDirection == "right") {
+                    enemy.setVelocity(x: enemy.movementSpeed, y: 0.0, dt: self.dt)
+                }
+                else
+                {
+                        
+                }
+            
+                //remove enemies who go below screen
+                if (enemy.position.y < -50) {
+                    enemy.canFire = false
+                    enemy.removeFromParent()
+                    var enemyIndex = findIndex(self.enemies, valueToFind: enemy)
+                    self.enemies.removeAtIndex(enemyIndex!)
+                }
+            
+                //fire bullets/bomb/self
+                if (enemy.name == "fighter") {
+                    let e = enemy as Fighter
+                    e.fireBullet(self)
+                }
+                else if (enemy.name == "bomber") {
+                    let e = enemy as Bomber
+                    e.fireBomb(self)
+                }
+                else if (enemy.name == "kamikaze") {
+                    let e = enemy as Kamikaze
+                
+                    if (e.position.x > self.player.position.x - self.player.size.width &&
+                        e.position.x < self.player.position.x + self.player.size.width) {
+                            e.fire()
+                    }
+                
+                    if (e.canFire){
+                        e.setVelocity(x: 0.0, y: -e.movementSpeed, dt: self.dt)
+                    }
+                }
+            }
+        }
+    }
+    
+    //controls the new waves that spawn in the game
+    func manageWaves() {
+        
+        if(self.enemies.count > 0) {
+            return
+        }
+        else
+        {
+            self.wave += 1
+            var randomNum = Int(arc4random_uniform(5))
+            self.enemies = self.enemyWaves.setNewWave(self.wave, index: randomNum)
+            
+            for enemy in self.enemies {
+                self.addChild(enemy)
+                //slide in enemies when a new wave spawns
+                var slideInAction = SKAction.moveToY(enemy.position.y - 500, duration: 2)
+                enemy.runAction(slideInAction, completion: {
+                    enemy.finishedSpawningIn = true
+                })
             }
         }
     }
