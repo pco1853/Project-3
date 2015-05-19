@@ -15,14 +15,6 @@ class Enemy: Ship {
     //var hasPowerup: Bool = false
     var moveDirection:String?
     
-    //draw order
-    let zShip: CGFloat = 0
-    let zBullets: CGFloat = -1
-    let zGuns: CGFloat = -2
-    let zEngine: CGFloat = -3
-    let zEngineParticle: CGFloat = -4
-    let zShadow: CGFloat = -5
-    
     override init(health: CGFloat, movementSpeed: CGFloat, canFire: Bool, fireRate: NSTimeInterval, bulletSpeed: CGFloat, bulletDamage: CGFloat, texture: SKTexture) {
         //set vars
         super.init(

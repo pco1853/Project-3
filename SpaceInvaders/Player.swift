@@ -42,6 +42,7 @@ class Player: Ship {
         )
         
         //add shadow
+        /*
         let shadowOffsetX: CGFloat = 10.0
         let shadowOffsetY: CGFloat = 10.0
         let shadow = SKSpriteNode(texture: self.texture)
@@ -55,6 +56,7 @@ class Player: Ship {
         shadowEffect.zPosition = self.zShadow
         shadowEffect.addChild(shadow)
         self.addChild(shadowEffect)
+        */
         
         //TODO: add engine
         
@@ -151,10 +153,9 @@ class Player: Ship {
     
     func explode(scene: SKScene) {
         if (!self.isDead) {
-            println("player died")
-            
             self.isDead = true
             self.alpha = 0
+            //don't want to remove from parent because it breaks a million things and makes player nil
         
             let explosion = Explosion(type: "PlayerExplosion", duration: 2.0, x: self.position.x, y: self.position.y)
             scene.addChild(explosion)

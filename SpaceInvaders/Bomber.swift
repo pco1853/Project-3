@@ -9,13 +9,13 @@
 import Foundation
 import SpriteKit
 
-class Bomber: Enemy
-{
+class Bomber: Enemy {
+    
     init() {
         //set vars
         let texture = SKTexture(imageNamed: "ship_bomber")
         super.init(
-            health: 75.0,
+            health: 100.0,
             movementSpeed: 50.0,
             canFire: false,
             fireRate: 5.0,
@@ -43,7 +43,7 @@ class Bomber: Enemy
             let b = EnemyBullet(imageName: "bullet_bomb")
             b.position.x = self.position.x
             b.position.y = self.position.y + 2.0
-            b.zPosition = self.zBullets
+            b.zPosition = -1
             b.name = "enemyBomb"
             
             scene.addChild(b)

@@ -15,7 +15,7 @@ class Kamikaze: Enemy {
         //set vars
         let texture = SKTexture(imageNamed: "ship_kamikaze")
         super.init(
-            health: 75.0,
+            health: 50.0,
             movementSpeed: 100.0,
             canFire: false,
             fireRate: 0.0,
@@ -37,7 +37,10 @@ class Kamikaze: Enemy {
     func fire() {
         if (!self.canFire) {
             self.canFire = true
-            self.movementSpeed = 700.0
+            
+            self.movementSpeed = 500.0
+            self.color = SKColor.yellowColor()
+            self.colorBlendFactor = 0.5
         
             audioManager.playSoundEffect("ship_kamikazeLock.m4a", node: self)
         }
