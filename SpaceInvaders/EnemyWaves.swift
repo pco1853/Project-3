@@ -228,8 +228,128 @@ class EnemyWaves:SKSpriteNode{
             //all hard waves
         else if(wavesCleared >= 10)
         {
-            var empty:[Enemy] = []
-            return empty
+            if(index == 0)
+            {
+                //hard1
+                var hard1: [Enemy] = []
+                var h1Fighter = createEnemy("fighter", xpos: size.width / 2, ypos: self.size.height + 380, moving: false)
+                var h1Fighter1 = createEnemy("fighter", xpos: size.width / 2 + 300, ypos: self.size.height + 380, moving: false)
+                var h1Fighter2 = createEnemy("fighter", xpos: size.width / 2 - 300, ypos: self.size.height + 380, moving: false)
+                var h1Fighter3 = createEnemy("fighter", xpos: size.width / 2 + 50, ypos: self.size.height + 200, moving: true)
+                var h1Fighter4 = createEnemy("fighter", xpos: size.width / 2 + 200, ypos: self.size.height + 200, moving: true)
+                var h1Fighter5 = createEnemy("fighter", xpos: size.width / 2 - 150, ypos: self.size.height + 200, moving: true)
+                var h1Fighter6 = createEnemy("fighter", xpos: size.width / 2 - 50, ypos: self.size.height + 300, moving: true)
+                var h1Fighter7 = createEnemy("fighter", xpos: size.width / 2 + 150, ypos: self.size.height + 300, moving: true)
+                var h1Fighter8 = createEnemy("fighter", xpos: size.width / 2 - 200, ypos: self.size.height + 300, moving: true)
+                
+                hard1.append(h1Fighter)
+                hard1.append(h1Fighter1)
+                hard1.append(h1Fighter2)
+                hard1.append(h1Fighter3)
+                hard1.append(h1Fighter4)
+                hard1.append(h1Fighter5)
+                hard1.append(h1Fighter6)
+                hard1.append(h1Fighter7)
+                hard1.append(h1Fighter8)
+                
+                return hard1
+            }
+            else if(index == 1)
+            {
+                var hard2: [Enemy] = []
+                var h1Kamikaze = createEnemy("kamikaze", xpos: size.width / 2 - 150, ypos: self.size.height + 350, moving: true)
+                var h1Kamikaze1 = createEnemy("kamikaze", xpos: size.width / 2 + 150, ypos: self.size.height + 350, moving: true)
+                var h1Kamikaze2 = createEnemy("kamikaze", xpos: size.width / 2 - 75, ypos: self.size.height + 150, moving: false)
+                var h1Kamikaze3 = createEnemy("kamikaze", xpos: size.width / 2 + 75, ypos: self.size.height + 150, moving: false)
+                var h1Kamikaze4 = createEnemy("kamikaze", xpos: size.width / 2 - 250, ypos: self.size.height + 150, moving: false)
+                var h1Kamikaze5 = createEnemy("kamikaze", xpos: size.width / 2 + 250, ypos: self.size.height + 150, moving: false)
+                var h1Bomber = createEnemy("bomber", xpos: size.width / 2, ypos: self.size.height + 225, moving: true)
+                
+                hard2.append(h1Kamikaze)
+                hard2.append(h1Kamikaze1)
+                hard2.append(h1Kamikaze2)
+                hard2.append(h1Kamikaze3)
+                hard2.append(h1Kamikaze4)
+                hard2.append(h1Kamikaze5)
+                hard2.append(h1Bomber)
+                return hard2
+            }
+            else if(index == 2)
+            {
+                var hard3: [Enemy] = []
+                var h3Bomber = createEnemy("bomber", xpos: size.width / 2 - 350, ypos: self.size.height + 350, moving: false)
+                var h3Bomber1 = createEnemy("bomber", xpos: size.width / 2 + 350, ypos: self.size.height + 350, moving: false)
+                var h3Bomber2 = createEnemy("bomber", xpos: size.width / 2 - 100, ypos: self.size.height + 100, moving: true)
+                var h3Bomber3 = createEnemy("bomber", xpos: size.width / 2 + 100, ypos: self.size.height + 100, moving: true)
+                var h3Fighter = createEnemy("fighter", xpos: size.width/2, ypos: self.size.height + 350, moving: false)
+                var h3Fighter2 = createEnemy("fighter", xpos: size.width/2 + 200, ypos: self.size.height + 200, moving: true)
+                var h3Fighter3 = createEnemy("fighter", xpos: size.width/2 - 200, ypos: self.size.height + 200, moving: true)
+                var h3Kamikaze = createEnemy("kamikaze", xpos: size.width / 2 + 150, ypos: self.size.height + 350, moving: false)
+                var h3Kamikaze2 = createEnemy("kamikaze", xpos: size.width / 2 - 150, ypos: self.size.height + 350, moving: false)
+                
+                hard3.append(h3Bomber)
+                hard3.append(h3Bomber1)
+                hard3.append(h3Bomber2)
+                hard3.append(h3Bomber3)
+                hard3.append(h3Fighter)
+                hard3.append(h3Fighter2)
+                hard3.append(h3Fighter3)
+                hard3.append(h3Kamikaze)
+                hard3.append(h3Kamikaze2)
+                
+                return hard3
+                
+            }
+            else if(index == 3)
+            {
+                var hard4: [Enemy] = []
+                var h4Kamikaze = createEnemy("kamikaze", xpos: size.width / 2 - 340, ypos: self.size.height + 200, moving: false)
+                var h4Kamikaze1 = createEnemy("kamikaze", xpos: size.width / 2 + 340, ypos: self.size.height + 200, moving: false)
+                var h4Kamikaze2 = createEnemy("kamikaze", xpos: size.width / 2 - 200, ypos: self.size.height + 100, moving: true)
+                var h4Kamikaze3 = createEnemy("kamikaze", xpos: size.width / 2 + 200, ypos: self.size.height + 100, moving: true)
+                var h4Fighter = createEnemy("fighter", xpos: size.width / 2, ypos: self.size.height + 200, moving: false)
+                var h4Fighter1 = createEnemy("fighter", xpos: size.width / 2 + 100, ypos: self.size.height + 350, moving: true)
+                var h4Fighter2 = createEnemy("fighter", xpos: size.width / 2 - 100, ypos: self.size.height + 350, moving: true)
+                var h4Bomber = createEnemy("bomber", xpos: size.width / 2, ypos: self.size.height + 350, moving: false)
+                hard4.append(h4Kamikaze)
+                hard4.append(h4Kamikaze1)
+                hard4.append(h4Kamikaze2)
+                hard4.append(h4Kamikaze3)
+                hard4.append(h4Fighter)
+                hard4.append(h4Fighter1)
+                hard4.append(h4Fighter2)
+                hard4.append(h4Bomber)
+                
+                return hard4
+            }
+            else if(index == 4)
+            {
+                var hard5: [Enemy] = []
+                var h5Kamikaze = createEnemy("kamikaze", xpos: size.width / 2 - 140, ypos: self.size.height + 200, moving: false)
+                var h5Kamikaze1 = createEnemy("kamikaze", xpos: size.width / 2 + 140, ypos: self.size.height + 200, moving: false)
+                var h5Fighter = createEnemy("fighter", xpos: size.width / 2, ypos: self.size.height + 280, moving: true)
+                var h5Fighter1 = createEnemy("fighter", xpos: size.width / 2 + 300, ypos: self.size.height + 280, moving: true)
+                var h5Fighter2 = createEnemy("fighter", xpos: size.width / 2 - 300, ypos: self.size.height + 280, moving: true)
+                var h5Bomber = createEnemy("bomber", xpos: size.width / 2, ypos: self.size.height + 350, moving: false)
+                var h5Bomber1 = createEnemy("bomber", xpos: size.width / 2, ypos: self.size.height + 350, moving: true)
+                var h5Bomber2 = createEnemy("bomber", xpos: size.width / 2, ypos: self.size.height + 350, moving: true)
+                
+                hard5.append(h5Kamikaze)
+                hard5.append(h5Kamikaze1)
+                hard5.append(h5Fighter)
+                hard5.append(h5Fighter1)
+                hard5.append(h5Fighter2)
+                hard5.append(h5Bomber)
+                hard5.append(h5Bomber1)
+                hard5.append(h5Bomber2)
+                
+                return hard5
+            }
+            else
+            {
+                var empty:[Enemy] = []
+                return empty
+            }
         }
             //if no string is passed in then pass over an empty array
         else

@@ -28,7 +28,7 @@ class Bomber: Enemy
         self.name = "bomber"
         
         //determine fire delay
-        let rand = NSTimeInterval(arc4random_uniform(UInt32(self.fireRate)))
+        let rand = NSTimeInterval(arc4random_uniform(UInt32(self.fireRate * 2)))
         let waitToEnableFire = SKAction.waitForDuration(rand)
         self.runAction(waitToEnableFire, completion: { self.canFire = true })
     }
@@ -49,7 +49,8 @@ class Bomber: Enemy
             
             scene.addChild(b)
             
-            let waitToEnableFire = SKAction.waitForDuration(self.fireRate)
+            let rand = NSTimeInterval(arc4random_uniform(UInt32(self.fireRate * 4)))
+            let waitToEnableFire = SKAction.waitForDuration(rand)
             self.runAction(waitToEnableFire, completion: { self.canFire = true })
         
             audioManager.playSoundEffect("bullet_enemy.mp3", node: self)

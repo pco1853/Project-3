@@ -94,7 +94,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     {
         var randomNum = Int(arc4random_uniform(3))
         self.enemies = self.enemyWaves.setNewWave(self.wave, index: randomNum)
-        //self.enemies = self.enemyWaves.setNewWave(5, index: 4)
         for enemy in self.enemies {
             self.addChild(enemy)
             

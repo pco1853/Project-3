@@ -15,7 +15,7 @@ class Kamikaze: Enemy {
         //set vars
         let texture = SKTexture(imageNamed: "ship_kamikaze")
         super.init(
-            health: 75.0,
+            health: 20.0,
             movementSpeed: 100.0,
             canFire: false,
             fireRate: 0.0,
